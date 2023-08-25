@@ -6,10 +6,16 @@ import java.util.Random;
 import com.sun.net.httpserver.HttpServer;
 
 import handlers.AppInteractionHandler;
+
+@SpringBootApplication
+@RestController
 public class App {
     public static void main(String[] args) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(80), 99);
-        server.createContext("/", new AppInteractionHandler());
-        server.start(); 
+        SpringApplication.run(App.class, args);
     }
+
+    @RequestMapping("/")
+	String sayHello() {
+		return "Hello World!";
+	}
 }
