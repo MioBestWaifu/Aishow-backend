@@ -5,7 +5,6 @@ plugins {
 }
 
 group = 'com.aishow'
-version = '0.0.1-SNAPSHOT'
 
 java {
 	sourceCompatibility = '11'
@@ -23,4 +22,9 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootJar{
+	destinationDirectory.set(file("/"))
+	 archiveFileName = "app.jar"
 }
