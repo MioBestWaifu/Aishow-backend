@@ -147,14 +147,13 @@ public abstract class Utils {
         return bytes;
     }
 
-    public static boolean updateUserProfilePicture(String host,String baseAddress, String format,byte[]data){
+    public static boolean updateUserProfilePicture(int id,String baseAddress, String format,byte[]data){
         try{
         String time = Long.toString(System.currentTimeMillis());
         BufferedImage bImage2 = ImageIO.read(new ByteArrayInputStream(data));
         //BufferedImage bImage2 = ImageIO.read(bis);
         String name = baseAddress+time+"."+format;
-        var y = baseAddress.split("/");
-        int id = Integer.parseInt(y[y.length-1]);
+        var x = DatabaseConnection.getUserImageUrl(id);
 
         if (DatabaseConnection.tryToUpdateUserImageUrl(id, String.valueOf(id)+String.valueOf(time)+"."+format)){
             var f = new File(name);
@@ -167,9 +166,8 @@ public abstract class Utils {
             System.out.println("Can execute: "+f.canExecute());
             System.out.println("\n\n");
             ImageIO.write(bImage2, format, f);
-            var x = UserConnectionManager.getInformation(host).getImageUrl();
-            UserConnectionManager.getInformation(host).setImageUrl(String.valueOf(baseAddress.charAt(baseAddress.length()-1))+time+"."+format);
-            new File("src/raw/images/"+x.split("/")[4]).delete();
+            //UserConnectionManager.getInformation(host).setImageUrl(String.valueOf(baseAddress.charAt(baseAddress.length()-1))+time+"."+format);
+            new File("src/raw/images/"+x).delete();
             return true;
         }
 
@@ -181,7 +179,7 @@ public abstract class Utils {
         }
     }
 
-    public static boolean updateServicePicture(String host,String address, String format,byte[]data){
+    public static boolean updateServicePicture(String address, String format,byte[]data){
         try{
         String time = Long.toString(System.currentTimeMillis());
         BufferedImage bImage2 = ImageIO.read(new ByteArrayInputStream(data));

@@ -627,7 +627,7 @@ public abstract class DatabaseConnection {
 
     public static String getUserImageUrl(int id){
         try {
-            var st = conn.prepareStatement("SELECT profileUrl FROM serviceTemplates WHERE idUser = ?");
+            var st = conn.prepareStatement("SELECT profileUrl FROM user WHERE idUser = ?");
             st.setInt(1, id);
             var res = st.executeQuery();
             res.next();

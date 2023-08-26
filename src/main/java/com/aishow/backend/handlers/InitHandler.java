@@ -9,7 +9,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 import com.aishow.backend.managers.Utils;
 
-public class InitHandler implements BaseHandler{
+public class InitHandler extends BaseHandler{
 
     @Override
     public <T, G> G handle(T reqBody){
@@ -51,6 +51,12 @@ public class InitHandler implements BaseHandler{
         } catch (IOException ex){
 
         }
+    }
+
+    @Override
+    public <T, G> G handle(T reqBody, String[] params) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 
