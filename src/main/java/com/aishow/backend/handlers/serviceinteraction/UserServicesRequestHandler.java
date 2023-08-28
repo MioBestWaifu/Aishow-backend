@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers.serviceinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.managers.DatabaseConnection;
 
 public class UserServicesRequestHandler extends BaseHandler{
 
@@ -10,16 +11,12 @@ public class UserServicesRequestHandler extends BaseHandler{
         return null;
     }
 
+    /**
+     * Passar esse metodo pro normal com o AUTH, passar o id vai ser desnecessario
+     * @param params passar id no 0
+     */
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        // TODO Auto-generated method stub
-        return null;
+        return (G) DatabaseConnection.getUserServices(Integer.parseInt(params[0]));
     }
-
-    
-    
-    //         case "requestAll":
-        //             exchange.getResponseHeaders().add("Content-type", "application/json");
-        //             Utils.sendAndClose(exchange, 200, ServiceInformation.JsonifyArray(DatabaseConnection.getUserServices(Integer.parseInt(params.get("id")))).getBytes(StandardCharsets.UTF_8));
-        //             break;
 }

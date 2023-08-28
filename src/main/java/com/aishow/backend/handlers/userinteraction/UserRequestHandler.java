@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers.userinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.managers.DatabaseConnection;
 
 public class UserRequestHandler extends BaseHandler{
     @Override
@@ -9,14 +10,12 @@ public class UserRequestHandler extends BaseHandler{
         throw new UnsupportedOperationException("Unimplemented method 'handle'");
     }
 
+    /**
+     * Passar esse metodo pro normal com o AUTH, passar o id vai ser desnecessario
+     * @param params passar id no 0
+     */
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'handle'");
-    }
-    
-    //         case "request":
-        //             exchange.getResponseHeaders().add("Content-type", "application/json");
-        //             Utils.sendAndClose(exchange,200, DatabaseConnection.getRequestedUserInformation(Integer.parseInt(params.get("id"))).toJson().getBytes(StandardCharsets.UTF_8));
-        //             break;
+        return (G) DatabaseConnection.getRequestedUserInformation(Integer.parseInt(params[0]));
+    }          
 }

@@ -1,31 +1,28 @@
 package com.aishow.backend.handlers.serviceinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.info.ServiceInformation;
+import com.aishow.backend.managers.DatabaseConnection;
 
 public class CreateServiceHandler extends BaseHandler{
 
     @Override
     public <T, G> G handle(T reqBody) {
-        // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * Passar esse metodo pro normal com o AUTH, passar o id vai ser desnecessario
+     * @param params passar id no 0
+     */
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        // TODO Auto-generated method stub
-        return null;
+        var x = (ServiceInformation) reqBody;
+        x.setProviderId(Integer.parseInt(params[0]));
+        if(DatabaseConnection.tryToAddServiceTemplate(x)){
+            return (G) "OK";
+        } else {
+            return (G) "FAIL";
+        }
     }
-
-    //         case "create":
-        //             var x = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-        //             ServiceInformation servInfo = new ServiceInformation(x);
-        //             servInfo.setProviderId(UserConnectionManager.getInformation(exchange.getRemoteAddress().getHostString()).getUserId());
-        //             if(DatabaseConnection.tryToAddServiceTemplate(servInfo)){
-        //                 exchange.getResponseHeaders().add("Content-type", "text/plain");
-        //                 Utils.sendAndClose(exchange,201,"".getBytes());
-        //             } else {
-        //                 exchange.getResponseHeaders().add("Content-type", "text/plain");
-        //                 Utils.sendAndClose(exchange,500,"".getBytes());
-        //             }
-        //             break;
 }

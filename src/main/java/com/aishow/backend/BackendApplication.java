@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aishow.backend.handlers.ImageUpdateHandler;
-import com.aishow.backend.handlers.appinteraction.MacroInfoHandler;
-import com.aishow.backend.handlers.appinteraction.PathfindHandler;
-import com.aishow.backend.handlers.personalinteraction.LoginHandler;
-import com.aishow.backend.handlers.personalinteraction.RegisterHandler;
-import com.aishow.backend.info.UserInformation;
+import com.aishow.backend.handlers.*;
+import com.aishow.backend.handlers.appinteraction.*;
+import com.aishow.backend.handlers.personalinteraction.*;
+import com.aishow.backend.handlers.serviceinteraction.*;
+import com.aishow.backend.handlers.userinteraction.*;
+import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
 
 import java.io.IOException;
@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
@@ -36,7 +37,7 @@ public class BackendApplication {
  */
 
  /*
-  * TODO #3 Testar as classem recém-migradas (SERVICES):
+  * TODO #3 Testar as classes recém-migradas (SERVICES):
   Create
   Schedule
   Agenda
@@ -46,19 +47,11 @@ public class BackendApplication {
   */
 
   //TODO #5 COMPATIBILIZAR COMPLETAMENTE OS TIPOS COM O JSON DO SPRING
+  //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
 		DatabaseConnection.connect();
 		SpringApplication.run(BackendApplication.class, args);
 	}
-	// server.createContext("/", initHandler); TRANSFERIDO 
-    // server.createContext("/login", new LoginHandler()); FEITO
-    // server.createContext("/registering", new RegisterHandler()); FEITO
-    // server.createContext("/pages", new AppInteractionHandler()); FEITO/TRANSFERIDO PARA O SPRING AUTH
-    // server.createContext("/images", new ImageRequestHandler()); FEITO
-    // server.createContext("/info",new InfoHandler()); FEITO
-    // server.createContext("/personal",new PersonalInteractionHandler());
-    // server.createContext("/users", new UserInteractionHandler());
-    // server.createContext("/services", new ServiceInteractionHandler());
 
 	//GETS
 	@GetMapping("/api/info")
@@ -72,8 +65,35 @@ public class BackendApplication {
 		return new PathfindHandler().handle(null, new String[]{type,id});
 	}
 
+	//Parar de recebr o idProvider dps do AUTH
+	@GetMapping(value="/api/answerRequest",produces = "text/plain")
+	public String answerRequest(@RequestParam("type")String type, @RequestParam("id") String id, @RequestParam("providerId") String idProvider){
+		return new AnswerRequestHandler().handle(null, new String[]{type,id,idProvider});
+	}
+
+	//Parar de recebr o idProvider dps do AUTH
+	@GetMapping(value="/api/getAgenda",produces = "application/json")
+	public ServiceSchedule getAgenda(@RequestParam("id") String id){
+		return new ServiceAgendaRequestHandler().handle(null, new String[]{id});
+	}
+
+	@GetMapping(value="/api/getService",produces = "application/json")
+	public ServiceInformation getService(@RequestParam("id") String id){
+		return new ServiceRequestHandler().handle(null, new String[]{id});
+	}
+
+	@GetMapping(value="/api/getUser",produces = "application/json")
+	public ServiceInformation getUser(@RequestParam("id") String id){
+		return new UserRequestHandler().handle(null, new String[]{id});
+	}
+
+	@GetMapping(value="/api/getAllServices",produces = "application/json")
+	public List<ServiceInformation> getAllUserServices(@RequestParam("id") String id){
+		return new UserServicesRequestHandler().handle(null, new String[]{id});
+	}
+
 	//POSTS
-	@PostMapping("/api/login")
+	@PostMapping(value ="/api/login", consumes = "application/json", produces = "application/json")
 	public UserInformation tryToLogin(@RequestBody UserInformation loginInfo) {
 		UserInformation x = new LoginHandler().handle(loginInfo);
 		return x;
@@ -88,6 +108,30 @@ public class BackendApplication {
 	@PostMapping(value="/api/imageUpdate",consumes = "image/*", produces = "text/plain")
 	public String tryToUpdateImage(@RequestBody byte[] image, @RequestParam("type") String type, @RequestParam("id") String id){
 		return new ImageUpdateHandler().handle(image, new String[]{type,id});
+	}
+
+	//Id será desnecessario com o AUTH
+	@PostMapping(value="/api/updateName",consumes = "text/plain", produces = "text/plain")
+	public String updateName(@RequestBody String newName,@RequestParam("id") String id) {
+		String x = new NameUpdateHandler().handle(newName,new String[]{id});
+		return x;
+	}
+
+	//Id será desnecessario com o AUTH
+	@PostMapping(value="/api/createService",consumes = "application/json", produces = "text/plain")
+	public String createService(@RequestBody ServiceInformation info,@RequestParam("id") String id) {
+		String x = new CreateServiceHandler().handle(info,new String[]{id});
+		return x;
+	}
+
+	@PostMapping(value="/api/scheduleService",consumes = "application/json", produces = "text/plain")
+	public String scheduleService(@RequestBody ClientServiceInteraction info){
+		return new ScheduleServiceHandler().handle(info);
+	}
+
+	@PostMapping(value="/api/updateService",consumes = "application/json", produces = "text/plain")
+	public String updateService(@RequestBody ServiceInformation info){
+		return new UpdateServiceHandler().handle(info);
 	}
 
 }

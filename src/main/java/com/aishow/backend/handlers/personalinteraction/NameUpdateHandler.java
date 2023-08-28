@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers.personalinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.managers.DatabaseConnection;
 
 public class NameUpdateHandler extends BaseHandler{
 
@@ -10,23 +11,19 @@ public class NameUpdateHandler extends BaseHandler{
         throw new UnsupportedOperationException("Unimplemented method 'handle'");
     }
 
+
+    //Parar de receber o user como parametro como AUTH
+    /**
+     * @param reqBody texto do novo nome
+     * @param params idUser no 0
+     */
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        // TODO Auto-generated method stub
-        return null;
+        if (DatabaseConnection.tryToUpdateUserName(Integer.parseInt(params[0]),(String) reqBody)) {
+            //UserConnectionManager.getInformation(exchange.getRemoteAddress().getHostString()).setName(newName);
+            return (G) "OK";
+        } else {
+            return (G) "FAIL";
+        }
     }
-
-    
-    
-    //case "nameUpdate":
-        //             String newName = new String(exchange.getRequestBody().readAllBytes());
-        //             if (DatabaseConnection.tryToUpdateUserName(UserConnectionManager.getInformation(exchange.getRemoteAddress().getHostString()).getUserId(),newName)) {
-        //                 UserConnectionManager.getInformation(exchange.getRemoteAddress().getHostString()).setName(newName);
-        //                 exchange.getResponseHeaders().add("Content-type", "text/plain");
-        //                 Utils.sendAndClose(exchange,201,"".getBytes(StandardCharsets.UTF_8));
-        //             } else {
-        //                 exchange.getResponseHeaders().add("Content-type", "text/plain");
-        //                 Utils.sendAndClose(exchange,500,"FAIL".getBytes(StandardCharsets.UTF_8));
-        //             }
-        //             break;
 }

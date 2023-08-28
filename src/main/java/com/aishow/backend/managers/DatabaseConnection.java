@@ -779,6 +779,7 @@ public abstract class DatabaseConnection {
                 return false;
             }
             
+            //Isso aq vai ser desnecessario como AUTH
             if(!DatabaseConnection.IsOwner(userId, res.getInt("templateID"))){
                 return false;
             }

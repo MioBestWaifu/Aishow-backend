@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers.serviceinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.managers.DatabaseConnection;
 
 public class ServiceAgendaRequestHandler extends BaseHandler{
 
@@ -10,15 +11,9 @@ public class ServiceAgendaRequestHandler extends BaseHandler{
         return null;
     }
 
+    //Verificacao de ID com o AUTH
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    //         case "requestSchedule":
-        //             exchange.getResponseHeaders().add("Content-type", "application/json");
-        //             Utils.sendAndClose(exchange, 200, DatabaseConnection.getScheduleByProvider(UserConnectionManager.getInformation(exchange.getRemoteAddress().getHostString()).getUserId()).toJson().getBytes(StandardCharsets.UTF_8));
-        //             break;
-    
+        return (G)DatabaseConnection.getScheduleByProvider(Integer.parseInt(params[0]));
+    }  
 }
