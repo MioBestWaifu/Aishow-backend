@@ -6,21 +6,21 @@ import java.util.HashMap;
 import com.aishow.backend.managers.Utils;
 
 public class ServiceBundle {
-    ArrayList<ServiceInformation> ServiceInfos;
+    ArrayList<ServiceInformation> serviceInfos;
 
     public ServiceBundle() {
     }
 
     public ArrayList<ServiceInformation> getServiceInfos() {
-        return ServiceInfos;
+        return serviceInfos;
     }
     
     
     public String toJson(){
         HashMap<String,String> mapFields  = new HashMap<String,String>();
-        if (!(ServiceInfos == null || ServiceInfos.size() == 0)){
+        if (!(serviceInfos == null || serviceInfos.size() == 0)){
             ArrayList<String> toJoin = new ArrayList<String>();
-            for (ServiceInformation si : ServiceInfos){
+            for (ServiceInformation si : serviceInfos){
                 toJoin.add(si.toJson());
             }
             mapFields.put("ServiceInfos", Utils.joinJsonArray(toJoin));
@@ -30,7 +30,7 @@ public class ServiceBundle {
     }
 
     public void setServiceInfos(ArrayList<ServiceInformation> servInfos) {
-        this.ServiceInfos = servInfos;
+        this.serviceInfos = servInfos;
     }
     
 }

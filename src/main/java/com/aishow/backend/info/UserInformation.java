@@ -9,8 +9,9 @@ import java.util.HashMap;
 import com.aishow.backend.managers.Utils;
 
 public class UserInformation {
+    //Vai enviar senha no json tbm
     String email, password, gender,name,imageUrl;
-    int userId, area;
+    int userId, areaCode;
     float averageScore;
     String areaName;
     boolean providingService;
@@ -36,7 +37,7 @@ public class UserInformation {
     if (map.containsKey("gender"))
         gender = map.get("gender");
     if (map.containsKey("area"))
-        area = Integer.parseInt(map.get("area"));
+        areaCode = Integer.parseInt(map.get("area"));
     if (map.containsKey("providingService"))
         providingService = Boolean.parseBoolean(map.get("email"));
     if (map.containsKey("birthday"))
@@ -151,11 +152,11 @@ public class UserInformation {
     public void setImageUrl(String userCode) {
         this.imageUrl = "http://localhost:8080/images/"+userCode;
     }
-    public int getArea() {
-        return area;
+    public int getAreaCode() {
+        return areaCode;
     }
-    public void setArea(int area) {
-        this.area = area;
+    public void setAreaCode(int area) {
+        this.areaCode = area;
     }
     public ArrayList<ServiceInformation> getServices() {
         return services;

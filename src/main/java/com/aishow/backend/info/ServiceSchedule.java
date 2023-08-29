@@ -6,8 +6,8 @@ import java.util.HashMap;
 import com.aishow.backend.managers.Utils;
 
 public class ServiceSchedule {
-    private ArrayList<ClientServiceInteraction> pendingInstances;
-    private ArrayList<ClientServiceInteraction> pendingRequests;
+    ArrayList<ClientServiceInteraction> pendingInstances;
+    ArrayList<ClientServiceInteraction> pendingRequests;
 
     public String toJson(){
         HashMap<String,String> mapFields = new HashMap<>();

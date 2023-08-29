@@ -7,13 +7,13 @@ import java.util.HashMap;
 import com.aishow.backend.managers.Utils;
 
 public class ClientServiceInteraction {
-    private boolean isAccepted, hasFinished;
-    private int id, clientId, templateId;
-    private Date startDate, endDate;
-    private Time startTime, endTime;
-    private float cost;
-    private UserInformation client;
-    private ServiceInformation service;
+    boolean isAccepted, hasFinished;
+    int id, clientId, templateId;
+    Date startDate, endDate;
+    Time startTime, endTime;
+    float cost;
+    UserInformation client;
+    ServiceInformation service;
 
     public ClientServiceInteraction(){}
 

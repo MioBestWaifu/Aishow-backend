@@ -162,10 +162,12 @@ public abstract class DatabaseConnection {
         st.setDate(4, info.getBirthday());
         st.setString(5, info.getUserId()+".png");
         st.setString(6, info.getGender());
-        st.setInt(7, info.getArea());
+        st.setInt(7, info.getAreaCode());
         int rowsAffected = st.executeUpdate();
         return true;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -465,6 +467,11 @@ public abstract class DatabaseConnection {
                 buffer.setCostPerHour(res.getFloat("costPerHour"));
                 buffer.setDescription(res.getString("description"));
                 buffer.setServiceName(res.getString("serviceName"));
+                try{
+                    buffer.setShortServiceName(buffer.getServiceName().substring(0, 23)+"...");
+                } catch( Exception ex){
+                    buffer.setShortServiceName(buffer.getServiceName());
+                }
                 buffer.setTemplateImageUrl(res.getString("templateImageUrl"));
                 buffer.setCategory(res.getInt("serviceCategory"));
                 buffer.setCatText(getSingleGenericInfo("servicecategory", "idServiceCategory", "categoryName", buffer.getCategory()));
@@ -561,6 +568,11 @@ public abstract class DatabaseConnection {
             info.setCostPerHour(res.getFloat("costPerHour"));
             info.setDescription(res.getString("description"));
             info.setServiceName(res.getString("serviceName"));
+            try{
+                info.setShortServiceName(info.getShortServiceName().substring(0, 23)+"...");
+            } catch (Exception ex){
+                info.setShortServiceName(info.getShortServiceName());
+            }
             info.setTemplateImageUrl(res.getString("templateImageUrl"));
             var x = res.getString("templateImageUrl");
             info.setTemplateId(res.getInt("idServiceTemplates"));
