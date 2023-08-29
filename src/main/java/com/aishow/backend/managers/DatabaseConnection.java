@@ -10,17 +10,13 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
-import com.aishow.backend.info.ClientServiceInteraction;
-import com.aishow.backend.info.ReviewInfomation;
-import com.aishow.backend.info.ServiceBundle;
-import com.aishow.backend.info.ServiceInformation;
-import com.aishow.backend.info.ServiceSchedule;
-import com.aishow.backend.info.UserInformation;
+import com.aishow.backend.info.*;
 
 public abstract class DatabaseConnection {
     private static Connection conn;
@@ -184,9 +180,12 @@ public abstract class DatabaseConnection {
             st.setInt(6, info.getCategory());
             var creation =  st.executeUpdate()>0;
 
+            var x = info.getFromsAsTime();
+            var y = info.getTosAsTime();
+
             for(int a = 0; a<=6;a++){
                 if (info.getAvailableDays()[a] == true){
-                    addAvailability(getLastCreatedService(info.getProviderId()), a, info.getAvailableFroms()[a], info.getAvailableTos()[a]);
+                    addAvailability(getLastCreatedService(info.getProviderId()), a, x[a], y[a]);
                 }
             }
 
@@ -243,9 +242,12 @@ public abstract class DatabaseConnection {
                     return false;
             }
 
+            var x = info.getFromsAsTime();
+            var y = info.getTosAsTime();
+
             for(int a = 0; a<=6;a++){
                 if (info.getAvailableDays()[a] == true){
-                    if (!addAvailability(getLastCreatedService(info.getProviderId()), a, info.getAvailableFroms()[a], info.getAvailableTos()[a]))
+                    if (!addAvailability(getLastCreatedService(info.getProviderId()), a, x[a], y[a]))
                         return false;
                 }
             }
@@ -418,20 +420,19 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static String GetGenericInfo(String table, String id, String name){
+    public static ArrayList<GenericInformation> GetAllGenericInfo(String table, String id, String name){
         try{
             var st = conn.prepareStatement("SELECT * FROM "+table);
             var rst = st.executeQuery();
-            ArrayList<String> toJoin = new ArrayList<>();
-            HashMap<String,String> buff = new HashMap<>();
+            
+            ArrayList<GenericInformation> toSend = new ArrayList<>();
+            GenericInformation buff = new GenericInformation();
             while(rst.next()){
-                buff.put("Id", rst.getString(id));
-                buff.put("Name", rst.getString(name));
-                toJoin.add(Utils.toJson(buff));
+                buff.Id = rst.getInt(id);
+                buff.Name = rst.getString(name);
+                toSend.add(buff);
+                buff = new GenericInformation();
             }
-
-            var toSend = Utils.joinJsonArray(toJoin);
-            System.out.println(toSend);
             return toSend;
         } catch (SQLException ex){
             ex.printStackTrace();

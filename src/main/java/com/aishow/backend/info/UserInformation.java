@@ -19,76 +19,7 @@ public class UserInformation {
     ArrayList<ServiceBundle> serviceRecs;
     ArrayList<ServiceInformation> services;
     ArrayList<ReviewInfomation> reviews;
-    public UserInformation(){
-
-    }
-    public UserInformation(String json){
-    var map = Utils.mapJson(json, this.getClass());
-    if (map.containsKey("email"))
-        email = map.get("email");
-    if (map.containsKey("name"))
-        name = map.get("name");
-    else if (map.containsKey("username"))
-        name = map.get("username");
-    if (map.containsKey("password"))
-        password = map.get("password");
-    if (map.containsKey("userId"))
-        userId = Integer.parseInt(map.get("userId"));
-    if (map.containsKey("gender"))
-        gender = map.get("gender");
-    if (map.containsKey("area"))
-        areaCode = Integer.parseInt(map.get("area"));
-    if (map.containsKey("providingService"))
-        providingService = Boolean.parseBoolean(map.get("email"));
-    if (map.containsKey("birthday"))
-        birthday = Date.valueOf(map.get("birthday"));
-    }
-
-    public String toJson(){
-        HashMap<String,String> mapFields = new HashMap<>();
-        mapFields.put("userID", Integer.toString(userId));
-        if (email != null)
-            mapFields.put("email", email);
-        if (imageUrl != null)
-            mapFields.put("imageUrl", imageUrl);
-        if (name != null)
-            mapFields.put("name", name);
-        //Essa porra é confusa
-        if (areaName != null)
-            mapFields.put("area", areaName);
-        if (gender != null)
-            mapFields.put("gender", gender);
-        mapFields.put("providingService", Boolean.toString(providingService));
-        if (birthday != null)
-            mapFields.put("birthday", birthday.toString());
-        if (averageScore != 0f)
-            mapFields.put("averageScore", Float.toString(averageScore));
-        if (!(serviceRecs == null || serviceRecs.size() == 0)){
-            ArrayList<String> toJoin = new ArrayList<String>();
-            for (ServiceBundle si : serviceRecs){
-                toJoin.add(si.toJson());
-            }
-            mapFields.put("serviceRecs", Utils.joinJsonArray(toJoin));
-        }
-        if (!(services == null || services.size() == 0)){
-            ArrayList<String> toJoin = new ArrayList<String>();
-            for (ServiceInformation si : services){
-                toJoin.add(si.toJson());
-            }
-            mapFields.put("services", Utils.joinJsonArray(toJoin));
-        }
-        if (!(reviews == null || reviews.size() == 0)){
-            ArrayList<String> toJoin = new ArrayList<String>();
-            for (ReviewInfomation si : reviews){
-                toJoin.add(si.toJson());
-            }
-            mapFields.put("reviews", Utils.joinJsonArray(toJoin));
-        }
-        String toReturn = Utils.toJson(mapFields);
-        
-        return toReturn;
-    }
-
+    
     public String getEmail() {
         return email;
     }

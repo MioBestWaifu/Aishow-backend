@@ -9,29 +9,6 @@ public class ServiceSchedule {
     ArrayList<ClientServiceInteraction> pendingInstances;
     ArrayList<ClientServiceInteraction> pendingRequests;
 
-    public String toJson(){
-        HashMap<String,String> mapFields = new HashMap<>();
-        if (!(pendingInstances == null || pendingInstances.size() == 0)){
-            ArrayList<String> toJoin = new ArrayList<String>();
-            for (ClientServiceInteraction si : pendingInstances){
-                toJoin.add(si.toJson());
-            }
-            mapFields.put("pendingInstances", Utils.joinJsonArray(toJoin));
-        }
-        if (!(pendingRequests == null || pendingRequests.size() == 0)){
-            ArrayList<String> toJoin = new ArrayList<String>();
-            for (ClientServiceInteraction si : pendingRequests){
-                toJoin.add(si.toJson());
-            }
-            mapFields.put("pendingRequests", Utils.joinJsonArray(toJoin));
-        }
-
-        if (mapFields.isEmpty()){
-            return "{}";
-        }
-        return Utils.toJson(mapFields);
-    }
-
     public ArrayList<ClientServiceInteraction> getPendingInstances() {
         return pendingInstances;
     }

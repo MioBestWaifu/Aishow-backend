@@ -20,37 +20,7 @@ public class InitHandler extends BaseHandler{
     }
 
     public void sendInitialContent(String path, HttpExchange exchange){
-        try{
-            System.out.println(path);
-            switch (path){
-                case "/main.js":
-                    exchange.getResponseHeaders().add("Content-type", "text/javascript");
-                    Utils.sendAndClose(exchange,200,Utils.pages.get("Main"));
-                    break;
-                case "/runtime.js":
-                    exchange.getResponseHeaders().add("Content-type", "text/javascript");
-                    Utils.sendAndClose(exchange,200,Utils.pages.get("Runtime"));
-                    break;
-                case "/polyfills.js":
-                    exchange.getResponseHeaders().add("Content-type", "text/javascript");
-                    Utils.sendAndClose(exchange,200,Utils.pages.get("Polyfills"));
-                    break;
-                case "/styles.css":
-                    exchange.getResponseHeaders().add("Content-type", "text/css");
-                    Utils.sendAndClose(exchange,200,Utils.pages.get("Styles"));
-                    break;
-                case "/favicon.ico":
-                    exchange.getResponseHeaders().add("Content-type", "image/ico");
-                    Utils.sendAndClose(exchange,200,Utils.pages.get("Favicon"));
-                    break;
-                case "/":
-                    exchange.getResponseHeaders().add("Content-type", "text/html");
-                    Utils.sendAndClose(exchange,200,Utils.pages.get("Index"));
-                    break;
-            }
-        } catch (IOException ex){
-
-        }
+        
     }
 
     @Override

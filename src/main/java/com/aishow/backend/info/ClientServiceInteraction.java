@@ -15,52 +15,6 @@ public class ClientServiceInteraction {
     UserInformation client;
     ServiceInformation service;
 
-    public ClientServiceInteraction(){}
-
-    public ClientServiceInteraction(String json){
-        var map = Utils.mapJson(json, this.getClass());
-        if (map.containsKey("isAccepted"))
-            isAccepted = Boolean.parseBoolean(map.get("isAccepted"));
-        if (map.containsKey("hasFinished"))
-            hasFinished = Boolean.parseBoolean(map.get("hasFinished"));
-        if (map.containsKey("id"))
-            id = Integer.parseInt(map.get("id"));
-        if (map.containsKey("clientId"))
-            clientId = Integer.parseInt(map.get("clientId"));
-        if (map.containsKey("templateId"))
-            templateId = Integer.parseInt(map.get("templateId"));
-        if (map.containsKey("cost"))
-            cost = Float.parseFloat(map.get("cost"));
-        if (map.containsKey("startDate"))
-            startDate = Date.valueOf(map.get("startDate"));
-        if (map.containsKey("endDate"))
-            endDate = Date.valueOf(map.get("endDate"));
-        if (map.containsKey("startTime"))
-            startTime = Time.valueOf(map.get("startTime"));
-        if (map.containsKey("endTime"))
-            endTime = Time.valueOf(map.get("endTime"));
-    }
-
-    public String toJson(){
-        HashMap<String,String> mapFields = new HashMap<>();
-        mapFields.put("id", Integer.toString(id));
-        mapFields.put("clientId", Integer.toString(clientId));
-        mapFields.put("templateId", Integer.toString(templateId));
-        mapFields.put("cost", Float.toString(cost));
-
-        var x = startDate.toLocalDate();
-        mapFields.put("startDate",x.getDayOfMonth() + "/"+x.getMonthValue()+"/"+x.getYear());
-        x = endDate.toLocalDate();
-        mapFields.put("endDate", x.getDayOfMonth() + "/"+x.getMonthValue()+"/"+x.getYear());
-
-        mapFields.put("startTime", startTime.toString());
-        mapFields.put("endTime", endTime.toString());
-        if(client != null);
-            mapFields.put("client", client.toJson());
-        if(service != null);
-            mapFields.put("service", service.toJson());
-        return Utils.toJson(mapFields);
-    }
 
     public boolean isAccepted() {
         return isAccepted;

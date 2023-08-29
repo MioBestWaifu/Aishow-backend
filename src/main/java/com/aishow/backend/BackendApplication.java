@@ -18,11 +18,7 @@ import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
 
 import java.io.IOException;
-//SQL
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -56,8 +52,8 @@ public class BackendApplication {
 	//GETS
 	//PASSED
 	@GetMapping("/api/info")
-	public String getGenericInfo(@RequestParam("category") String cat) throws IOException{
-		String x = new MacroInfoHandler().handle(null, new String[]{cat});
+	public ArrayList<GenericInformation> getGenericInfo(@RequestParam("category") String cat) throws IOException{
+	    ArrayList<GenericInformation> x = new MacroInfoHandler().handle(null, new String[]{cat});
 		return x;
 	}
 
@@ -116,8 +112,8 @@ public class BackendApplication {
 
 	//PASSED
 	@PostMapping(value="/api/imageUpdate",consumes = "image/*", produces = "text/plain")
-	public String tryToUpdateImage(@RequestBody byte[] image, @RequestParam("type") String type, @RequestParam("id") String id){
-		return new ImageUpdateHandler().handle(image, new String[]{type,id});
+	public String tryToUpdateImage(@RequestBody byte[] image, @RequestParam("type") String type, @RequestParam("id") String id, @RequestParam("idProvider") String idProvider){
+		return new ImageUpdateHandler().handle(image, new String[]{type,id,idProvider});
 	}
 
 	//Id será desnecessario com o AUTH
@@ -129,20 +125,20 @@ public class BackendApplication {
 	}
 
 	//Id será desnecessario com o AUTH
-	//PROBLEMA COM CONVERTER O DATE
+	//PASSED
 	@PostMapping(value="/api/createService",consumes = "application/json", produces = "text/plain")
 	public String createService(@RequestBody ServiceInformation info,@RequestParam("id") String id) {
 		String x = new CreateServiceHandler().handle(info,new String[]{id});
 		return x;
 	}
 
-	//VAI DAR O MESMO PROBLEMA DE CIMA
+	//PASSED
 	@PostMapping(value="/api/scheduleService",consumes = "application/json", produces = "text/plain")
 	public String scheduleService(@RequestBody ClientServiceInteraction info){
 		return new ScheduleServiceHandler().handle(info);
 	}
 
-	///VAI DAR O MESMO PROBLEMA DO CREATE
+	//PASSED
 	@PostMapping(value="/api/updateService",consumes = "application/json", produces = "text/plain")
 	public String updateService(@RequestBody ServiceInformation info){
 		return new UpdateServiceHandler().handle(info);
