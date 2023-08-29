@@ -1,0 +1,3 @@
+jdbc:mysql://aishow.mysql.database.azure.com/aluguel
+miobestwaifu
+24%viado
