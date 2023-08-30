@@ -16,6 +16,6 @@ public class ImageLoader {
         System.out.println("REQ IMAGEM");
         System.out.println(request.getRequestURI());
         System.out.println("------------------------------");
-		return Utils.imageToByteArray("src/raw/"+request.getRequestURI(), "png");
+		return ImageHandler.imageToByteArray("src/raw/"+request.getRequestURI(), "png");
 	}
 }
