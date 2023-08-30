@@ -73,10 +73,12 @@ public class BackendApplication {
 			try (ByteArrayInputStream dataStream = new ByteArrayInputStream(sampleData.getBytes())) {
         		x.upload(dataStream, sampleData.length());
     		} catch (IOException ex) {
+				System.out.println(ex.toString());
 				return ex.toString();
 			}
 			return "OK";
 		}catch (Exception ex){
+			System.out.println(ex.toString());
 			return ex.toString();
 		}
 	}
