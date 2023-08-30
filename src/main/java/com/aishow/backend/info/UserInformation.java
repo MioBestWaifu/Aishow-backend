@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.aishow.backend.managers.Utils;
+import com.aishow.backend.modular.ModularInfo;
 
 public class UserInformation {
     //Vai enviar senha no json tbm
@@ -81,7 +82,7 @@ public class UserInformation {
         return imageUrl;
     }
     public void setImageUrl(String userCode) {
-        this.imageUrl = "http://localhost:8080/images/"+userCode;
+        this.imageUrl = ModularInfo.BASE_IMAGE_URL+userCode;
     }
     public int getAreaCode() {
         return areaCode;
