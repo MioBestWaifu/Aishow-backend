@@ -65,7 +65,7 @@ public class BackendApplication {
 	    try{
 			BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
             .endpoint("https://aishow.blob.core.windows.net/")
-            .credential(new DefaultAzureCredentialBuilder().build())
+            .credential(new ManagedIdentityCredentialBuilder().build())
             .buildClient();
 
 			String sampleData = "Hello World";
