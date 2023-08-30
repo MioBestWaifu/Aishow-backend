@@ -61,7 +61,7 @@ public class BackendApplication {
 	//GETS
 	//PASSED
 	@GetMapping("/blob")
-	public String testBlob(@RequestParam("category") String cat){
+	public String testBlob(){
 	    try{
 			BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
             .endpoint("https://aishow.blob.core.windows.net/")
@@ -69,7 +69,7 @@ public class BackendApplication {
             .buildClient();
 
 			String sampleData = "Hello World";
-			var x = blobServiceClient.getBlobContainerClient("images").getBlobClient("images/teste.txt").getBlockBlobClient();
+			var x = blobServiceClient.getBlobContainerClient("images").getBlobClient("/teste.txt").getBlockBlobClient();
 			System.out.println(x.getBlobUrl());
 			try (ByteArrayInputStream dataStream = new ByteArrayInputStream(sampleData.getBytes())) {
         		x.upload(dataStream, sampleData.length());
