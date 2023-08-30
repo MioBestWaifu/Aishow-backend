@@ -2,6 +2,7 @@ package com.aishow.backend.handlers.appinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.managers.DatabaseConnection;
+import com.aishow.backend.modular.ModularInfo;
 
 public class PathfindHandler extends BaseHandler{
 
@@ -20,9 +21,9 @@ public class PathfindHandler extends BaseHandler{
         // TODO MODIFICAR ISSO QUADNO TIVER UMA CDN OU FAZER UMA VERSÃO PARA TESTES E UMA PARA PRODUÇÃO
         switch(params[0]){
             case "service":
-                return (G)("http://localhost:8080/images/"+DatabaseConnection.getServiceImageUrl(Integer.parseInt(params[1])));
+                return (G)(ModularInfo.BASE_IMAGE_URL+DatabaseConnection.getServiceImageUrl(Integer.parseInt(params[1])));
             case "user":
-                return (G)("http://localhost:8080/images/"+DatabaseConnection.getUserImageUrl(Integer.parseInt(params[1])));
+                return (G)(ModularInfo.BASE_IMAGE_URL+DatabaseConnection.getUserImageUrl(Integer.parseInt(params[1])));
         }
         return (G)"FAIL";
     }

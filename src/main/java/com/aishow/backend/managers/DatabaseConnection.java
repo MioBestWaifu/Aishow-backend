@@ -22,7 +22,7 @@ public abstract class DatabaseConnection {
     private static Connection conn;
     private static ArrayList<Integer> serviceIds = new ArrayList<>();
     public static void connect() throws IOException{
-        BufferedReader txtReader = new BufferedReader(new InputStreamReader(DatabaseConnection.class.getResourceAsStream("conninfo.txt")));
+        BufferedReader txtReader = new BufferedReader(new InputStreamReader(DatabaseConnection.class.getResourceAsStream("../modular/conninfo.txt")));
         String driverName = "com.mysql.cj.jdbc.Driver";
         try {
             Class.forName(driverName);

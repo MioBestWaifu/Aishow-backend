@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.aishow.backend.managers.Utils;
+import com.aishow.backend.modular.ModularInfo;
 
 public class ServiceInformation {
     String serviceName,shortServiceName,description, providerName, providerUrl, providerImageUrl, providerArea, templateImageUrl, modText, catText;
@@ -39,7 +40,7 @@ public class ServiceInformation {
         return providerImageUrl;
     }
     public void setProviderImageUrl(String providerCode) {
-        this.providerImageUrl = "http://localhost:8080/images/"+providerCode;
+        this.providerImageUrl = ModularInfo.BASE_IMAGE_URL+providerCode;
     }
     public float getCostPerHour() {
         return costPerHour;
