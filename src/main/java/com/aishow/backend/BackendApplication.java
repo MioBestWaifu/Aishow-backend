@@ -17,6 +17,15 @@ import com.aishow.backend.handlers.userinteraction.*;
 import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
 
+//Azure
+import com.azure.core.credential.*;
+import com.azure.identity.*;
+import com.azure.storage.blob.*;
+import com.azure.storage.blob.models.*;
+import com.azure.storage.blob.specialized.*;
+import com.azure.storage.common.*;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +57,30 @@ public class BackendApplication {
 		DatabaseConnection.connect();
 		SpringApplication.run(BackendApplication.class, args);
 	}
+
+	//GETS
+	//PASSED
+	@GetMapping("/blob")
+	public String testBlob(@RequestParam("category") String cat){
+	    try{
+			BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+            .endpoint("https://aishow.blob.core.windows.net/")
+            .credential(new DefaultAzureCredentialBuilder().build())
+            .buildClient();
+
+			String sampleData = "Hello World";
+			var x = blobServiceClient.getBlobContainerClient("images").getBlobClient("images/teste.txt").getBlockBlobClient();
+			try (ByteArrayInputStream dataStream = new ByteArrayInputStream(sampleData.getBytes())) {
+        		x.upload(dataStream, sampleData.length());
+    		} catch (IOException ex) {
+				return ex.toString();
+			}
+			return "OK";
+		}catch (Exception ex){
+			return ex.toString();
+		}
+	}
+
 
 	//GETS
 	//PASSED
