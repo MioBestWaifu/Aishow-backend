@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.aishow.backend.managers.Utils;
+import com.aishow.backend.modular.ImageHandler;
 import com.aishow.backend.modular.ModularInfo;
 
 public class ServiceInformation {
@@ -88,7 +89,7 @@ public class ServiceInformation {
         return templateImageUrl;
     }
     public void setTemplateImageUrl(String templateImageUrl) {
-        this.templateImageUrl = "http://localhost:8080/images/services/"+templateImageUrl;
+        this.templateImageUrl = ModularInfo.BASE_IMAGE_URL+templateImageUrl;
     }
     public ArrayList<ReviewInfomation> getReviews() {
         return reviews;
