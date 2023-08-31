@@ -89,7 +89,7 @@ public class ServiceInformation {
         return templateImageUrl;
     }
     public void setTemplateImageUrl(String templateImageUrl) {
-        this.templateImageUrl = ModularInfo.BASE_IMAGE_URL+templateImageUrl;
+        this.templateImageUrl = ModularInfo.BASE_IMAGE_URL+"services/"+templateImageUrl;
     }
     public ArrayList<ReviewInfomation> getReviews() {
         return reviews;
