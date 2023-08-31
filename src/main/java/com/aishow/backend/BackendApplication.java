@@ -28,6 +28,7 @@ import com.azure.storage.common.*;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class BackendApplication {
 	}
 
 	@GetMapping("teste")
-	public String getGenericInfo(){
+	public String getGenericInfo() throws IOException{
 		BufferedReader txtReader = new BufferedReader(new InputStreamReader(DatabaseConnection.class.getResourceAsStream("teste.txt")));
 		return txtReader.readLine();
 	}
