@@ -35,12 +35,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 @RestController
 public class BackendApplication {
 
-	static byte[] index, poly, main, fav, css, run;
+	static String index, poly, main, css, run;
 /*
  * TODO #2 Testar as classes recém-migradas (PERSONAL):
  * ImageUpdate
@@ -63,58 +64,36 @@ public class BackendApplication {
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
 		//DatabaseConnection.connect();
-		File resource = new ClassPathResource("dist/hayasaka/index.html").getFile();
-		byte[] bytes = new byte[(int) resource.length()];
-		FileInputStream fis = new FileInputStream(resource);
-		fis.read(bytes);
-		fis.close();
+		var stream = new ClassPathResource("dist/hayasaka/index.html").getInputStream();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		index = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
 
-		index = bytes;
+		stream = new ClassPathResource("dist/hayasaka/main.js").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		main = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
 
-		resource = new ClassPathResource("dist/hayasaka/main.js").getFile();
-		bytes = new byte[(int) resource.length()];
-		fis = new FileInputStream(resource);
-		fis.read(bytes);
-		fis.close();
+		stream = new ClassPathResource("dist/hayasaka/polyfills.js").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		poly = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
 
+		stream = new ClassPathResource("dist/hayasaka/styles.css").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		css = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
 
-		main = bytes;
+		stream = new ClassPathResource("dist/hayasaka/runtime.js").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		run = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
 
-		resource = new ClassPathResource("dist/hayasaka/polyfills.js").getFile();
-		bytes = new byte[(int) resource.length()];
-		fis = new FileInputStream(resource);
-		fis.read(bytes);
-		fis.close();
-
-
-		poly = bytes;
-
-		resource = new ClassPathResource("dist/hayasaka/styles.css").getFile();
-		bytes = new byte[(int) resource.length()];
-		fis = new FileInputStream(resource);
-		fis.read(bytes);
-		fis.close();
-
-
-		css = bytes;
-
-		resource = new ClassPathResource("dist/hayasaka/favicon.ico").getFile();
-		bytes = new byte[(int) resource.length()];
-		fis = new FileInputStream(resource);
-		fis.read(bytes);
-		fis.close();
-
-
-		fav = bytes;
-
-		resource = new ClassPathResource("dist/hayasaka/runtime.js").getFile();
-		bytes = new byte[(int) resource.length()];
-		fis = new FileInputStream(resource);
-		fis.read(bytes);
-		fis.close();
-
-
-		run = bytes;
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
@@ -144,33 +123,28 @@ public class BackendApplication {
 		}
 	}
 	@GetMapping("/")
-	public byte[] getIndex() throws IOException{
+	public String getIndex() throws IOException{
 		return index;
 	}
 
 	@GetMapping(value = "/main.js", produces = "application/javascript")
-	public byte[] getMain() throws IOException{
+	public String getMain() throws IOException{
 		return main;
 	}
 
 	@GetMapping(value = "/polyfills.js", produces = "application/javascript")
-	public byte[] getPoly() throws IOException{
+	public String getPoly() throws IOException{
 		return poly;
 	}
 
 	@GetMapping(value = "/runtime.js" , produces = "application/javascript")
-	public byte[] getRun() throws IOException{
+	public String getRun() throws IOException{
 		return run;
 	}
 
 	@GetMapping(value = "/styles.css", produces = "text/css")
-	public byte[] getCss() throws IOException{
+	public String getCss() throws IOException{
 		return css;
-	}
-
-	@GetMapping("/favicon.ico")
-	public byte[] getFav() throws IOException{
-		return fav;
 	}
 
 
