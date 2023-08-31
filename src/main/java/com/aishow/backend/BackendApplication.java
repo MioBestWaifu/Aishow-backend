@@ -28,7 +28,10 @@ import com.azure.storage.common.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,8 @@ import java.util.List;
 @SpringBootApplication
 @RestController
 public class BackendApplication {
+
+	static byte[] index, poly, main, fav, css, run;
 /*
  * TODO #2 Testar as classes recém-migradas (PERSONAL):
  * ImageUpdate
@@ -57,14 +62,60 @@ public class BackendApplication {
   //TODO #5 COMPATIBILIZAR COMPLETAMENTE OS TIPOS COM O JSON DO SPRING
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
-		DatabaseConnection.connect();
-		SpringApplication.run(BackendApplication.class, args);
-	}
+		//DatabaseConnection.connect();
+		File resource = new ClassPathResource("dist/hayasaka/index.html").getFile();
+		byte[] bytes = new byte[(int) resource.length()];
+		FileInputStream fis = new FileInputStream(resource);
+		fis.read(bytes);
+		fis.close();
 
-	@GetMapping("teste")
-	public String getGenericInfo() throws IOException{
-		BufferedReader txtReader = new BufferedReader(new InputStreamReader(new ClassPathResource("teste.txt").getInputStream()));
-		return txtReader.readLine();
+		index = bytes;
+
+		resource = new ClassPathResource("dist/hayasaka/main.js").getFile();
+		bytes = new byte[(int) resource.length()];
+		fis = new FileInputStream(resource);
+		fis.read(bytes);
+		fis.close();
+
+
+		main = bytes;
+
+		resource = new ClassPathResource("dist/hayasaka/polyfills.js").getFile();
+		bytes = new byte[(int) resource.length()];
+		fis = new FileInputStream(resource);
+		fis.read(bytes);
+		fis.close();
+
+
+		poly = bytes;
+
+		resource = new ClassPathResource("dist/hayasaka/styles.css").getFile();
+		bytes = new byte[(int) resource.length()];
+		fis = new FileInputStream(resource);
+		fis.read(bytes);
+		fis.close();
+
+
+		css = bytes;
+
+		resource = new ClassPathResource("dist/hayasaka/favicon.ico").getFile();
+		bytes = new byte[(int) resource.length()];
+		fis = new FileInputStream(resource);
+		fis.read(bytes);
+		fis.close();
+
+
+		fav = bytes;
+
+		resource = new ClassPathResource("dist/hayasaka/runtime.js").getFile();
+		bytes = new byte[(int) resource.length()];
+		fis = new FileInputStream(resource);
+		fis.read(bytes);
+		fis.close();
+
+
+		run = bytes;
+		SpringApplication.run(BackendApplication.class, args);
 	}
 
 	//GETS
@@ -91,6 +142,35 @@ public class BackendApplication {
 			System.out.println(ex.toString());
 			return ex.toString();
 		}
+	}
+	@GetMapping("/")
+	public byte[] getIndex() throws IOException{
+		return index;
+	}
+
+	@GetMapping(value = "/main.js", produces = "application/javascript")
+	public byte[] getMain() throws IOException{
+		return main;
+	}
+
+	@GetMapping(value = "/polyfills.js", produces = "application/javascript")
+	public byte[] getPoly() throws IOException{
+		return poly;
+	}
+
+	@GetMapping(value = "/runtime.js" , produces = "application/javascript")
+	public byte[] getRun() throws IOException{
+		return run;
+	}
+
+	@GetMapping(value = "/styles.css", produces = "text/css")
+	public byte[] getCss() throws IOException{
+		return css;
+	}
+
+	@GetMapping("/favicon.ico")
+	public byte[] getFav() throws IOException{
+		return fav;
 	}
 
 
