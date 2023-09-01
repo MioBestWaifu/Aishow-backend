@@ -53,7 +53,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Aishow-backend'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B4834F6EFE964E3689ADE3954FC34943 }}
+          app-name: 'aishow-us-delay-test'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_8fa595c088e94bd1915d63d0686d0bef }}
           package: '*.jar'
