@@ -6,7 +6,7 @@ name: Build and deploy JAR app to Azure Web App - Aishow-backend
 on:
   push:
     branches:
-      - main
+      - delayTest
   workflow_dispatch:
 
 jobs:
