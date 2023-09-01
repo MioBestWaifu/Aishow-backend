@@ -54,7 +54,7 @@ public class BackendApplication {
   * TODO #3 Testar as classes recém-migradas (SERVICES):
   Create
   Schedule
-  Agenda
+  Agend
   Request
   Update
   UserServicesRequest
