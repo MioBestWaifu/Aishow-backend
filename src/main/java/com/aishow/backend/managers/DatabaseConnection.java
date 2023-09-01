@@ -38,7 +38,7 @@ public abstract class DatabaseConnection {
         } catch (SQLException ex) {
             System.out.println("Conexão merda");
             System.out.println(ex.getMessage());
-            System.exit(0);
+            return;
         }
         try{
         var st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates");
