@@ -247,7 +247,7 @@ public abstract class DatabaseConnection {
 
             for(int a = 0; a<=6;a++){
                 if (info.getAvailableDays()[a] == true){
-                    if (!addAvailability(getLastCreatedService(info.getProviderId()), a, x[a], y[a]))
+                    if (!addAvailability(info.getTemplateId(), a, x[a], y[a]))
                         return false;
                 }
             }
@@ -698,8 +698,8 @@ public abstract class DatabaseConnection {
                 //}
             }
             info.setAvailableDays(days);
-            info.setAvailableFroms(from);
-            info.setAvailableTos(to);
+            info.setAvailableFromsFromTime(from);
+            info.setAvailableTosFromTime(to);
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
