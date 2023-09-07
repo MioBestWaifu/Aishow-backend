@@ -30,9 +30,9 @@ public abstract class DatabaseConnection {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        String url = "jdbc:mysql://aishow.mysql.database.azure.com:3306/aluguel";
-        String username = "miobestwaifu";
-        String serverPassword = "24%viado";
+        String url = "jdbc:mysql://localhost:3306/aluguel";
+        String username = "root";
+        String serverPassword = "uiharu";
         try {
             conn = DriverManager.getConnection(url, username, serverPassword);
         } catch (SQLException ex) {
@@ -208,7 +208,7 @@ public abstract class DatabaseConnection {
             st.setInt(2, info.getCategory());
             st.setString(3, info.getDescription());
             st.setString(4, info.getServiceName());
-            st.setFloat(5, info.getCostInNumber());
+            st.setFloat(5, info.getCostPerHour());
             st.setInt(6, info.getTemplateId());
             return st.executeUpdate() == 1;
         } catch (SQLException ex){
@@ -247,7 +247,7 @@ public abstract class DatabaseConnection {
 
             for(int a = 0; a<=6;a++){
                 if (info.getAvailableDays()[a] == true){
-                    if (!addAvailability(getLastCreatedService(info.getProviderId()), a, x[a], y[a]))
+                    if (!addAvailability(info.getTemplateId(), a, x[a], y[a]))
                         return false;
                 }
             }
@@ -698,8 +698,8 @@ public abstract class DatabaseConnection {
                 //}
             }
             info.setAvailableDays(days);
-            info.setAvailableFroms(from);
-            info.setAvailableTos(to);
+            info.setAvailableFromsFromTime(from);
+            info.setAvailableTosFromTime(to);
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -707,12 +707,50 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static ServiceSchedule getScheduleByProvider (int id){
+    public static ArrayList<ClientServiceInteraction> getUserRequests(int id){
+        try{
+            var st = conn.prepareStatement("SELECT * FROM servicerequests WHERE clientID = ?");
+            st.setInt(1, id);
+            var res = st.executeQuery();
+            ArrayList<ClientServiceInteraction> buffer = new ArrayList<>();
+            ClientServiceInteraction x;
+            while (res.next()){
+                x = new ClientServiceInteraction();
+                x.setAccepted(true);
+                x.setId(res.getInt("idServiceInstances"));
+                x.setCost(res.getFloat("cost"));
+                x.setHasFinished(res.getBoolean("finished"));
+                x.setStartDate(res.getDate("startDate"));
+                x.setEndDate(res.getDate("endDate"));
+                x.setStartTime(res.getTime("startTime"));
+                x.setEndTime(res.getTime("endTime"));
+                x.setTemplateId(res.getInt("templateID"));
+                x.setClientId(res.getInt("clientID"));
+                x.setProvider(x.getClientId() == id);
+                System.out.println(x.getId());
+                var y = new UserInformation();
+                var z = new ServiceInformation();
+                z.setTemplateId(x.getTemplateId());
+                y.setUserId(x.getClientId());
+                x.setClient(DatabaseConnection.getBasicUserInformation(y));
+                x.setService(DatabaseConnection.getBasicServiceInformation(z));
+                buffer.add(x);
+            }
+
+            return buffer;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static ServiceSchedule getScheduleByUser (int id){
         try{
             ServiceSchedule toReturn = new ServiceSchedule();
             ArrayList<ClientServiceInteraction> buffer = new ArrayList<>();
-            var st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) ORDER BY startDate, startTime");
+            var st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ? ORDER BY startDate, startTime");
             st.setInt(1, id);
+            st.setInt(2, id);
 
             var res = st.executeQuery();
 
@@ -730,6 +768,8 @@ public abstract class DatabaseConnection {
                 x.setEndTime(res.getTime("endTime"));
                 x.setTemplateId(res.getInt("templateID"));
                 x.setClientId(res.getInt("clientID"));
+                x.setProvider(x.getClientId() == id);
+
                 System.out.println(x.getId());
                 var y = new UserInformation();
                 var z = new ServiceInformation();

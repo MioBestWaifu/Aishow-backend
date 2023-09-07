@@ -51,6 +51,9 @@ public abstract class Utils {
     }
 
     public static Time stringToTime (String s){
+        if (s.length() == 5){
+            s+= ":00";
+        }
         var x = s.split(":");
         Time toReturn = new Time(Integer.parseInt(x[0]), Integer.parseInt(x[1]), Integer.parseInt(x[2]));
         return toReturn;

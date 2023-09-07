@@ -64,36 +64,6 @@ public class BackendApplication {
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
 		DatabaseConnection.connect();
-		var stream = new ClassPathResource("dist/hayasaka/index.html").getInputStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		index = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/main.js").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		main = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/polyfills.js").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		poly = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/styles.css").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		css = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/runtime.js").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		run = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
@@ -122,32 +92,7 @@ public class BackendApplication {
 			return ex.toString();
 		}
 	}
-	@GetMapping("/")
-	public String getIndex() throws IOException{
-		return index;
-	}
-
-	@GetMapping(value = "/main.js", produces = "application/javascript")
-	public String getMain() throws IOException{
-		return main;
-	}
-
-	@GetMapping(value = "/polyfills.js", produces = "application/javascript")
-	public String getPoly() throws IOException{
-		return poly;
-	}
-
-	@GetMapping(value = "/runtime.js" , produces = "application/javascript")
-	public String getRun() throws IOException{
-		return run;
-	}
-
-	@GetMapping(value = "/styles.css", produces = "text/css")
-	public String getCss() throws IOException{
-		return css;
-	}
-
-
+	
 	//GETS
 	//PASSED
 	@GetMapping("/api/info")
@@ -174,6 +119,11 @@ public class BackendApplication {
 	@GetMapping(value="/api/getAgenda",produces = "application/json")
 	public ServiceSchedule getAgenda(@RequestParam("id") String id){
 		return new ServiceAgendaRequestHandler().handle(null, new String[]{id});
+	}
+
+	@GetMapping(value="/api/getUserRequests",produces = "application/json")
+	public ArrayList<ClientServiceInteraction> getUserServiceRequests(@RequestParam("id") String id){
+		return new UserServiceRequestsHandler().handle(null, new String[]{id});
 	}
 
 	//PASSED, ADICIONAR OBJETO PROVIDER NO FULL INFO

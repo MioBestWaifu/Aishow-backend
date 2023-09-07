@@ -12,7 +12,7 @@ import com.aishow.backend.modular.ModularInfo;
 
 public class ServiceInformation {
     String serviceName,shortServiceName,description, providerName, providerUrl, providerImageUrl, providerArea, templateImageUrl, modText, catText;
-    float costPerHour, costInNumber;
+    float costPerHour;
     float averageScore;
     int providerId, templateId, modality, category;
     boolean[] availableDays;
@@ -96,6 +96,8 @@ public class ServiceInformation {
     }
     public void setReviews(ArrayList<ReviewInfomation> reviews) {
         this.reviews = reviews;
+        if (reviews == null)
+            return;
         if (reviews.size()>0){
             int tot = 0;
             for (ReviewInfomation reviewInfomation : reviews) {
@@ -134,7 +136,17 @@ public class ServiceInformation {
         return availableFroms;
     }
 
-    public void setAvailableFroms(Time[] from) {
+    @com.fasterxml.jackson.annotation.JsonSetter
+    public void setAvailableFroms(String[] froms){
+        availableFroms = froms;
+    }
+
+    @com.fasterxml.jackson.annotation.JsonSetter
+    public void setAvailableTos(String[] tos){
+        availableTos = tos;
+    }
+
+    public void setAvailableFromsFromTime(Time[] from) {
         this.availableFroms = new String[7];
         for(int a = 0; a<=6; a++){
             try{
@@ -148,7 +160,7 @@ public class ServiceInformation {
         return availableTos;
     }
 
-    public void setAvailableTos(Time[] to) {
+    public void setAvailableTosFromTime(Time[] to) {
         this.availableTos = new String[7];
         for(int a = 0; a<=6; a++){
             try{
@@ -179,14 +191,6 @@ public class ServiceInformation {
 
     public void setShortServiceName(String shortServiceName) {
         this.shortServiceName = shortServiceName;
-    }
-
-    public float getCostInNumber() {
-        return costInNumber;
-    }
-
-    public void setCostInNumber(float costInNumber) {
-        this.costInNumber = costInNumber;
     }
     
     public Time[] getFromsAsTime(){
