@@ -64,7 +64,6 @@ public class BackendApplication {
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
 		DatabaseConnection.connect();
-	
 		SpringApplication.run(BackendApplication.class, args);
 	}
 

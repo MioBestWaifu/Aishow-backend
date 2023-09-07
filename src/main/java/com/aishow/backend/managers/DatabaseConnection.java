@@ -38,7 +38,7 @@ public abstract class DatabaseConnection {
         } catch (SQLException ex) {
             System.out.println("Conexão merda");
             System.out.println(ex.getMessage());
-            System.exit(0);
+            return;
         }
         try{
         var st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates");
@@ -470,7 +470,7 @@ public abstract class DatabaseConnection {
                 buffer.setServiceName(res.getString("serviceName"));
                 try{
                     buffer.setShortServiceName(buffer.getServiceName().substring(0, 23)+"...");
-                } catch( Exception ex){
+                } catch(Exception ex){
                     buffer.setShortServiceName(buffer.getServiceName());
                 }
                 buffer.setTemplateImageUrl(res.getString("templateImageUrl"));
@@ -570,7 +570,7 @@ public abstract class DatabaseConnection {
             info.setDescription(res.getString("description"));
             info.setServiceName(res.getString("serviceName"));
             try{
-                info.setShortServiceName(info.getShortServiceName().substring(0, 23)+"...");
+                info.setShortServiceName(info.getServiceName().substring(0, 23)+"...");
             } catch (Exception ex){
                 info.setShortServiceName(info.getServiceName());
             }
