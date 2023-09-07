@@ -22,7 +22,7 @@ public abstract class DatabaseConnection {
     private static Connection conn;
     private static ArrayList<Integer> serviceIds = new ArrayList<>();
     public static void connect() throws IOException{
-        BufferedReader txtReader = new BufferedReader(new InputStreamReader(DatabaseConnection.class.getResourceAsStream("../modular/conninfo.txt")));
+        //BufferedReader txtReader = new BufferedReader(new InputStreamReader(DatabaseConnection.class.getResourceAsStream("../modular/conninfo.txt")));
         String driverName = "com.mysql.cj.jdbc.Driver";
         try {
             Class.forName(driverName);
@@ -30,9 +30,9 @@ public abstract class DatabaseConnection {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        String url = txtReader.readLine();
-        String username = txtReader.readLine();
-        String serverPassword = txtReader.readLine();
+        String url = "jdbc:mysql://aishow.mysql.database.azure.com:3306/aluguel";
+        String username = "miobestwaifu";
+        String serverPassword = "24%viado";
         try {
             conn = DriverManager.getConnection(url, username, serverPassword);
         } catch (SQLException ex) {

@@ -15,6 +15,8 @@ import com.aishow.backend.managers.DatabaseConnection;
 public abstract class ImageHandler {
     
     public static byte[] imageToByteArray(String address, String format) throws IOException {
+        if (true)
+            return null;
         if (Files.notExists(Paths.get(address))){
             address = "src/raw/images/0.png";
         }
@@ -25,6 +27,8 @@ public abstract class ImageHandler {
     }
 
     public static boolean updateUserProfilePicture(int id,String baseAddress, String format,byte[]data){
+        if(true)
+            return true;
         try{
         String time = Long.toString(System.currentTimeMillis());
         BufferedImage bImage2 = ImageIO.read(new ByteArrayInputStream(data));
@@ -57,6 +61,8 @@ public abstract class ImageHandler {
     }
 
     public static boolean updateServicePicture(String address, String format,byte[]data){
+        if(true)
+            return true;
         try{
         String time = Long.toString(System.currentTimeMillis());
         BufferedImage bImage2 = ImageIO.read(new ByteArrayInputStream(data));
