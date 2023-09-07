@@ -30,9 +30,9 @@ public abstract class DatabaseConnection {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        String url = "jdbc:mysql://aishow.mysql.database.azure.com:3306/aluguel";
-        String username = "miobestwaifu";
-        String serverPassword = "24%viado";
+        String url = "jdbc:mysql://localhost:3306/aluguel";
+        String username = "root";
+        String serverPassword = "uiharu";
         try {
             conn = DriverManager.getConnection(url, username, serverPassword);
         } catch (SQLException ex) {
