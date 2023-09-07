@@ -77,6 +77,11 @@ public class BackendApplication {
 		return new ServiceAgendaRequestHandler().handle(null, new String[]{id});
 	}
 
+	@GetMapping(value="/api/getUserRequests",produces = "application/json")
+	public ArrayList<ClientServiceInteraction> getUserServiceRequests(@RequestParam("id") String id){
+		return new UserServiceRequestsHandler().handle(null, new String[]{id});
+	}
+
 	//PASSED, ADICIONAR OBJETO PROVIDER NO FULL INFO
 	@GetMapping(value="/api/getService",produces = "application/json")
 	public ServiceInformation getService(@RequestParam("id") String id){

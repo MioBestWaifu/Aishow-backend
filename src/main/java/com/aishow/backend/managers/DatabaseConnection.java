@@ -707,6 +707,43 @@ public abstract class DatabaseConnection {
         }
     }
 
+    public static ArrayList<ClientServiceInteraction> getUserRequests(int id){
+        try{
+            var st = conn.prepareStatement("SELECT * FROM servicerequests WHERE clientID = ?");
+            st.setInt(1, id);
+            var res = st.executeQuery();
+            ArrayList<ClientServiceInteraction> buffer = new ArrayList<>();
+            ClientServiceInteraction x;
+            while (res.next()){
+                x = new ClientServiceInteraction();
+                x.setAccepted(true);
+                x.setId(res.getInt("idServiceInstances"));
+                x.setCost(res.getFloat("cost"));
+                x.setHasFinished(res.getBoolean("finished"));
+                x.setStartDate(res.getDate("startDate"));
+                x.setEndDate(res.getDate("endDate"));
+                x.setStartTime(res.getTime("startTime"));
+                x.setEndTime(res.getTime("endTime"));
+                x.setTemplateId(res.getInt("templateID"));
+                x.setClientId(res.getInt("clientID"));
+                x.setProvider(x.getClientId() == id);
+                System.out.println(x.getId());
+                var y = new UserInformation();
+                var z = new ServiceInformation();
+                z.setTemplateId(x.getTemplateId());
+                y.setUserId(x.getClientId());
+                x.setClient(DatabaseConnection.getBasicUserInformation(y));
+                x.setService(DatabaseConnection.getBasicServiceInformation(z));
+                buffer.add(x);
+            }
+
+            return buffer;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     public static ServiceSchedule getScheduleByUser (int id){
         try{
             ServiceSchedule toReturn = new ServiceSchedule();
