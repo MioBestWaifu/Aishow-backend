@@ -11,7 +11,7 @@ import com.aishow.backend.modular.ModularInfo;
 
 public class ServiceInformation {
     String serviceName,shortServiceName,description, providerName, providerUrl, providerImageUrl, providerArea, templateImageUrl, modText, catText;
-    float costPerHour, costInNumber;
+    float costPerHour;
     float averageScore;
     int providerId, templateId, modality, category;
     boolean[] availableDays;
@@ -190,14 +190,6 @@ public class ServiceInformation {
 
     public void setShortServiceName(String shortServiceName) {
         this.shortServiceName = shortServiceName;
-    }
-
-    public float getCostInNumber() {
-        return costInNumber;
-    }
-
-    public void setCostInNumber(float costInNumber) {
-        this.costInNumber = costInNumber;
     }
     
     public Time[] getFromsAsTime(){

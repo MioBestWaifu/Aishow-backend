@@ -208,7 +208,7 @@ public abstract class DatabaseConnection {
             st.setInt(2, info.getCategory());
             st.setString(3, info.getDescription());
             st.setString(4, info.getServiceName());
-            st.setFloat(5, info.getCostInNumber());
+            st.setFloat(5, info.getCostPerHour());
             st.setInt(6, info.getTemplateId());
             return st.executeUpdate() == 1;
         } catch (SQLException ex){
@@ -572,7 +572,7 @@ public abstract class DatabaseConnection {
             try{
                 info.setShortServiceName(info.getShortServiceName().substring(0, 23)+"...");
             } catch (Exception ex){
-                info.setShortServiceName(info.getShortServiceName());
+                info.setShortServiceName(info.getServiceName());
             }
             info.setTemplateImageUrl(res.getString("templateImageUrl"));
             var x = res.getString("templateImageUrl");
