@@ -707,12 +707,13 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static ServiceSchedule getScheduleByProvider (int id){
+    public static ServiceSchedule getScheduleByUser (int id){
         try{
             ServiceSchedule toReturn = new ServiceSchedule();
             ArrayList<ClientServiceInteraction> buffer = new ArrayList<>();
-            var st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) ORDER BY startDate, startTime");
+            var st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ? ORDER BY startDate, startTime");
             st.setInt(1, id);
+            st.setInt(2, id);
 
             var res = st.executeQuery();
 
@@ -730,6 +731,8 @@ public abstract class DatabaseConnection {
                 x.setEndTime(res.getTime("endTime"));
                 x.setTemplateId(res.getInt("templateID"));
                 x.setClientId(res.getInt("clientID"));
+                x.setProvider(x.getClientId() == id);
+
                 System.out.println(x.getId());
                 var y = new UserInformation();
                 var z = new ServiceInformation();

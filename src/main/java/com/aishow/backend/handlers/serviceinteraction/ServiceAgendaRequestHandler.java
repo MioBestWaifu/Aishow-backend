@@ -14,6 +14,6 @@ public class ServiceAgendaRequestHandler extends BaseHandler{
     //Verificacao de ID com o AUTH
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        return (G)DatabaseConnection.getScheduleByProvider(Integer.parseInt(params[0]));
+        return (G)DatabaseConnection.getScheduleByUser(Integer.parseInt(params[0]));
     }  
 }
