@@ -7,7 +7,7 @@ import java.util.HashMap;
 import com.aishow.backend.managers.Utils;
 
 public class ClientServiceInteraction {
-    boolean isAccepted, hasFinished;
+    boolean isAccepted, hasFinished, isProvider;
     int id, clientId, templateId;
     Date startDate, endDate;
     Time startTime, endTime;
@@ -16,6 +16,7 @@ public class ClientServiceInteraction {
     ServiceInformation service;
 
 
+    
     public boolean isAccepted() {
         return isAccepted;
     }
@@ -96,6 +97,12 @@ public class ClientServiceInteraction {
 
     public void setService(ServiceInformation service) {
         this.service = service;
+    }
+    public boolean isProvider() {
+        return isProvider;
+    }
+    public void setProvider(boolean isProvider) {
+        this.isProvider = isProvider;
     }
     
     

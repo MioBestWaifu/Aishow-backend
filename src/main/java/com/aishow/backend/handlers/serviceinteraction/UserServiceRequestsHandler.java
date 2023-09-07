@@ -3,17 +3,17 @@ package com.aishow.backend.handlers.serviceinteraction;
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.managers.DatabaseConnection;
 
-public class ServiceAgendaRequestHandler extends BaseHandler{
+public class UserServiceRequestsHandler extends BaseHandler{
 
     @Override
     public <T, G> G handle(T reqBody) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("Unimplemented method 'handle'");
     }
 
-    //Verificacao de ID com o AUTH
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        return (G)DatabaseConnection.getScheduleByUser(Integer.parseInt(params[0]));
-    }  
+        return (G) DatabaseConnection.getUserRequests(Integer.parseInt(params[0]));
+    }
+    
 }
