@@ -10,7 +10,11 @@ public class ScheduleServiceHandler extends BaseHandler{
     public <T, G> G handle(T reqBody) {
         //Isso precisa de validação
         try{
-            DatabaseConnection.addNewServiceRequest((ClientServiceInteraction) reqBody);
+            var y = (ClientServiceInteraction) reqBody;
+            var x = DatabaseConnection.checkAvailability(y);
+            if (!x.equals("AVA"))
+                return (G)x;
+            DatabaseConnection.addNewServiceRequest(y);
             return (G)"OK";
         } catch(Exception ex){
             return (G)"FAIL";

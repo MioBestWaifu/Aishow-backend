@@ -18,32 +18,16 @@ import com.aishow.backend.handlers.serviceinteraction.*;
 import com.aishow.backend.handlers.userinteraction.*;
 import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
+import com.aishow.backend.managers.DatabaseManager;
 
-//Azure
-import com.azure.core.credential.*;
-import com.azure.identity.*;
-import com.azure.storage.blob.*;
-import com.azure.storage.blob.models.*;
-import com.azure.storage.blob.specialized.*;
-import com.azure.storage.common.*;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 @CrossOrigin(origins = "https://nice-ground-0db2b8e10.3.azurestaticapps.net")
 @RestController
 public class BackendApplication {
-
-	static String index, poly, main, css, run;
 /*
  * TODO #2 Testar as classes recém-migradas (PERSONAL):
  * ImageUpdate
@@ -65,36 +49,8 @@ public class BackendApplication {
   //TODO #5 COMPATIBILIZAR COMPLETAMENTE OS TIPOS COM O JSON DO SPRING
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
-		DatabaseConnection.connect();
-		var stream = new ClassPathResource("dist/hayasaka/index.html").getInputStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		index = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/main.js").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		main = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/polyfills.js").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		poly = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/styles.css").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		css = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
-
-		stream = new ClassPathResource("dist/hayasaka/runtime.js").getInputStream();
-		reader = new BufferedReader(new InputStreamReader(stream));
-		run = reader.lines().collect(Collectors.joining("\n"));
-		stream.close();
-		reader.close();
+		DatabaseManager dm = new DatabaseManager();
+		dm.start();
 		SpringApplication.run(BackendApplication.class, args);
 		System.out.println("PSVM");
 	}
