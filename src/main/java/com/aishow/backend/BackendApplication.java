@@ -16,6 +16,7 @@ import com.aishow.backend.handlers.serviceinteraction.*;
 import com.aishow.backend.handlers.userinteraction.*;
 import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
+import com.aishow.backend.managers.DatabaseManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +46,8 @@ public class BackendApplication {
   //TODO #5 COMPATIBILIZAR COMPLETAMENTE OS TIPOS COM O JSON DO SPRING
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
-		DatabaseConnection.connect();
+		DatabaseManager dm = new DatabaseManager();
+		dm.start();
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
