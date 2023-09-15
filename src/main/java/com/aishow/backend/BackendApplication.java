@@ -4,6 +4,7 @@ package com.aishow.backend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootApplication
+@CrossOrigin(origins = "https://nice-ground-0db2b8e10.3.azurestaticapps.net")
 @RestController
 public class BackendApplication {
 
@@ -64,11 +66,69 @@ public class BackendApplication {
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
 		DatabaseConnection.connect();
-	
+		var stream = new ClassPathResource("dist/hayasaka/index.html").getInputStream();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		index = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
+
+		stream = new ClassPathResource("dist/hayasaka/main.js").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		main = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
+
+		stream = new ClassPathResource("dist/hayasaka/polyfills.js").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		poly = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
+
+		stream = new ClassPathResource("dist/hayasaka/styles.css").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		css = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
+
+		stream = new ClassPathResource("dist/hayasaka/runtime.js").getInputStream();
+		reader = new BufferedReader(new InputStreamReader(stream));
+		run = reader.lines().collect(Collectors.joining("\n"));
+		stream.close();
+		reader.close();
 		SpringApplication.run(BackendApplication.class, args);
+		System.out.println("PSVM");
 	}
 
 	//GETS
+	@GetMapping("/")
+	public String getIndex() throws IOException{
+		System.out.println("Index");
+		return index;
+	}
+
+	@GetMapping(value = "/main.js", produces = "application/javascript")
+	public String getMain() throws IOException{
+		System.out.println("Main");
+		return main;
+	}
+
+	@GetMapping(value = "/polyfills.js", produces = "application/javascript")
+	public String getPoly() throws IOException{
+		System.out.println("Poly");
+		return poly;
+	}
+
+	@GetMapping(value = "/runtime.js" , produces = "application/javascript")
+	public String getRun() throws IOException{
+		System.out.println("Runtime");
+		return run;
+	}
+
+	@GetMapping(value = "/styles.css", produces = "text/css")
+	public String getCss() throws IOException{
+		System.out.println("Styles");
+		return css;
+	}
 	//PASSED
 	@GetMapping("/blob")
 	public String testBlob(){
