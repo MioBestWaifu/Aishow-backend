@@ -65,3 +65,6 @@ testem.log
 .DS_Store
 Thumbs.db
 aishow.jar
+src/main/resources/dist/hayasaka/styles.css
+src/main/resources/dist/hayasaka/index.html
+src/main/resources/dist/hayasaka/index.html
