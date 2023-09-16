@@ -118,30 +118,6 @@ public class BackendApplication {
 		System.out.println("Styles");
 		return css;
 	}
-	//PASSED
-	@GetMapping("/blob")
-	public String testBlob(){
-	    try{
-			BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-            .endpoint("https://aishow.blob.core.windows.net/")
-            .credential(new ManagedIdentityCredentialBuilder().build())
-            .buildClient();
-
-			String sampleData = "Hello World";
-			var x = blobServiceClient.getBlobContainerClient("images").getBlobClient("/teste.txt").getBlockBlobClient();
-			System.out.println(x.getBlobUrl());
-			try (ByteArrayInputStream dataStream = new ByteArrayInputStream(sampleData.getBytes())) {
-        		x.upload(dataStream, sampleData.length());
-    		} catch (IOException ex) {
-				System.out.println(ex.toString());
-				return ex.toString();
-			}
-			return "OK";
-		}catch (Exception ex){
-			System.out.println(ex.toString());
-			return ex.toString();
-		}
-	}
 	
 	//GETS
 	//PASSED
