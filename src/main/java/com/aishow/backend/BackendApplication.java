@@ -19,14 +19,6 @@ import com.aishow.backend.handlers.userinteraction.*;
 import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
 
-//Azure
-import com.azure.core.credential.*;
-import com.azure.identity.*;
-import com.azure.storage.blob.*;
-import com.azure.storage.blob.models.*;
-import com.azure.storage.blob.specialized.*;
-import com.azure.storage.common.*;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -128,30 +120,6 @@ public class BackendApplication {
 	public String getCss() throws IOException{
 		System.out.println("Styles");
 		return css;
-	}
-	//PASSED
-	@GetMapping("/blob")
-	public String testBlob(){
-	    try{
-			BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-            .endpoint("https://aishow.blob.core.windows.net/")
-            .credential(new ManagedIdentityCredentialBuilder().build())
-            .buildClient();
-
-			String sampleData = "Hello World";
-			var x = blobServiceClient.getBlobContainerClient("images").getBlobClient("/teste.txt").getBlockBlobClient();
-			System.out.println(x.getBlobUrl());
-			try (ByteArrayInputStream dataStream = new ByteArrayInputStream(sampleData.getBytes())) {
-        		x.upload(dataStream, sampleData.length());
-    		} catch (IOException ex) {
-				System.out.println(ex.toString());
-				return ex.toString();
-			}
-			return "OK";
-		}catch (Exception ex){
-			System.out.println(ex.toString());
-			return ex.toString();
-		}
 	}
 	
 	//GETS
