@@ -81,7 +81,7 @@ public class BackendApplication {
 
 	@GetMapping(value="/api/getUserRequests",produces = "application/json")
 	public ArrayList<ClientServiceInteraction> getUserServiceRequests(@RequestParam("id") String id){
-		return new UserServiceRequestsHandler().handle(null, new String[]{id});
+		return new UserMadeServiceRequestsHandler().handle(null, new String[]{id});
 	}
 
 	//PASSED, ADICIONAR OBJETO PROVIDER NO FULL INFO
@@ -101,6 +101,13 @@ public class BackendApplication {
 	public List<ServiceInformation> getAllUserServices(@RequestParam("id") String id){
 		return new UserServicesRequestHandler().handle(null, new String[]{id});
 	}
+
+	//Transformar isso num delete
+	@GetMapping(value = "/api/cancelRequest",produces = "text/plain")
+	public String cancelRequest(@RequestParam("id") String id){
+		return new CancelRequestHandler().handle(null, new String[]{id});
+	}
+
 
 	//POSTS
 	//PASSED

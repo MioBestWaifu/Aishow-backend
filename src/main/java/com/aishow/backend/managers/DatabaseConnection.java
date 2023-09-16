@@ -718,9 +718,8 @@ public abstract class DatabaseConnection {
             while (res.next()){
                 x = new ClientServiceInteraction();
                 x.setAccepted(true);
-                x.setId(res.getInt("idServiceInstances"));
+                x.setId(res.getInt("serviceRequestID"));
                 x.setCost(res.getFloat("cost"));
-                x.setHasFinished(res.getBoolean("finished"));
                 x.setStartDate(res.getString("startDate"));
                 x.setEndDate(res.getString("endDate"));
                 x.setStartTime(res.getTime("startTime"));
@@ -896,13 +895,11 @@ public abstract class DatabaseConnection {
     public static String checkAvailability(ClientServiceInteraction info){
         try{
             var st = conn.prepareStatement("SELECT startTime, endTime FROM serviceinstances WHERE (templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ?) AND" + //
-                    "((startDate BETWEEN ? AND ?) AND (startTime BETWEEN ? AND ?)) ORDER BY startDate, startTime");
+                    "((DATE(?) BETWEEN startDate AND endDate) AND (TIME(?) BETWEEN startTime AND endTime)) ORDER BY startDate, startTime");
             st.setInt(1, info.getService().getProviderId());
             st.setInt(2, info.getService().getProviderId());
             st.setString(3, info.getStartDate());
-            st.setString(4, info.getEndDate());
-            st.setTime(5, info.getStartTime());
-            st.setTime(6, info.getEndTime());
+            st.setTime(4, info.getStartTime());
             var res = st.executeQuery();
 
             if(res.next()){
@@ -920,6 +917,19 @@ public abstract class DatabaseConnection {
             ex.printStackTrace();
             System.out.println("ERRO EM checkAvailavility");
             return "BROKE";
+        }
+    }
+
+    //AUTH segurança
+    public static boolean cancelRequest(int id){
+        try{
+            var st = conn.prepareStatement("DELETE FROM servicerequests WHERE serviceRequestID = ?");
+            st.setInt(1, id);
+            var res = st.executeUpdate();
+            return res == 1;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return false;
         }
     }
 

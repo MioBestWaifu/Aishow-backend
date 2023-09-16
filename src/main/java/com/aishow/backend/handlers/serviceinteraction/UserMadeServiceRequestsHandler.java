@@ -3,7 +3,7 @@ package com.aishow.backend.handlers.serviceinteraction;
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.managers.DatabaseConnection;
 
-public class UserServiceRequestsHandler extends BaseHandler{
+public class UserMadeServiceRequestsHandler extends BaseHandler{
 
     @Override
     public <T, G> G handle(T reqBody) {
