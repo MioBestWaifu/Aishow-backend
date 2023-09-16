@@ -18,13 +18,10 @@ import com.aishow.backend.handlers.serviceinteraction.*;
 import com.aishow.backend.handlers.userinteraction.*;
 import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
+import com.aishow.backend.managers.DatabaseManager;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +31,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "https://nice-ground-0db2b8e10.3.azurestaticapps.net")
 @RestController
 public class BackendApplication {
-
-	static String index, poly, main, css, run;
+	static String index, css, run, poly, main;
 /*
  * TODO #2 Testar as classes recém-migradas (PERSONAL):
  * ImageUpdate
@@ -57,7 +53,6 @@ public class BackendApplication {
   //TODO #5 COMPATIBILIZAR COMPLETAMENTE OS TIPOS COM O JSON DO SPRING
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
-		DatabaseConnection.connect();
 		var stream = new ClassPathResource("dist/hayasaka/index.html").getInputStream();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		index = reader.lines().collect(Collectors.joining("\n"));
@@ -87,6 +82,8 @@ public class BackendApplication {
 		run = reader.lines().collect(Collectors.joining("\n"));
 		stream.close();
 		reader.close();
+		DatabaseManager dm = new DatabaseManager();
+		dm.start();
 		SpringApplication.run(BackendApplication.class, args);
 		System.out.println("PSVM");
 	}
@@ -121,6 +118,30 @@ public class BackendApplication {
 		System.out.println("Styles");
 		return css;
 	}
+	//PASSED
+	@GetMapping("/blob")
+	public String testBlob(){
+	    try{
+			BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+            .endpoint("https://aishow.blob.core.windows.net/")
+            .credential(new ManagedIdentityCredentialBuilder().build())
+            .buildClient();
+
+			String sampleData = "Hello World";
+			var x = blobServiceClient.getBlobContainerClient("images").getBlobClient("/teste.txt").getBlockBlobClient();
+			System.out.println(x.getBlobUrl());
+			try (ByteArrayInputStream dataStream = new ByteArrayInputStream(sampleData.getBytes())) {
+        		x.upload(dataStream, sampleData.length());
+    		} catch (IOException ex) {
+				System.out.println(ex.toString());
+				return ex.toString();
+			}
+			return "OK";
+		}catch (Exception ex){
+			System.out.println(ex.toString());
+			return ex.toString();
+		}
+	}
 	
 	//GETS
 	//PASSED
@@ -152,7 +173,7 @@ public class BackendApplication {
 
 	@GetMapping(value="/api/getUserRequests",produces = "application/json")
 	public ArrayList<ClientServiceInteraction> getUserServiceRequests(@RequestParam("id") String id){
-		return new UserServiceRequestsHandler().handle(null, new String[]{id});
+		return new UserMadeServiceRequestsHandler().handle(null, new String[]{id});
 	}
 
 	//PASSED, ADICIONAR OBJETO PROVIDER NO FULL INFO
@@ -172,6 +193,13 @@ public class BackendApplication {
 	public List<ServiceInformation> getAllUserServices(@RequestParam("id") String id){
 		return new UserServicesRequestHandler().handle(null, new String[]{id});
 	}
+
+	//Transformar isso num delete
+	@GetMapping(value = "/api/cancelRequest",produces = "text/plain")
+	public String cancelRequest(@RequestParam("id") String id){
+		return new CancelRequestHandler().handle(null, new String[]{id});
+	}
+
 
 	//POSTS
 	//PASSED
