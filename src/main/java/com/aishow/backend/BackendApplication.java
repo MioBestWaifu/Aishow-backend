@@ -20,14 +20,18 @@ import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
 import com.aishow.backend.managers.DatabaseManager;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 @CrossOrigin(origins = "https://nice-ground-0db2b8e10.3.azurestaticapps.net")
 @RestController
 public class BackendApplication {
+	static String index, css, run, poly, main;
 /*
  * TODO #2 Testar as classes recém-migradas (PERSONAL):
  * ImageUpdate
