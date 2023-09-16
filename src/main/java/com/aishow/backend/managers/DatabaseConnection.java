@@ -895,12 +895,13 @@ public abstract class DatabaseConnection {
     public static String checkAvailability(ClientServiceInteraction info){
         try{
             var st = conn.prepareStatement("SELECT startTime, endTime FROM serviceinstances WHERE (templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ?) AND" + //
-                    "((DATE(?) BETWEEN startDate AND endDate) AND (TIME(?) BETWEEN startTime AND endTime)) ORDER BY startDate, startTime");
+                    "((DATE(?) BETWEEN startDate AND endDate) AND ((TIME(?) BETWEEN startTime AND endTime) OR (TIME(?) BETWEEN startTime AND endTime))) ORDER BY startDate, startTime");
             st.setInt(1, info.getService().getProviderId());
             st.setInt(2, info.getService().getProviderId());
+            //ISSO NAO ACOMODA PRA MULTIPLOS DIAS
             st.setString(3, info.getStartDate());
             st.setTime(4, info.getStartTime());
-            var res = st.executeQuery();
+            st.setTime(5, info.getEndTime());            var res = st.executeQuery();
 
             if(res.next()){
                 String toReturn = "Unavailable that day between: \n"+res.getTime("startTime").toString() + 
