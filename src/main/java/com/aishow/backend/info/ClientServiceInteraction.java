@@ -9,7 +9,7 @@ import com.aishow.backend.managers.Utils;
 public class ClientServiceInteraction {
     boolean isAccepted, hasFinished, isProvider;
     int id, clientId, templateId;
-    Date startDate, endDate;
+    String startDate, endDate;
     Time startTime, endTime;
     float cost;
     UserInformation client;
@@ -47,16 +47,16 @@ public class ClientServiceInteraction {
     public void setTemplateId(int templateId) {
         this.templateId = templateId;
     }
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
-    public void setStartDate(Date start) {
+    public void setStartDate(String start) {
         this.startDate = start;
     }
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
-    public void setEndDate(Date end) {
+    public void setEndDate(String end) {
         this.endDate = end;
     }
     public float getCost() {

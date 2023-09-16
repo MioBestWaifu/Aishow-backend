@@ -659,8 +659,8 @@ public abstract class DatabaseConnection {
              "VALUES (?,?,?,?,?,?,?)");
             st.setInt(1, info.getTemplateId());
             st.setInt(2, info.getClientId());
-            st.setDate(3, info.getStartDate());
-            st.setDate(4, info.getEndDate());
+            st.setString(3, info.getStartDate());
+            st.setString(4, info.getEndDate());
             st.setTime(5, info.getStartTime());
             st.setTime(6, info.getEndTime());
             st.setFloat(7, info.getCost());
@@ -721,8 +721,8 @@ public abstract class DatabaseConnection {
                 x.setId(res.getInt("idServiceInstances"));
                 x.setCost(res.getFloat("cost"));
                 x.setHasFinished(res.getBoolean("finished"));
-                x.setStartDate(res.getDate("startDate"));
-                x.setEndDate(res.getDate("endDate"));
+                x.setStartDate(res.getString("startDate"));
+                x.setEndDate(res.getString("endDate"));
                 x.setStartTime(res.getTime("startTime"));
                 x.setEndTime(res.getTime("endTime"));
                 x.setTemplateId(res.getInt("templateID"));
@@ -763,8 +763,8 @@ public abstract class DatabaseConnection {
                 x.setId(res.getInt("idServiceInstances"));
                 x.setCost(res.getFloat("cost"));
                 x.setHasFinished(res.getBoolean("finished"));
-                x.setStartDate(res.getDate("startDate"));
-                x.setEndDate(res.getDate("endDate"));
+                x.setStartDate(res.getString("startDate"));
+                x.setEndDate(res.getString("endDate"));
                 x.setStartTime(res.getTime("startTime"));
                 x.setEndTime(res.getTime("endTime"));
                 x.setTemplateId(res.getInt("templateID"));
@@ -796,8 +796,8 @@ public abstract class DatabaseConnection {
                 x.setId(res.getInt("serviceRequestID"));
                 x.setCost(res.getFloat("cost"));
                 x.setHasFinished(false);
-                x.setStartDate(res.getDate("startDate"));
-                x.setEndDate(res.getDate("endDate"));
+                x.setStartDate(res.getString("startDate"));
+                x.setEndDate(res.getString("endDate"));
                 x.setStartTime(res.getTime("startTime"));
                 x.setEndTime(res.getTime("endTime"));
                 x.setTemplateId(res.getInt("templateID"));
@@ -899,8 +899,8 @@ public abstract class DatabaseConnection {
                     "((startDate BETWEEN ? AND ?) AND (startTime BETWEEN ? AND ?)) ORDER BY startDate, startTime");
             st.setInt(1, info.getService().getProviderId());
             st.setInt(2, info.getService().getProviderId());
-            st.setDate(3, info.getStartDate());
-            st.setDate(4, info.getEndDate());
+            st.setString(3, info.getStartDate());
+            st.setString(4, info.getEndDate());
             st.setTime(5, info.getStartTime());
             st.setTime(6, info.getEndTime());
             var res = st.executeQuery();
