@@ -26,6 +26,6 @@ tasks.named('test') {
 }
 
 bootJar{
-	destinationDirectory.set(file("/"))
-	 archiveFileName = "app.jar"
+	destinationDirectory.set(file("C://Users/yan/Documents"))
+	 archiveFileName = "aishow.jar"
 }

@@ -22,7 +22,7 @@ public abstract class DatabaseConnection {
     private static Connection conn;
     private static ArrayList<Integer> serviceIds;
     public static void connect() throws IOException{
-        BufferedReader txtReader = new BufferedReader(new InputStreamReader(DatabaseConnection.class.getResourceAsStream("../modular/conninfo.txt")));
+        //BufferedReader txtReader = new BufferedReader(new InputStreamReader(DatabaseConnection.class.getResourceAsStream("../modular/conninfo.txt")));
         String driverName = "com.mysql.cj.jdbc.Driver";
         try {
             Class.forName(driverName);
@@ -30,15 +30,15 @@ public abstract class DatabaseConnection {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        String url = txtReader.readLine();
-        String username = txtReader.readLine();
-        String serverPassword = txtReader.readLine();
+        String url = "jdbc:mysql://localhost:3306/aluguel";
+        String username = "root";
+        String serverPassword = "uiharu";
         try {
             conn = DriverManager.getConnection(url, username, serverPassword);
         } catch (SQLException ex) {
             System.out.println("Conexão merda");
             System.out.println(ex.getMessage());
-            System.exit(0);
+            return;
         }
         serviceIds = new ArrayList<>();
         try{
@@ -471,7 +471,7 @@ public abstract class DatabaseConnection {
                 buffer.setServiceName(res.getString("serviceName"));
                 try{
                     buffer.setShortServiceName(buffer.getServiceName().substring(0, 23)+"...");
-                } catch( Exception ex){
+                } catch(Exception ex){
                     buffer.setShortServiceName(buffer.getServiceName());
                 }
                 buffer.setTemplateImageUrl(res.getString("templateImageUrl"));
@@ -571,7 +571,7 @@ public abstract class DatabaseConnection {
             info.setDescription(res.getString("description"));
             info.setServiceName(res.getString("serviceName"));
             try{
-                info.setShortServiceName(info.getShortServiceName().substring(0, 23)+"...");
+                info.setShortServiceName(info.getServiceName().substring(0, 23)+"...");
             } catch (Exception ex){
                 info.setShortServiceName(info.getServiceName());
             }
