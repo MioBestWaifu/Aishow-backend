@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootApplication
-@CrossOrigin(origins = "https://nice-ground-0db2b8e10.3.azurestaticapps.net")
+@CrossOrigin(origins = "http://yancosta.online")
 @RestController
 public class BackendApplication {
 	static String index, css, run, poly, main;
@@ -136,7 +136,7 @@ public class BackendApplication {
 	//Parar de recebr o idProvider dps do AUTH
 	//PASSED
 	@GetMapping(value="/api/answerRequest",produces = "text/plain")
-	public String answerRequest(@RequestParam("type")String type, @RequestParam("id") String id, @RequestParam("providerId") String idProvider){
+	public String answerRequest(@RequestParam("type")String type, @RequestParam("id") String id, @RequestParam("idProvider") String idProvider){
 		return new AnswerRequestHandler().handle(null, new String[]{type,id,idProvider});
 	}
 
