@@ -10,6 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+//Azure
+import com.azure.core.credential.*;
+import com.azure.core.util.BinaryData;
+import com.azure.identity.*;
+import com.azure.storage.blob.*;
+import com.azure.storage.blob.models.*;
+import com.azure.storage.blob.specialized.*;
+import com.azure.storage.common.*;
 
 import com.aishow.backend.handlers.*;
 import com.aishow.backend.handlers.appinteraction.*;
@@ -21,14 +29,17 @@ import com.aishow.backend.managers.DatabaseConnection;
 import com.aishow.backend.managers.DatabaseManager;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootApplication
-@CrossOrigin(origins = "http://yancosta.online")
+@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online"})
 @RestController
 public class BackendApplication {
 	static String index, css, run, poly, main;
@@ -194,7 +205,7 @@ public class BackendApplication {
 
 	//PASSED
 	@PostMapping(value="/api/imageUpdate",consumes = "image/*", produces = "text/plain")
-	public String tryToUpdateImage(@RequestBody byte[] image, @RequestParam("type") String type, @RequestParam("id") String id, @RequestParam("idProvider") String idProvider){
+	public String tryToUpdateImage(@RequestBody byte[] image, @RequestParam("type") String type, @RequestParam("id") String id, @RequestParam(name = "idProvider",required = false) String idProvider){
 		return new ImageUpdateHandler().handle(image, new String[]{type,id,idProvider});
 	}
 

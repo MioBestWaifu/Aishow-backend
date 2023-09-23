@@ -34,7 +34,7 @@ public class ImageUpdateHandler extends BaseHandler{
             id = DatabaseConnection.getLastCreatedService(creator);
         }
         //A função acima retorna -1 se houver erro
-        if (id!=-1 && ImageHandler.updateServicePicture("src/raw/images/services/"+id, "png",image)){
+        if (id!=-1 && ImageHandler.updateServicePicture(id, "png",image)){
             return "OK";
         } else {
             return"FAIL";
@@ -43,7 +43,7 @@ public class ImageUpdateHandler extends BaseHandler{
 
     //AUTH
     private String tryToUpdateUserPicture(byte[]image, int id){
-        if (ImageHandler.updateUserProfilePicture(id,"src/raw/images/" + id,"png", image)) {
+        if (ImageHandler.updateUserProfilePicture(id,"png", image)) {
             return "OK";
         } else {
             return "FAIL";

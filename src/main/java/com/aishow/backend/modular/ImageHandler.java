@@ -1,18 +1,61 @@
 package com.aishow.backend.modular;
 
+//Azure
+import com.azure.core.credential.*;
+import com.azure.core.util.BinaryData;
+import com.azure.identity.*;
+import com.azure.storage.blob.*;
+import com.azure.storage.blob.models.*;
+import com.azure.storage.blob.specialized.*;
+import com.azure.storage.common.*;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.core.io.ClassPathResource;
+
 import com.aishow.backend.managers.DatabaseConnection;
 
 public abstract class ImageHandler {
+    private static BlobServiceClient blobServiceClient;
+
+    public static void GetBlobServiceClientTokenCredential() {
+		TokenCredential credential = new DefaultAzureCredentialBuilder().build();
+	
+		// Azure SDK client builders accept the credential as a parameter
+		// TODO: Replace <storage-account-name> with your actual storage account name
+		blobServiceClient = new BlobServiceClientBuilder()
+				.endpoint("https://aishow.blob.core.windows.net/")
+				.credential(credential)
+				.buildClient();
+	}
+
+	public static boolean uploadBlob(String path, byte[] bytes) throws IOException{
+		BlockBlobClient blockBlobClient = blobServiceClient
+			.getBlobContainerClient("images")
+			.getBlobClient(path)
+			.getBlockBlobClient();
+		System.out.println(blockBlobClient.getBlobUrl());
+		BinaryData data = BinaryData.fromBytes(bytes);
+		System.out.println(data.getLength());
+        blockBlobClient.upload(data);
+		return true;
+	}
+
+    public static boolean deleteBlob(String path){
+        BlobClient blockBlobClient = blobServiceClient
+			.getBlobContainerClient("images")
+			.getBlobClient(path);
+            return blockBlobClient.deleteIfExists();
+    }
     
     public static byte[] imageToByteArray(String address, String format) throws IOException {
         if (Files.notExists(Paths.get(address))){
@@ -24,27 +67,16 @@ public abstract class ImageHandler {
         return bytes;
     }
 
-    public static boolean updateUserProfilePicture(int id,String baseAddress, String format,byte[]data){
+    public static boolean updateUserProfilePicture(int id, String format,byte[]data){
         try{
         String time = Long.toString(System.currentTimeMillis());
-        BufferedImage bImage2 = ImageIO.read(new ByteArrayInputStream(data));
-        //BufferedImage bImage2 = ImageIO.read(bis);
-        String name = baseAddress+time+"."+format;
+        String name = String.valueOf(id)+time+"."+format;
         var x = DatabaseConnection.getUserImageUrl(id);
 
-        if (DatabaseConnection.tryToUpdateUserImageUrl(id, String.valueOf(id)+String.valueOf(time)+"."+format)){
-            var f = new File(name);
-            System.out.println("USER");
-            System.out.println(name);
-            System.out.println("EXISTE: "+f.exists());
-            System.out.println("Is Dir: "+f.isDirectory());
-            System.out.println("Is File: " +f.isFile());
-            System.out.println("Can write: "+f.canWrite());
-            System.out.println("Can execute: "+f.canExecute());
-            System.out.println("\n\n");
-            ImageIO.write(bImage2, format, f);
-            //UserConnectionManager.getInformation(host).setImageUrl(String.valueOf(baseAddress.charAt(baseAddress.length()-1))+time+"."+format);
-            new File("src/raw/images/"+x).delete();
+        if (DatabaseConnection.tryToUpdateUserImageUrl(id,name)){
+            uploadBlob(name, data);
+            if (!x.equals("0.png"))
+                deleteBlob(x);
             return true;
         }
 
@@ -56,28 +88,16 @@ public abstract class ImageHandler {
         }
     }
 
-    public static boolean updateServicePicture(String address, String format,byte[]data){
+    public static boolean updateServicePicture(int id, String format,byte[]data){
         try{
         String time = Long.toString(System.currentTimeMillis());
-        BufferedImage bImage2 = ImageIO.read(new ByteArrayInputStream(data));
-        //BufferedImage bImage2 = ImageIO.read(bis);
-        String name = address+time+"."+format;
-        var y = address.split("/");
-        int id = Integer.parseInt(y[y.length-1]);
+        String name = String.valueOf(id)+time+"."+format;
         var x = DatabaseConnection.getServiceImageUrl(id);
 
-        if (DatabaseConnection.tryToUpdateServiceImageUrl(id, String.valueOf(id)+String.valueOf(time)+"."+format)){
-            var f = new File(name);
-            System.out.println("SERVICE");
-            System.out.println(name);
-            System.out.println("EXISTE: "+f.exists());
-            System.out.println("Is Dir: "+f.isDirectory());
-            System.out.println("Is File: " +f.isFile());
-            System.out.println("Can write: "+f.canWrite());
-            System.out.println("Can execute: "+f.canExecute());
-            System.out.println("ID: "+id);
-            ImageIO.write(bImage2, format, f);
-            new File("src/raw/images/services/"+x).delete();
+        if (DatabaseConnection.tryToUpdateServiceImageUrl(id, name)){
+            uploadBlob("services/"+name, data);
+            if (!x.equals("0.png"))
+                deleteBlob("services/"+x);
             return true;
         }
 

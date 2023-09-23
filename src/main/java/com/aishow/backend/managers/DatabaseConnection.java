@@ -157,7 +157,7 @@ public abstract class DatabaseConnection {
         st.setString(2, info.getEmail());
         st.setString(3, info.getPassword());
         st.setDate(4, info.getBirthday());
-        st.setString(5, info.getUserId()+".png");
+        st.setString(5, "0.png");
         st.setString(6, info.getGender());
         st.setInt(7, info.getAreaCode());
         int rowsAffected = st.executeUpdate();
@@ -171,14 +171,15 @@ public abstract class DatabaseConnection {
 
     public static boolean tryToAddServiceTemplate(ServiceInformation info){
         try {
-            var st = conn.prepareStatement("INSERT INTO serviceTemplates (idProvider,serviceName,description,costPerHour,serviceModality,serviceCategory)"+
-            "VALUES (?,?,?,?,?,?)");
+            var st = conn.prepareStatement("INSERT INTO serviceTemplates (idProvider,serviceName,description,costPerHour,serviceModality,serviceCategory,templateImageUrl)"+
+            "VALUES (?,?,?,?,?,?,?)");
             st.setInt(1, info.getProviderId());
             st.setString(2, info.getServiceName());
             st.setString(3, info.getDescription());
             st.setFloat(4, info.getCostPerHour());
             st.setInt(5, info.getModality());
             st.setInt(6, info.getCategory());
+            st.setString(7, "0.png");
             var creation =  st.executeUpdate()>0;
 
             var x = info.getFromsAsTime();
@@ -202,7 +203,7 @@ public abstract class DatabaseConnection {
 
     public static boolean tryToUpdateServiceTemplate(ServiceInformation info){
         try{
-            var st = conn.prepareStatement("UPDATE serviceTemplates "+
+            var st = conn.prepareStatement("UPDATE servicetemplates "+
             "SET serviceModality = ?, serviceCategory = ?, description = ?, serviceName = ?, costPerHour = ? "+
             "WHERE idServiceTemplates = ?");
             st.setInt(1, info.getModality());
@@ -353,7 +354,7 @@ public abstract class DatabaseConnection {
 
     public static boolean tryToUpdateServiceImageUrl(int id, String newUrl){
         try{
-            var st = conn.prepareStatement("UPDATE serviceTemplates SET templateImageUrl = ? WHERE idServiceTemplates = ?");
+            var st = conn.prepareStatement("UPDATE servicetemplates SET templateImageUrl = ? WHERE idServiceTemplates = ?");
             st.setString(1, newUrl);
             st.setInt(2, id);
             var rst = st.executeUpdate();
