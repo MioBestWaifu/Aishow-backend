@@ -2,12 +2,15 @@ package com.aishow.backend.managers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -181,7 +184,6 @@ public abstract class DatabaseConnection {
             st.setInt(6, info.getCategory());
             st.setString(7, "0.png");
             var creation =  st.executeUpdate()>0;
-
             var x = info.getFromsAsTime();
             var y = info.getTosAsTime();
 
@@ -324,6 +326,53 @@ public abstract class DatabaseConnection {
         toReturn.get(1).setServiceInfos(new ArrayList<ServiceInformation>(buffer.subList(4, 8)));
         toReturn.get(2).setServiceInfos(new ArrayList<ServiceInformation>(buffer.subList(8, 12)));
         return toReturn;
+    }
+
+    public static ServiceBundle getAnotherBundle(Integer[] alreadyHas){
+        try{
+            int[] toGet = new int[4];
+            ServiceBundle bundle = new ServiceBundle();
+            ArrayList<ServiceInformation> servInfos = new ArrayList<ServiceInformation>();
+            ArrayList<Integer> available = new ArrayList<>(serviceIds.size());
+            for(int i=0;i<serviceIds.size();i++){
+                available.add(i);
+            }
+            Collections.copy(available, serviceIds);
+            if(alreadyHas[0] >= 0)
+                available.removeAll(Arrays.asList(alreadyHas));
+            Random rand = new Random();
+            int x;
+            for(int i = 0; i<=3; i++){
+                x = rand.nextInt(available.size());
+                toGet[i] = available.get(x);
+                available.remove(x);
+            } 
+            
+            for (int i = 0; i<=3; i++){
+                ServiceInformation buffer = getBasicServiceInformation(serviceFromId(toGet[i]));
+                var st = conn.prepareStatement("SELECT * FROM user WHERE idUser = ?");
+                st.setInt(1, buffer.getProviderId());
+                var providerRes = st.executeQuery();
+                providerRes.next();
+                buffer.setProviderName(providerRes.getString("name"));
+                buffer.setProviderImageUrl(providerRes.getString("profileUrl"));
+                buffer.setProviderUrl(Integer.toString(providerRes.getInt("idUser")));
+                var areaSt = conn.prepareStatement("SELECT name FROM area WHERE area.idArea = ?");
+                areaSt.setInt(1,providerRes.getInt("area"));
+                var areaRes = areaSt.executeQuery();
+                areaRes.next();
+                buffer.setProviderArea(areaRes.getString(1));
+                DatabaseConnection.getServiceReviews(buffer, false);
+                servInfos.add(buffer);
+            }
+
+            bundle.setServiceInfos(servInfos);
+            return bundle;
+        } catch (SQLException ex){
+            System.out.println("Erro em get new bundle");
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     public static boolean tryToUpdateUserName(int id, String newName){

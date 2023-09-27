@@ -203,6 +203,11 @@ public class BackendApplication {
 		return x;
 	}
 
+	@PostMapping(value = "/api/getAnotherBundle", consumes = "application/json", produces = "application/json")
+	public ServiceBundle getAnortherBundle (@RequestBody Integer[] has){
+		return new GetBundleHandler().handle(has);
+	}
+
 	//PASSED
 	@PostMapping(value="/api/imageUpdate",consumes = "image/*", produces = "text/plain")
 	public String tryToUpdateImage(@RequestBody byte[] image, @RequestParam("type") String type, @RequestParam("id") String id, @RequestParam(name = "idProvider",required = false) String idProvider){
