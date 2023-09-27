@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers.personalinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.managers.DatabaseConnection;
 
 public class ReloadUserHandler extends BaseHandler{
 
@@ -12,8 +13,9 @@ public class ReloadUserHandler extends BaseHandler{
 
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        // TODO Auto-generated method stub
-        return null;
+        return (G) DatabaseConnection.getActiveUserInformation(DatabaseConnection.userFromId(
+            Integer.parseInt(params[0])
+        ));
     }
 
     

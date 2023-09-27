@@ -64,7 +64,13 @@ public abstract class DatabaseConnection {
             var st = conn.prepareStatement("SELECT * FROM user WHERE user.email = ? AND user.password = ?");
             st.setString(1, info.getEmail());
             st.setString(2, info.getPassword());
-            return st.executeQuery().next();
+            var res = st.executeQuery();
+            if (res.next()){
+                info.setUserId(res.getInt("idUser"));
+                return true;
+            }
+
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -102,7 +108,7 @@ public abstract class DatabaseConnection {
         }
     }
 
-    private static UserInformation userFromId(int id){
+    public static UserInformation userFromId(int id){
         UserInformation user = new UserInformation();
         user.setUserId(id);
         return user;
@@ -116,8 +122,8 @@ public abstract class DatabaseConnection {
 
     public static UserInformation getSensitiveUserInformation(UserInformation info){
         try {
-            var st = conn.prepareStatement("SELECT email, providingService FROM user WHERE user.email = ?");
-            st.setString(1, info.getEmail());
+            var st = conn.prepareStatement("SELECT email, providingService FROM user WHERE user.idUser = ?");
+            st.setInt(1, info.getUserId());
             var result = st.executeQuery();
             result.next();
             info.setEmail(result.getString("email"));

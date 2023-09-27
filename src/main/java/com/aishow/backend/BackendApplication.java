@@ -175,6 +175,11 @@ public class BackendApplication {
 		return new UserRequestHandler().handle(null, new String[]{id});
 	}
 
+	@GetMapping(value="/api/reload",produces = "application/json")
+	public UserInformation reload(@RequestParam("id") String id){
+		return new ReloadUserHandler().handle(null, new String[]{id});
+	}
+
 	//PASSED
 	@GetMapping(value="/api/getAllServices",produces = "application/json")
 	public List<ServiceInformation> getAllUserServices(@RequestParam("id") String id){
