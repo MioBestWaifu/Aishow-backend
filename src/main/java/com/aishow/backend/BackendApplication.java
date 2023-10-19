@@ -192,6 +192,11 @@ public class BackendApplication {
 		return new CancelRequestHandler().handle(null, new String[]{id});
 	}
 
+	@GetMapping(value = "/api/search",produces = "application/json")
+	public<T> ArrayList<T> search(@RequestParam("type") String type,@RequestParam("q") String q,@RequestParam("offset") String offset){
+		return new SearchHandler().handle(null, new String[]{type,q,offset});
+	} 
+
 
 	//POSTS
 	//PASSED

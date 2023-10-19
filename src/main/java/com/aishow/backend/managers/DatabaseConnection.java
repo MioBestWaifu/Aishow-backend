@@ -991,6 +991,80 @@ public abstract class DatabaseConnection {
         }
     }
 
+    public static ArrayList<ServiceInformation> searchForServiceTemplate (String toSearch, int offset){
+        try{
+            toSearch = '%' + toSearch + '%';
+            var st = conn.prepareStatement("SELECT * FROM servicetemplates WHERE serviceName LIKE ? LIMIT 20 OFFSET ?");
+            st.setString(1, toSearch);
+            st.setInt(2, offset);
+            var res = st.executeQuery();
+            ArrayList<ServiceInformation> toAdd = new ArrayList<>();
+            ServiceInformation buffer;
+            while (res.next()){
+                buffer = new ServiceInformation();
+                buffer.setProviderId(res.getInt("idProvider"));
+                buffer.setTemplateId(res.getInt("idServiceTemplates"));
+                buffer.setCostPerHour(res.getFloat("costPerHour"));
+                buffer.setDescription(res.getString("description"));
+                buffer.setServiceName(res.getString("serviceName"));
+                try{
+                    buffer.setShortServiceName(buffer.getServiceName().substring(0, 23)+"...");
+                } catch(Exception ex){
+                    buffer.setShortServiceName(buffer.getServiceName());
+                }
+                buffer.setTemplateImageUrl(res.getString("templateImageUrl"));
+                buffer.setCategory(res.getInt("serviceCategory"));
+                buffer.setCatText(getSingleGenericInfo("servicecategory", "idServiceCategory", "categoryName", buffer.getCategory()));
+                buffer.setModality(res.getInt("serviceModality"));
+                buffer.setModText(getSingleGenericInfo("servicemodality", "idServiceModality", "modalityName", buffer.getModality()));
+                getServiceReviews(buffer, false);
+                GetServiceAvailability(buffer);
+                toAdd.add(buffer);
+            }
+            return toAdd;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            System.out.println("EXCEÇÃO EM PROCURAR TEMPLTATE");
+            return null;
+        }
+    }
+
+    public static ArrayList<UserInformation> searchForUsers(String toSearch, int offset){
+        try{
+            toSearch = '%' + toSearch + '%';
+            var st = conn.prepareStatement("SELECT * FROM user WHERE name LIKE ? LIMIT 20 OFFSET ?");
+            st.setString(1, toSearch);
+            st.setInt(2, offset);
+            ArrayList<UserInformation> toReturn = new ArrayList<>();
+            UserInformation buffer;
+
+            var res = st.executeQuery();
+            while(res.next()){
+                buffer = new UserInformation();
+                buffer.setUserId(res.getInt("idUser"));
+                buffer.setName(res.getString("name"));
+                buffer.setBirthday(res.getDate("birthday"));
+                buffer.setGender(res.getString("gender"));
+                buffer.setImageUrl(res.getString("profileUrl"));
+                try{
+                    var areaSt = conn.prepareStatement("SELECT name FROM area WHERE idArea = ?");
+                    areaSt.setInt(1, res.getInt("area"));
+                    var areaRes = areaSt.executeQuery();
+                    areaRes.next();
+                    buffer.setAreaName(areaRes.getString(1));
+                } catch (SQLException ex){
+                }
+                System.out.println(buffer.getEmail());
+                toReturn.add(buffer);
+            }
+            return toReturn;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            System.out.println("EXCEÇÃO EM PROCURAR USER");
+            return null;
+        }
+    }
+
 }
 
 
