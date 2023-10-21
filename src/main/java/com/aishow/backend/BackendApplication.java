@@ -24,9 +24,9 @@ import com.aishow.backend.handlers.appinteraction.*;
 import com.aishow.backend.handlers.personalinteraction.*;
 import com.aishow.backend.handlers.serviceinteraction.*;
 import com.aishow.backend.handlers.userinteraction.*;
-import com.aishow.backend.info.*;
 import com.aishow.backend.managers.DatabaseConnection;
 import com.aishow.backend.managers.DatabaseManager;
+import com.aishow.backend.models.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

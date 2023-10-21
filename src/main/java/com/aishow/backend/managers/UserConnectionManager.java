@@ -2,8 +2,8 @@ package com.aishow.backend.managers;
 
 import java.util.HashMap;
 
-import com.aishow.backend.info.UserConnection;
-import com.aishow.backend.info.UserInformation;
+import com.aishow.backend.models.UserConnection;
+import com.aishow.backend.models.UserInformation;
 
 public abstract class UserConnectionManager {
     private static HashMap<String,UserConnection> connections = new HashMap<String,UserConnection>();

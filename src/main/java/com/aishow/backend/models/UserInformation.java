@@ -1,6 +1,7 @@
-package com.aishow.backend.info;
+package com.aishow.backend.models;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -20,6 +21,32 @@ public class UserInformation {
     ArrayList<ServiceBundle> serviceRecs;
     ArrayList<ServiceInformation> services;
     ArrayList<ReviewInfomation> reviews;
+
+    public static UserInformation fromResultSet(ResultSet rs){
+        UserInformation toReturn = new UserInformation();
+        var paramTypes = new Class[]{String.class};
+
+        toReturn.email =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"email"});
+        toReturn.password =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"password"});
+        toReturn.gender =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"gender"});
+        toReturn.name =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"name"});
+        toReturn.imageUrl =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"profileUrl"});
+
+        toReturn.userId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idUser"});
+        toReturn.areaCode =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"area"});
+
+        toReturn.birthday =(Date) Utils.runMethodReflection(rs, "getDate", paramTypes, new Object[]{"birthday"});
+
+        return toReturn;
+    }
+
+    public void setReviews(ResultSet rs){
+
+    }
+
+    public void setServices(ResultSet rs){
+
+    }
     
     public String getEmail() {
         return email;

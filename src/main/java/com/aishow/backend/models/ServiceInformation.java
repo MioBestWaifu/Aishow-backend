@@ -1,5 +1,6 @@
-package com.aishow.backend.info;
+package com.aishow.backend.models;
 
+import java.sql.ResultSet;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -11,6 +12,7 @@ import com.aishow.backend.modular.ImageHandler;
 import com.aishow.backend.modular.ModularInfo;
 
 public class ServiceInformation {
+    //TODO #25 dar cabo dessas informações do user e criar um objeto UserInformation no lugar
     String serviceName,shortServiceName,description, providerName, providerUrl, providerImageUrl, providerArea, templateImageUrl, modText, catText;
     float costPerHour;
     float averageScore;
@@ -18,7 +20,24 @@ public class ServiceInformation {
     boolean[] availableDays;
     String[] availableFroms, availableTos;
     ArrayList<ReviewInfomation> reviews;
+
+    public static ServiceInformation fromResultSet(ResultSet rs){
+        ServiceInformation toReturn = new ServiceInformation();
+        var paramTypes = new Class[]{String.class};
+        toReturn.serviceName =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"serviceName"});
+        toReturn.description =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"desciption"});
+        toReturn.templateImageUrl =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"templateImageUrl"});
+        toReturn.costPerHour =(float) Utils.runMethodReflection(rs, "getFlaot", paramTypes, new Object[]{"costPerHour"});
+        toReturn.providerId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idProvider"});
+        toReturn.templateId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idServiceTemplates"});
+        toReturn.modality =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"serviceModality"});
+        toReturn.category =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"serviceCategory"});
+        return toReturn;
+    }
     
+    public void setReviews(ResultSet rs){
+
+    }
     public String getDescription() {
         return description;
     }

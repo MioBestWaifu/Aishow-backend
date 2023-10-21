@@ -1,4 +1,4 @@
-package com.aishow.backend.info;
+package com.aishow.backend.models;
 
 public class UserConnection {
     private UserInformation userInformation;

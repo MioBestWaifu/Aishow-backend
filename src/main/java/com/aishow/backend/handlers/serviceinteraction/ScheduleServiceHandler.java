@@ -1,8 +1,8 @@
 package com.aishow.backend.handlers.serviceinteraction;
 
 import com.aishow.backend.handlers.BaseHandler;
-import com.aishow.backend.info.ClientServiceInteraction;
 import com.aishow.backend.managers.DatabaseConnection;
+import com.aishow.backend.models.ClientServiceInteraction;
 
 public class ScheduleServiceHandler extends BaseHandler{
 

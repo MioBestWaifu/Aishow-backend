@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,6 +58,31 @@ public abstract class Utils {
         }
         var x = s.split(":");
         Time toReturn = new Time(Integer.parseInt(x[0]), Integer.parseInt(x[1]), Integer.parseInt(x[2]));
+        return toReturn;
+    }
+
+    public static Object runMethodReflection(Object holder, String methodName, Class[] paramTypes, Object[] params){
+        Method toRun = null;
+        Object toReturn = null;
+        try{
+            try {
+                toRun = holder.getClass().getMethod(methodName, paramTypes);
+            } catch (NoSuchMethodException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            try {
+                toReturn = toRun.invoke(holder, params);
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (Exception ex){
+            System.out.println("Deu erro na invocação");
+        }
         return toReturn;
     }
 

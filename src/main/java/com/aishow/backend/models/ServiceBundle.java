@@ -1,5 +1,6 @@
-package com.aishow.backend.info;
+package com.aishow.backend.models;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,6 +10,10 @@ public class ServiceBundle {
     ArrayList<ServiceInformation> serviceInfos;
 
     public ServiceBundle() {
+    }
+
+    public static ServiceBundle fromResultSet(ResultSet rs){
+        return null;
     }
 
     public ArrayList<ServiceInformation> getServiceInfos() {
