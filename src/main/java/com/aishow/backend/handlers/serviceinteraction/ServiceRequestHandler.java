@@ -51,4 +51,17 @@ public class ServiceRequestHandler extends BaseHandler{
         rs = DatabaseConnection.runQuery(st);
         info.setAvailablity(rs);
     }
+
+    public static int findLastCreatedService(int creator){
+        try {
+            PreparedStatement st = StatementPreparer.getLastCreatedServiceByProviderId(DatabaseConnection.getConnection(), creator);
+            ResultSet rs = DatabaseConnection.runQuery(st);
+            if (rs.next())
+                return rs.getInt(1);
+            return -1;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return -1;
+        }
+    }
 }

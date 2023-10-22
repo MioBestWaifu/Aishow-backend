@@ -1,5 +1,6 @@
 package com.aishow.backend.handlers.appinteraction;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -42,6 +43,20 @@ public class PathfindHandler extends BaseHandler{
         } finally {
             return (G) "FAIL";
         }
+    }
+
+    public String getUserBaseUrl(int id) throws SQLException{
+        ResultSet rs = DatabaseConnection.runQuery(StatementPreparer.getUserProfileImageUrlById(
+        DatabaseConnection.getConnection(), id));
+        rs.next();
+        return rs.getString(1);
+    }
+
+    public String getServiceBaseUrl(int id) throws SQLException{
+        ResultSet rs = DatabaseConnection.runQuery(StatementPreparer.getServiceImageUrlById(
+        DatabaseConnection.getConnection(), id));
+        rs.next();
+        return rs.getString(1);
     }
  
 }

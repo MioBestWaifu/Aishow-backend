@@ -1,6 +1,7 @@
 package com.aishow.backend.modular;
 
 import com.aishow.backend.data.DatabaseConnection;
+import com.aishow.backend.handlers.appinteraction.PathfindHandler;
 //Azure
 import com.azure.core.credential.*;
 import com.azure.core.util.BinaryData;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 
@@ -70,7 +72,7 @@ public abstract class ImageHandler {
         try{
         String time = Long.toString(System.currentTimeMillis());
         String name = String.valueOf(id)+time+"."+format;
-        var x = DatabaseConnection.getUserImageUrl(id);
+        String x = new PathfindHandler().getUserBaseUrl(id);
 
         if (DatabaseConnection.tryToUpdateUserImageUrl(id,name)){
             uploadBlob(name, data);
@@ -80,7 +82,7 @@ public abstract class ImageHandler {
         }
 
         return false;
-        } catch (IOException ex){
+        } catch (IOException | SQLException ex){
             System.out.println("Exceção update imagem");
             System.out.println(ex.getMessage());
             return false;
@@ -91,7 +93,7 @@ public abstract class ImageHandler {
         try{
         String time = Long.toString(System.currentTimeMillis());
         String name = String.valueOf(id)+time+"."+format;
-        var x = DatabaseConnection.getServiceImageUrl(id);
+        String x = new PathfindHandler().getServiceBaseUrl(id);
 
         if (DatabaseConnection.tryToUpdateServiceImageUrl(id, name)){
             uploadBlob("services/"+name, data);
@@ -101,7 +103,7 @@ public abstract class ImageHandler {
         }
 
         return false;
-        } catch (IOException ex){
+        } catch (IOException | SQLException ex){
             System.out.println("Exceção update imagem");
             System.out.println(ex.getMessage());
             return false;

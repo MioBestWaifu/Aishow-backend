@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers;
 
 import com.aishow.backend.data.DatabaseConnection;
+import com.aishow.backend.handlers.serviceinteraction.ServiceRequestHandler;
 import com.aishow.backend.modular.ImageHandler;
 import com.aishow.backend.utils.Utils;
 
@@ -31,7 +32,7 @@ public class ImageUpdateHandler extends BaseHandler{
     //AUTH
     private String tryToUpdateServicePicture(byte[]image,int creator, int id){
         if(id==-1){
-            id = DatabaseConnection.getLastCreatedService(creator);
+            id = ServiceRequestHandler.findLastCreatedService(creator);
         }
         //A função acima retorna -1 se houver erro
         if (id!=-1 && ImageHandler.updateServicePicture(id, "png",image)){
