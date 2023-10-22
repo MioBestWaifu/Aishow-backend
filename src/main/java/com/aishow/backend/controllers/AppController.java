@@ -3,6 +3,7 @@ package com.aishow.backend.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import com.aishow.backend.handlers.appinteraction.MacroInfoHandler;
 import com.aishow.backend.handlers.appinteraction.SearchHandler;
 import com.aishow.backend.models.GenericInformation;
 
+@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online"})
 @RestController("api/app")
 public class AppController {
 

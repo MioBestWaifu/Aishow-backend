@@ -3,6 +3,7 @@ package com.aishow.backend.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ import com.aishow.backend.models.ServiceBundle;
 import com.aishow.backend.models.ServiceInformation;
 import com.aishow.backend.models.ServiceSchedule;
 
+@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online"})
 @RestController ("api/services")
 public class ServiceController {
 	@GetMapping(value="/",produces = "application/json")

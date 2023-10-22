@@ -6,35 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-//Azure
-import com.azure.core.credential.*;
-import com.azure.core.util.BinaryData;
-import com.azure.identity.*;
-import com.azure.storage.blob.*;
-import com.azure.storage.blob.models.*;
-import com.azure.storage.blob.specialized.*;
-import com.azure.storage.common.*;
-import com.aishow.backend.data.DatabaseConnection;
-import com.aishow.backend.handlers.*;
-import com.aishow.backend.handlers.appinteraction.*;
-import com.aishow.backend.handlers.personalinteraction.*;
-import com.aishow.backend.handlers.serviceinteraction.*;
-import com.aishow.backend.handlers.userinteraction.*;
 import com.aishow.backend.managers.DatabaseManager;
-import com.aishow.backend.models.*;
-
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootApplication

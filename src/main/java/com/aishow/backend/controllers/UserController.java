@@ -1,5 +1,6 @@
 package com.aishow.backend.controllers;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import com.aishow.backend.handlers.personalinteraction.ReloadUserHandler;
 import com.aishow.backend.handlers.userinteraction.UserRequestHandler;
 import com.aishow.backend.models.UserInformation;
 
+@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online"})
 @RestController("api/users")
 public class UserController {
     
