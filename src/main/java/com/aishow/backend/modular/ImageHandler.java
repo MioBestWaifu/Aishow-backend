@@ -1,6 +1,7 @@
 package com.aishow.backend.modular;
 
 import com.aishow.backend.data.DatabaseConnection;
+import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.appinteraction.PathfindHandler;
 //Azure
 import com.azure.core.credential.*;
@@ -10,6 +11,7 @@ import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.*;
 import com.azure.storage.blob.specialized.*;
 import com.azure.storage.common.*;
+import com.sun.jna.platform.unix.X11.XClientMessageEvent.Data;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
@@ -74,7 +77,7 @@ public abstract class ImageHandler {
         String name = String.valueOf(id)+time+"."+format;
         String x = new PathfindHandler().getUserBaseUrl(id);
 
-        if (DatabaseConnection.tryToUpdateUserImageUrl(id,name)){
+        if (updateUserImageUrl(id,name)){
             uploadBlob(name, data);
             if (!x.equals("0.png"))
                 deleteBlob(x);
@@ -95,7 +98,7 @@ public abstract class ImageHandler {
         String name = String.valueOf(id)+time+"."+format;
         String x = new PathfindHandler().getServiceBaseUrl(id);
 
-        if (DatabaseConnection.tryToUpdateServiceImageUrl(id, name)){
+        if (updateServiceImageUrl(id, name)){
             uploadBlob("services/"+name, data);
             if (!x.equals("0.png"))
                 deleteBlob("services/"+x);
@@ -106,6 +109,26 @@ public abstract class ImageHandler {
         } catch (IOException | SQLException ex){
             System.out.println("Exceção update imagem");
             System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean updateUserImageUrl(int id, String newUrl){
+        try {
+            PreparedStatement st = StatementPreparer.updateUserImageUrl(DatabaseConnection.getConnection(), id, newUrl);
+            return DatabaseConnection.runUpdate(st) == 1;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updateServiceImageUrl(int id, String newUrl){
+        try {
+            PreparedStatement st = StatementPreparer.updateTemplateImageUrl(DatabaseConnection.getConnection(), id, newUrl);
+            return DatabaseConnection.runUpdate(st) == 1;
+        } catch (SQLException ex){
+            ex.printStackTrace();
             return false;
         }
     }

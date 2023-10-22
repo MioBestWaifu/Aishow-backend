@@ -109,6 +109,13 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement updateUserImageUrl(Connection conn, int id, String newVarchar) throws SQLException{
+        var st = conn.prepareStatement("UPDATE user SET profileImageUrl = ? WHERE idUser = ?");
+        st.setString(1, newVarchar);
+        st.setInt(2, id);
+        return st;
+    }
+
+    public static PreparedStatement updateTemplateImageUrl(Connection conn, int id, String newVarchar) throws SQLException{
         var st = conn.prepareStatement("UPDATE servicetemplates SET templateImageUrl = ? WHERE idServiceTemplates = ?");
         st.setString(1, newVarchar);
         st.setInt(2, id);
