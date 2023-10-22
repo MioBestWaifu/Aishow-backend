@@ -1,5 +1,6 @@
 package com.aishow.backend.modular;
 
+import com.aishow.backend.data.DatabaseConnection;
 //Azure
 import com.azure.core.credential.*;
 import com.azure.core.util.BinaryData;
@@ -21,8 +22,6 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
 import org.springframework.core.io.ClassPathResource;
-
-import com.aishow.backend.managers.DatabaseConnection;
 
 public abstract class ImageHandler {
     private static BlobServiceClient blobServiceClient;

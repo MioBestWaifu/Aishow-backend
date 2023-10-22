@@ -2,6 +2,7 @@ package com.aishow.backend.managers;
 
 import java.io.IOException;
 
+import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.modular.ImageHandler;
 
 public class DatabaseManager extends Thread{

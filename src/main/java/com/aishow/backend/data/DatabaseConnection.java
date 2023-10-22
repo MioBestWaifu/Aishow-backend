@@ -1,4 +1,4 @@
-package com.aishow.backend.managers;
+package com.aishow.backend.data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -1066,5 +1066,3 @@ public abstract class DatabaseConnection {
     }
 
 }
-
-

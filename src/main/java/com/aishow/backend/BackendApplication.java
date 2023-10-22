@@ -18,13 +18,12 @@ import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.*;
 import com.azure.storage.blob.specialized.*;
 import com.azure.storage.common.*;
-
+import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.handlers.*;
 import com.aishow.backend.handlers.appinteraction.*;
 import com.aishow.backend.handlers.personalinteraction.*;
 import com.aishow.backend.handlers.serviceinteraction.*;
 import com.aishow.backend.handlers.userinteraction.*;
-import com.aishow.backend.managers.DatabaseConnection;
 import com.aishow.backend.managers.DatabaseManager;
 import com.aishow.backend.models.*;
 

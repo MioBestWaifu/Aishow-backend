@@ -2,8 +2,8 @@ package com.aishow.backend.handlers.serviceinteraction;
 
 import java.nio.charset.StandardCharsets;
 
+import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.handlers.BaseHandler;
-import com.aishow.backend.managers.DatabaseConnection;
 import com.aishow.backend.managers.UserConnectionManager;
 import com.aishow.backend.models.ServiceInformation;
 

@@ -1,7 +1,7 @@
 package com.aishow.backend.handlers.appinteraction;
 
+import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.handlers.BaseHandler;
-import com.aishow.backend.managers.DatabaseConnection;
 import com.aishow.backend.modular.ModularInfo;
 
 public class PathfindHandler extends BaseHandler{
