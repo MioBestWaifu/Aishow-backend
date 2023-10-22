@@ -10,6 +10,8 @@ import java.util.HashMap;
 import com.aishow.backend.modular.ModularInfo;
 import com.aishow.backend.utils.Utils;
 
+//TODO #29 remover redundancia
+
 public class UserInformation {
     //Vai enviar senha no json tbm
     String email, password, gender,name,imageUrl;
@@ -18,6 +20,14 @@ public class UserInformation {
     String areaName;
     boolean providingService;
     Date birthday;
+    GenericInformation area;
+    public GenericInformation getArea() {
+        return area;
+    }
+
+    public void setArea(GenericInformation area) {
+        this.area = area;
+    }
     ArrayList<ServiceBundle> serviceRecs;
     ArrayList<ServiceInformation> services;
     ArrayList<ReviewInfomation> reviews;

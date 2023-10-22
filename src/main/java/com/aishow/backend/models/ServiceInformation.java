@@ -20,6 +20,7 @@ public class ServiceInformation {
     boolean[] availableDays;
     String[] availableFroms, availableTos;
     ArrayList<ReviewInfomation> reviews;
+    UserInformation provider;
 
     public static ServiceInformation fromResultSet(ResultSet rs){
         ServiceInformation toReturn = new ServiceInformation();
@@ -233,4 +234,14 @@ public class ServiceInformation {
 
         return tR;
     }
+
+    public UserInformation getProvider() {
+        return provider;
+    }
+
+    public void setProvider(UserInformation provider) {
+        this.provider = provider;
+    }
+
+    
 }

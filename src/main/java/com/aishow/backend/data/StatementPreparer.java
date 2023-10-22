@@ -23,13 +23,13 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement getUserById(Connection conn, int id) throws SQLException{
-        var st = conn.prepareStatement("SELECT idUser, name, birthday, gender, profileUrl,area FROM user WHERE user.idUser = ?");
+        var st = conn.prepareStatement("SELECT * FROM user WHERE user.idUser = ?");
         st.setInt(1, id);
         return st;
     }
 
     public static PreparedStatement getUserByEmail(Connection conn, String email) throws SQLException{
-        var st = conn.prepareStatement("SELECT idUser, name, birthday, gender, profileUrl,area FROM user WHERE user.email = ?");
+        var st = conn.prepareStatement("SELECT * FROM user WHERE user.email = ?");
         st.setString(1, email);
         return st;
     }

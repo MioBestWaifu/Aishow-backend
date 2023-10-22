@@ -2,14 +2,18 @@ package com.aishow.backend.handlers.appinteraction;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.aishow.backend.data.DatabaseConnection;
+import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.models.GenericInformation;
 import com.aishow.backend.utils.Utils;
+
+//TODO #30 revear as nomeações de colunas de nome nos statements e no servidor
 
 public class MacroInfoHandler extends BaseHandler{
 
@@ -23,11 +27,11 @@ public class MacroInfoHandler extends BaseHandler{
         try{
             switch(params[0]){
                 case "areas":
-                    return (G) sendAreas();
+                    return (G) sendInfos("area");
                 case "mod":
-                    return (G) sendMods();
+                    return (G) sendInfos("servicemodality");
                 case "cat":
-                    return (G) sendCats();
+                    return (G) sendInfos("servicecategory");
                 default:
                     return (G) "ERROR";
             } 
@@ -36,16 +40,21 @@ public class MacroInfoHandler extends BaseHandler{
         }
     }
 
-    private ArrayList<GenericInformation> sendAreas() throws IOException{
-        return DatabaseConnection.GetAllGenericInfo("area","idArea","name");
-    }
+    private ArrayList<GenericInformation> sendInfos(String type) throws IOException{
+        try {
+            var st = StatementPreparer.getAllGenericInformation(DatabaseConnection.getConnection(), type);
+            var rs = DatabaseConnection.runQuery(st);
+            ArrayList<GenericInformation> toReturn = new ArrayList<>();
 
-    private ArrayList<GenericInformation> sendMods() throws IOException{
-        return DatabaseConnection.GetAllGenericInfo("servicemodality","idServiceModality","modalityName");
-    }
+            while (rs.next()){
+                toReturn.add(GenericInformation.fromResultSet(rs,type));
+            }
 
-    private ArrayList<GenericInformation> sendCats() throws IOException{
-        return DatabaseConnection.GetAllGenericInfo("servicecategory","idServiceCategory","categoryName");
+            return toReturn;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
     
 }

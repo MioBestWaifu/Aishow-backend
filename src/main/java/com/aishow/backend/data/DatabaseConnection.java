@@ -55,28 +55,29 @@ public abstract class DatabaseConnection {
             System.out.println(ex.getMessage());
             System.exit(0);
         }
-
-        //input.close();
     }
 
-    public static boolean checkLogin(UserInformation info){
-        try {
-            var st = conn.prepareStatement("SELECT * FROM user WHERE user.email = ? AND user.password = ?");
-            st.setString(1, info.getEmail());
-            st.setString(2, info.getPassword());
-            var res = st.executeQuery();
-            if (res.next()){
-                info.setUserId(res.getInt("idUser"));
-                return true;
-            }
+    public static ResultSet runQuery(PreparedStatement st) throws SQLException{
+        return st.executeQuery();
+    }
 
-            return false;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+    public static int runUpdate(PreparedStatement st) throws SQLException{
+        return st.executeUpdate();
+    }
+
+    public static Connection getConnection(){
+        return conn;
+    }
+
+    public static ArrayList<Integer> getAvailableServiceIds(){
+        ArrayList<Integer> available = new ArrayList<>(serviceIds.size());
+        for(int i=0;i<serviceIds.size();i++){
+            available.add(i);
         }
-        
+        Collections.copy(available, serviceIds);
+        return available;
     }
+
 
     public static UserInformation getBasicUserInformation(UserInformation info){
         try {
@@ -334,53 +335,6 @@ public abstract class DatabaseConnection {
         return toReturn;
     }
 
-    public static ServiceBundle getAnotherBundle(Integer[] alreadyHas){
-        try{
-            int[] toGet = new int[4];
-            ServiceBundle bundle = new ServiceBundle();
-            ArrayList<ServiceInformation> servInfos = new ArrayList<ServiceInformation>();
-            ArrayList<Integer> available = new ArrayList<>(serviceIds.size());
-            for(int i=0;i<serviceIds.size();i++){
-                available.add(i);
-            }
-            Collections.copy(available, serviceIds);
-            if(alreadyHas[0] >= 0)
-                available.removeAll(Arrays.asList(alreadyHas));
-            Random rand = new Random();
-            int x;
-            for(int i = 0; i<=3; i++){
-                x = rand.nextInt(available.size());
-                toGet[i] = available.get(x);
-                available.remove(x);
-            } 
-            
-            for (int i = 0; i<=3; i++){
-                ServiceInformation buffer = getBasicServiceInformation(serviceFromId(toGet[i]));
-                var st = conn.prepareStatement("SELECT * FROM user WHERE idUser = ?");
-                st.setInt(1, buffer.getProviderId());
-                var providerRes = st.executeQuery();
-                providerRes.next();
-                buffer.setProviderName(providerRes.getString("name"));
-                buffer.setProviderImageUrl(providerRes.getString("profileUrl"));
-                buffer.setProviderUrl(Integer.toString(providerRes.getInt("idUser")));
-                var areaSt = conn.prepareStatement("SELECT name FROM area WHERE area.idArea = ?");
-                areaSt.setInt(1,providerRes.getInt("area"));
-                var areaRes = areaSt.executeQuery();
-                areaRes.next();
-                buffer.setProviderArea(areaRes.getString(1));
-                DatabaseConnection.getServiceReviews(buffer, false);
-                servInfos.add(buffer);
-            }
-
-            bundle.setServiceInfos(servInfos);
-            return bundle;
-        } catch (SQLException ex){
-            System.out.println("Erro em get new bundle");
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
     public static boolean tryToUpdateUserName(int id, String newName){
         try{
             var st = conn.prepareStatement("UPDATE user SET name = ? WHERE idUser = ?");
@@ -477,25 +431,6 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static ArrayList<GenericInformation> GetAllGenericInfo(String table, String id, String name){
-        try{
-            var st = conn.prepareStatement("SELECT * FROM "+table);
-            var rst = st.executeQuery();
-            
-            ArrayList<GenericInformation> toSend = new ArrayList<>();
-            GenericInformation buff = new GenericInformation();
-            while(rst.next()){
-                buff.Id = rst.getInt(id);
-                buff.Name = rst.getString(name);
-                toSend.add(buff);
-                buff = new GenericInformation();
-            }
-            return toSend;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            return null;
-        }
-    }
 
     public static String getSingleGenericInfo(String table, String idCol, String nameCol, int id){
         try{
@@ -681,33 +616,7 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static String getServiceImageUrl(int id){
-        try {
-            var st = conn.prepareStatement("SELECT templateImageUrl FROM serviceTemplates WHERE idServiceTemplates = ?");
-            st.setInt(1, id);
-            var res = st.executeQuery();
-            res.next();
-            return res.getString("templateImageUrl");
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-    }
 
-    public static String getUserImageUrl(int id){
-        try {
-            var st = conn.prepareStatement("SELECT profileUrl FROM user WHERE idUser = ?");
-            st.setInt(1, id);
-            var res = st.executeQuery();
-            res.next();
-            return res.getString("profileUrl");
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public static void addNewServiceRequest(ClientServiceInteraction info){
         try{
@@ -988,80 +897,6 @@ public abstract class DatabaseConnection {
         } catch (SQLException ex){
             ex.printStackTrace();
             return false;
-        }
-    }
-
-    public static ArrayList<ServiceInformation> searchForServiceTemplate (String toSearch, int offset){
-        try{
-            toSearch = '%' + toSearch + '%';
-            var st = conn.prepareStatement("SELECT * FROM servicetemplates WHERE serviceName LIKE ? LIMIT 20 OFFSET ?");
-            st.setString(1, toSearch);
-            st.setInt(2, offset);
-            var res = st.executeQuery();
-            ArrayList<ServiceInformation> toAdd = new ArrayList<>();
-            ServiceInformation buffer;
-            while (res.next()){
-                buffer = new ServiceInformation();
-                buffer.setProviderId(res.getInt("idProvider"));
-                buffer.setTemplateId(res.getInt("idServiceTemplates"));
-                buffer.setCostPerHour(res.getFloat("costPerHour"));
-                buffer.setDescription(res.getString("description"));
-                buffer.setServiceName(res.getString("serviceName"));
-                try{
-                    buffer.setShortServiceName(buffer.getServiceName().substring(0, 23)+"...");
-                } catch(Exception ex){
-                    buffer.setShortServiceName(buffer.getServiceName());
-                }
-                buffer.setTemplateImageUrl(res.getString("templateImageUrl"));
-                buffer.setCategory(res.getInt("serviceCategory"));
-                buffer.setCatText(getSingleGenericInfo("servicecategory", "idServiceCategory", "categoryName", buffer.getCategory()));
-                buffer.setModality(res.getInt("serviceModality"));
-                buffer.setModText(getSingleGenericInfo("servicemodality", "idServiceModality", "modalityName", buffer.getModality()));
-                getServiceReviews(buffer, false);
-                GetServiceAvailability(buffer);
-                toAdd.add(buffer);
-            }
-            return toAdd;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("EXCEÇÃO EM PROCURAR TEMPLTATE");
-            return null;
-        }
-    }
-
-    public static ArrayList<UserInformation> searchForUsers(String toSearch, int offset){
-        try{
-            toSearch = '%' + toSearch + '%';
-            var st = conn.prepareStatement("SELECT * FROM user WHERE name LIKE ? LIMIT 20 OFFSET ?");
-            st.setString(1, toSearch);
-            st.setInt(2, offset);
-            ArrayList<UserInformation> toReturn = new ArrayList<>();
-            UserInformation buffer;
-
-            var res = st.executeQuery();
-            while(res.next()){
-                buffer = new UserInformation();
-                buffer.setUserId(res.getInt("idUser"));
-                buffer.setName(res.getString("name"));
-                buffer.setBirthday(res.getDate("birthday"));
-                buffer.setGender(res.getString("gender"));
-                buffer.setImageUrl(res.getString("profileUrl"));
-                try{
-                    var areaSt = conn.prepareStatement("SELECT name FROM area WHERE idArea = ?");
-                    areaSt.setInt(1, res.getInt("area"));
-                    var areaRes = areaSt.executeQuery();
-                    areaRes.next();
-                    buffer.setAreaName(areaRes.getString(1));
-                } catch (SQLException ex){
-                }
-                System.out.println(buffer.getEmail());
-                toReturn.add(buffer);
-            }
-            return toReturn;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("EXCEÇÃO EM PROCURAR USER");
-            return null;
         }
     }
 

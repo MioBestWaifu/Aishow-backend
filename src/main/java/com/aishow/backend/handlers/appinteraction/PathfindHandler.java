@@ -1,6 +1,10 @@
 package com.aishow.backend.handlers.appinteraction;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.aishow.backend.data.DatabaseConnection;
+import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.modular.ModularInfo;
 
@@ -19,13 +23,25 @@ public class PathfindHandler extends BaseHandler{
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
         // TODO MODIFICAR ISSO QUADNO TIVER UMA CDN OU FAZER UMA VERSÃO PARA TESTES E UMA PARA PRODUÇÃO
-        switch(params[0]){
-            case "service":
-                return (G)(ModularInfo.BASE_IMAGE_URL+DatabaseConnection.getServiceImageUrl(Integer.parseInt(params[1])));
-            case "user":
-                return (G)(ModularInfo.BASE_IMAGE_URL+DatabaseConnection.getUserImageUrl(Integer.parseInt(params[1])));
+        ResultSet rs;
+        try{
+            switch(params[0]){
+                case "service":
+                    rs = DatabaseConnection.runQuery(StatementPreparer.getServiceImageUrlById(
+                        DatabaseConnection.getConnection(), Integer.parseInt(params[1])));
+                    rs.next();
+                    return (G)(ModularInfo.BASE_IMAGE_URL+rs.getString(1));
+                case "user":
+                    rs = DatabaseConnection.runQuery(StatementPreparer.getUserProfileImageUrlById(
+                    DatabaseConnection.getConnection(), Integer.parseInt(params[1])));
+                    rs.next();
+                    return (G)(ModularInfo.BASE_IMAGE_URL+rs.getString(1));
+            }
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        } finally {
+            return (G) "FAIL";
         }
-        return (G)"FAIL";
     }
  
 }
