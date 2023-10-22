@@ -1,8 +1,8 @@
 package com.aishow.backend.handlers;
 
 import com.aishow.backend.managers.DatabaseConnection;
-import com.aishow.backend.managers.Utils;
 import com.aishow.backend.modular.ImageHandler;
+import com.aishow.backend.utils.Utils;
 
 public class ImageUpdateHandler extends BaseHandler{
 

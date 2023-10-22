@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aishow.backend.managers.Utils;
+import com.aishow.backend.utils.Utils;
 
 @RestController
 public class ImageLoader {

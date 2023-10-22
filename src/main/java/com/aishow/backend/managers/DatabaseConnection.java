@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import com.aishow.backend.models.*;
+import com.aishow.backend.utils.Utils;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 public abstract class DatabaseConnection {

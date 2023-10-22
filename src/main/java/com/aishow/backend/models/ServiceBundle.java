@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.aishow.backend.managers.Utils;
+import com.aishow.backend.utils.Utils;
 
 public class ServiceBundle {
     ArrayList<ServiceInformation> serviceInfos;

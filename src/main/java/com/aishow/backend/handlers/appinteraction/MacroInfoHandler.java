@@ -8,8 +8,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.managers.DatabaseConnection;
-import com.aishow.backend.managers.Utils;
 import com.aishow.backend.models.GenericInformation;
+import com.aishow.backend.utils.Utils;
 
 public class MacroInfoHandler extends BaseHandler{
 

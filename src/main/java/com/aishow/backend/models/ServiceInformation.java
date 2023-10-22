@@ -7,9 +7,9 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.aishow.backend.managers.Utils;
 import com.aishow.backend.modular.ImageHandler;
 import com.aishow.backend.modular.ModularInfo;
+import com.aishow.backend.utils.Utils;
 
 public class ServiceInformation {
     //TODO #25 dar cabo dessas informações do user e criar um objeto UserInformation no lugar

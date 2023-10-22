@@ -1,4 +1,4 @@
-package com.aishow.backend.managers;
+package com.aishow.backend.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

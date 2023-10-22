@@ -3,7 +3,7 @@ package com.aishow.backend.models;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
-import com.aishow.backend.managers.Utils;
+import com.aishow.backend.utils.Utils;
 
 public class ReviewInfomation {
     UserInformation reviewer;

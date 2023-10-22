@@ -7,8 +7,8 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.aishow.backend.managers.Utils;
 import com.aishow.backend.modular.ModularInfo;
+import com.aishow.backend.utils.Utils;
 
 public class UserInformation {
     //Vai enviar senha no json tbm
