@@ -12,6 +12,7 @@ import com.aishow.backend.models.UserInformation;
 import com.aishow.backend.utils.Utils;
 
 //TODO #26 organizar essa porra
+//TODO #31 ottimizar consultas que são feita em duas partes
 
 public class StatementPreparer {
 

@@ -137,46 +137,11 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static UserInformation getActiveUserInformation(UserInformation info){
-        info = getBasicUserInformation(info);
-        info = getSensitiveUserInformation(info);
-        info.setServiceRecs(getServiceRecommendations(info.getUserId()));
-        info = getUserReviews(info);
-        return info;
-    }
-
     public static UserInformation getRequestedUserInformation(int id){
         UserInformation info = getBasicUserInformation(userFromId(id));
         info.setServices(getUserServices(info.getUserId()));
         info = getUserReviews(info);
         return info;
-    }
-
-    
-
-    public static boolean tryToRegister(UserInformation info){
-        try {
-            var st = conn.prepareStatement("SELECT * FROM user WHERE user.email = ?");
-            st.setString(1, info.getEmail());
-            var result = st.executeQuery();
-            if (result.next())
-                return false;
-        st = conn.prepareStatement("INSERT INTO user (name,email,password,birthday,profileUrl,gender,area)"+
-        "VALUES(?,?,?,?,?,?,?)");
-        st.setString(1, info.getName());
-        st.setString(2, info.getEmail());
-        st.setString(3, info.getPassword());
-        st.setDate(4, info.getBirthday());
-        st.setString(5, "0.png");
-        st.setString(6, info.getGender());
-        st.setInt(7, info.getAreaCode());
-        int rowsAffected = st.executeUpdate();
-        return true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public static boolean tryToAddServiceTemplate(ServiceInformation info){
@@ -333,19 +298,6 @@ public abstract class DatabaseConnection {
         toReturn.get(1).setServiceInfos(new ArrayList<ServiceInformation>(buffer.subList(4, 8)));
         toReturn.get(2).setServiceInfos(new ArrayList<ServiceInformation>(buffer.subList(8, 12)));
         return toReturn;
-    }
-
-    public static boolean tryToUpdateUserName(int id, String newName){
-        try{
-            var st = conn.prepareStatement("UPDATE user SET name = ? WHERE idUser = ?");
-            st.setString(1, newName);
-            st.setInt(2, id);
-            var rst = st.executeUpdate();
-            return rst == 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public static boolean tryToUpdateUserImageUrl(int id, String newUrl){
@@ -785,62 +737,6 @@ public abstract class DatabaseConnection {
             System.out.println("EXCEÇÃO NO SERV SCHEDULE");
             ex.printStackTrace();
             return null;
-        }
-    }
-
-    public static boolean AcceptRequest(int reqId, int userId){
-        try{
-            var st = conn.prepareStatement("SELECT * FROM servicerequests WHERE serviceRequestID = ?");
-            st.setInt(1, reqId);
-            var res = st.executeQuery();
-            if (!res.next()){
-                return false;
-            }
-            
-            //Isso aq vai ser desnecessario como AUTH
-            if(!DatabaseConnection.IsOwner(userId, res.getInt("templateID"))){
-                return false;
-            }
-
-            st = conn.prepareStatement("INSERT INTO serviceinstances (clientID,templateID,startDate,endDate,startTime,endTime,cost)"+
-            "VALUES (?,?,?,?,?,?,?)");
-            st.setInt(1, res.getInt("clientID"));
-            st.setInt(2, res.getInt("templateID"));
-            st.setDate(3, res.getDate("startDate"));
-            st.setDate(4, res.getDate("endDate"));
-            st.setTime(5, res.getTime("startTime"));
-            st.setTime(6, res.getTime("endTime"));
-            st.setFloat(7, res.getFloat("cost"));
-
-            st.executeUpdate();
-            st = conn.prepareStatement("DELETE FROM servicerequests WHERE serviceRequestID = ?");
-            st.setInt(1, reqId);
-            return st.executeUpdate() > 0;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("ERRO EM ACCEPT REQ");
-            return false;
-        }
-    }
-
-    public static boolean DenyRequest(int reqId, int userId){      
-        try{
-            var st = conn.prepareStatement("SELECT templateID FROM servicerequests WHERE serviceRequestID = ?");
-            st.setInt(1, reqId);
-            var res = st.executeQuery();
-            if (!res.next()){
-                return false;
-            }
-            if(!DatabaseConnection.IsOwner(userId, res.getInt("templateID"))){
-                return false;
-            }
-            st = conn.prepareStatement("DELETE FROM servicerequests WHERE serviceRequestID = ?");
-            st.setInt(1, reqId);
-            return st.executeUpdate() > 0;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("ERRO EM ACCEPT REQ");
-            return false;
         }
     }
 

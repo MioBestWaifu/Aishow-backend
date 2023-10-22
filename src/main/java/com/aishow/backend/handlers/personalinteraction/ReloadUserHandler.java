@@ -1,7 +1,13 @@
 package com.aishow.backend.handlers.personalinteraction;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.aishow.backend.data.DatabaseConnection;
+import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.models.UserInformation;
 
 public class ReloadUserHandler extends BaseHandler{
 
@@ -11,19 +17,18 @@ public class ReloadUserHandler extends BaseHandler{
         return null;
     }
 
+    //AUTH
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
-        return (G) DatabaseConnection.getActiveUserInformation(DatabaseConnection.userFromId(
-            Integer.parseInt(params[0])
-        ));
+        try{
+            PreparedStatement st = StatementPreparer.getUserById(DatabaseConnection.getConnection(),Integer.parseInt(params[0]));
+            ResultSet rs = DatabaseConnection.runQuery(st);
+            rs.next();
+            return (G) UserInformation.fromResultSet(rs);
+        }catch (SQLException ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
-
-    
-
-    //         case "reload":
-        //             exchange.getResponseHeaders().add("Content-type", "application/json");
-        //             var toSend = UserConnectionManager.getInformation(exchange.getRemoteAddress().getHostString()).toJson().getBytes(StandardCharsets.UTF_8);
-        //             Utils.sendAndClose(exchange,200,toSend);
-        //             break;
     
 }
