@@ -95,6 +95,12 @@ public class StatementPreparer {
         return st;
     }
 
+    public static PreparedStatement deleteleAvailabilityByTemplateId(Connection conn, int id) throws SQLException{
+        var st = conn.prepareStatement("DELETE FROM serviceavailability WHERE templateID = ?");
+        st.setInt(1, id);
+        return st;
+    }
+
     public static PreparedStatement updateUserName(Connection conn, int id, String newVarchar) throws SQLException{
         var st = conn.prepareStatement("UPDATE user SET name = ? WHERE idUser = ?");
         st.setString(1, newVarchar);

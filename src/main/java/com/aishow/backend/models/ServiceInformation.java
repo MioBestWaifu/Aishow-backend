@@ -1,6 +1,7 @@
 package com.aishow.backend.models;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -38,6 +39,23 @@ public class ServiceInformation {
     
     public void setReviews(ResultSet rs){
 
+    }
+
+    public void setAvailablity(ResultSet rs) throws SQLException{
+        boolean[] days = new boolean[7];
+        Time[] from = new Time[7];
+        Time[] to = new Time[7];
+        int i;
+        while(rs.next()){
+            i = rs.getInt("weekday");
+            days[i] = true;
+            from[i] = rs.getTime("startHour");
+            to[i] = rs.getTime("endHour");
+
+            setAvailableDays(days);
+            setAvailableFromsFromTime(from);
+            setAvailableTosFromTime(to);  
+        }
     }
     public String getDescription() {
         return description;

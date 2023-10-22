@@ -175,25 +175,6 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static boolean tryToUpdateServiceTemplate(ServiceInformation info){
-        try{
-            var st = conn.prepareStatement("UPDATE servicetemplates "+
-            "SET serviceModality = ?, serviceCategory = ?, description = ?, serviceName = ?, costPerHour = ? "+
-            "WHERE idServiceTemplates = ?");
-            st.setInt(1, info.getModality());
-            st.setInt(2, info.getCategory());
-            st.setString(3, info.getDescription());
-            st.setString(4, info.getServiceName());
-            st.setFloat(5, info.getCostPerHour());
-            st.setInt(6, info.getTemplateId());
-            return st.executeUpdate() == 1;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("ERRO EM UPDATE TEMPLATE");
-            return false;
-        }
-    }
-
     public static boolean addAvailability(int templateId, int weekday, Time from, Time to){
         try {
             var st = conn.prepareStatement("INSERT INTO serviceavailability (templateID, weekday,startHour,endHour) VALUES (?,?,?,?)");
@@ -204,46 +185,6 @@ public abstract class DatabaseConnection {
             return st.executeUpdate()>0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean updateAvailabilityScheme(ServiceInformation info){
-        try{
-            var st = conn.prepareStatement("SELECT serviceAvailabilityID FROM serviceavailability WHERE templateID = ?");
-            st.setInt(1, info.getTemplateId());
-            var res = st.executeQuery();
-            while(res.next()){
-                if (!deleteAvailability(res.getInt(1)))
-                    return false;
-            }
-
-            var x = info.getFromsAsTime();
-            var y = info.getTosAsTime();
-
-            for(int a = 0; a<=6;a++){
-                if (info.getAvailableDays()[a] == true){
-                    if (!addAvailability(info.getTemplateId(), a, x[a], y[a]))
-                        return false;
-                }
-            }
-
-            return true;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("ERRO EM DELETE AVILABILITY");
-            return false;
-        }
-    }
-
-    public static boolean deleteAvailability(int id){
-        try{
-            var st = conn.prepareStatement("DELETE FROM serviceavailability WHERE serviceAvailabilityID = ?");
-            st.setInt(1, id);
-            return st.executeUpdate() == 1;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("ERRO EM DELETE AVILABILITY");
             return false;
         }
     }
@@ -398,41 +339,6 @@ public abstract class DatabaseConnection {
         }
     }
 
-    public static ArrayList<ServiceInformation> getUserServices(int id){
-        try{
-            var st = conn.prepareStatement("SELECT idServiceTemplates, costPerHour, description, serviceName, templateImageUrl, serviceModality, serviceCategory FROM servicetemplates WHERE idProvider = ?");
-            st.setInt(1, id);
-            var res = st.executeQuery();
-            ArrayList<ServiceInformation> toAdd = new ArrayList<>();
-            ServiceInformation buffer;
-            while (res.next()){
-                buffer = new ServiceInformation();
-                buffer.setProviderId(id);
-                buffer.setTemplateId(res.getInt("idServiceTemplates"));
-                buffer.setCostPerHour(res.getFloat("costPerHour"));
-                buffer.setDescription(res.getString("description"));
-                buffer.setServiceName(res.getString("serviceName"));
-                try{
-                    buffer.setShortServiceName(buffer.getServiceName().substring(0, 23)+"...");
-                } catch(Exception ex){
-                    buffer.setShortServiceName(buffer.getServiceName());
-                }
-                buffer.setTemplateImageUrl(res.getString("templateImageUrl"));
-                buffer.setCategory(res.getInt("serviceCategory"));
-                buffer.setCatText(getSingleGenericInfo("servicecategory", "idServiceCategory", "categoryName", buffer.getCategory()));
-                buffer.setModality(res.getInt("serviceModality"));
-                buffer.setModText(getSingleGenericInfo("servicemodality", "idServiceModality", "modalityName", buffer.getModality()));
-                getServiceReviews(buffer, false);
-                GetServiceAvailability(buffer);
-                toAdd.add(buffer);
-            }
-            return toAdd;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
     public static UserInformation getUserReviews(UserInformation info){
         try{
             var st = conn.prepareStatement("SELECT idreviewer, score, comment FROM userreviews WHERE idtarget = ?");
@@ -568,99 +474,6 @@ public abstract class DatabaseConnection {
         }
     }
 
-
-
-    public static void addNewServiceRequest(ClientServiceInteraction info){
-        try{
-            var st = conn.prepareStatement("INSERT INTO servicerequests (templateID, clientID, startDate, endDate, startTime, endTime,cost)"+
-             "VALUES (?,?,?,?,?,?,?)");
-            st.setInt(1, info.getTemplateId());
-            st.setInt(2, info.getClientId());
-            st.setString(3, info.getStartDate());
-            st.setString(4, info.getEndDate());
-            st.setTime(5, info.getStartTime());
-            st.setTime(6, info.getEndTime());
-            st.setFloat(7, info.getCost());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    public static void GetServiceAvailability(ServiceInformation info){
-        try{
-            var st = conn.prepareStatement("SELECT * FROM serviceavailability WHERE templateID = ?");
-            st.setInt(1, info.getTemplateId());
-            var res = st.executeQuery();
-            boolean[] days = new boolean[7];
-            Time[] from = new Time[7];
-            Time[] to = new Time[7];
-            int i;
-            if(res.next()){
-                i = res.getInt("weekday");
-                days[i] = true;
-                from[i] = res.getTime("startHour");
-                to[i] = res.getTime("endHour");
-                while(res.next()){
-                    i = res.getInt("weekday");
-                    days[i] = true;
-                    from[i] = res.getTime("startHour");
-                    to[i] = res.getTime("endHour");
-                }
-            } else {
-                //for (int a = 0; a<=6; a++){
-                    //days[a] = false;
-                    //from[a] = new Time(0,0,0);
-                    //to[a] = new Time(0, 0, 0);
-                //}
-            }
-            info.setAvailableDays(days);
-            info.setAvailableFromsFromTime(from);
-            info.setAvailableTosFromTime(to);
-
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    public static ArrayList<ClientServiceInteraction> getUserRequests(int id){
-        try{
-            var st = conn.prepareStatement("SELECT * FROM servicerequests WHERE clientID = ?");
-            st.setInt(1, id);
-            var res = st.executeQuery();
-            ArrayList<ClientServiceInteraction> buffer = new ArrayList<>();
-            ClientServiceInteraction x;
-            while (res.next()){
-                x = new ClientServiceInteraction();
-                x.setAccepted(true);
-                x.setId(res.getInt("serviceRequestID"));
-                x.setCost(res.getFloat("cost"));
-                x.setStartDate(res.getString("startDate"));
-                x.setEndDate(res.getString("endDate"));
-                x.setStartTime(res.getTime("startTime"));
-                x.setEndTime(res.getTime("endTime"));
-                x.setTemplateId(res.getInt("templateID"));
-                x.setClientId(res.getInt("clientID"));
-                x.setProvider(x.getClientId() == id);
-                System.out.println(x.getId());
-                var y = new UserInformation();
-                var z = new ServiceInformation();
-                z.setTemplateId(x.getTemplateId());
-                y.setUserId(x.getClientId());
-                x.setClient(DatabaseConnection.getBasicUserInformation(y));
-                x.setService(DatabaseConnection.getBasicServiceInformation(z));
-                buffer.add(x);
-            }
-
-            return buffer;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
     public static ServiceSchedule getScheduleByUser (int id){
         try{
             ServiceSchedule toReturn = new ServiceSchedule();
@@ -749,49 +562,6 @@ public abstract class DatabaseConnection {
         } catch (SQLException ex){
             ex.printStackTrace();
             System.out.println("ERRO EM IsOwner");
-            return false;
-        }
-    }
-
-    public static String checkAvailability(ClientServiceInteraction info){
-        try{
-            var st = conn.prepareStatement("SELECT startTime, endTime FROM serviceinstances WHERE (templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ?) AND" + //
-                    "((DATE(?) BETWEEN startDate AND endDate) AND ((TIME(?) BETWEEN startTime AND endTime) OR (TIME(?) BETWEEN startTime AND endTime))) ORDER BY startDate, startTime");
-            st.setInt(1, info.getService().getProviderId());
-            st.setInt(2, info.getService().getProviderId());
-            //ISSO NAO ACOMODA PRA MULTIPLOS DIAS
-            st.setString(3, info.getStartDate());
-            st.setTime(4, info.getStartTime());
-            st.setTime(5, info.getEndTime());
-            var res = st.executeQuery();
-
-            if(res.next()){
-                String toReturn = "Unavailable that day between: \n"+res.getTime("startTime").toString() + 
-                    " and "+res.getTime("endTime").toString();
-                while (res.next()){
-                    toReturn += "\n"+res.getTime("startTime").toString() + 
-                    " and "+res.getTime("endTime").toString();
-                }
-                return toReturn;
-            } else {
-                return "AVA";
-            }
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            System.out.println("ERRO EM checkAvailavility");
-            return "BROKE";
-        }
-    }
-
-    //AUTH segurança
-    public static boolean cancelRequest(int id){
-        try{
-            var st = conn.prepareStatement("DELETE FROM servicerequests WHERE serviceRequestID = ?");
-            st.setInt(1, id);
-            var res = st.executeUpdate();
-            return res == 1;
-        } catch (SQLException ex){
-            ex.printStackTrace();
             return false;
         }
     }
