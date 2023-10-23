@@ -8,7 +8,6 @@ import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.models.ClientServiceInteraction;
-import com.ctc.wstx.shaded.msv_core.reader.State;
 
 //TODO #32 evitar o uso de var
 

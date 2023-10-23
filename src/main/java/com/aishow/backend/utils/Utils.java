@@ -1,32 +1,13 @@
 package com.aishow.backend.utils;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.Buffer;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
-import javax.print.DocFlavor.STRING;
-
-import com.sun.net.httpserver.HttpExchange;
 
 public abstract class Utils {
     public static HashMap<String,byte[]> pages = new HashMap<String,byte[]>();

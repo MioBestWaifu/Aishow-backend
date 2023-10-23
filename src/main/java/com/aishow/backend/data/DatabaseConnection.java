@@ -89,36 +89,6 @@ public abstract class DatabaseConnection {
             System.out.println("ERRO EM IsOwner");
             return false;
         }
-    }
-
-    public static boolean tryToAddReviewToService(int reviewer, int target, int score, String comment){
-        try{
-            var st = conn.prepareStatement("INSERT INTO servicereviews VALUES (?,?,?,?)");
-            st.setInt(1, reviewer);
-            st.setInt(2, target);
-            st.setInt(3, score);
-            st.setString(4, comment);
-            var rst = st.executeUpdate();
-            return rst == 1;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean tryToAddReviewToUser(int reviewer, int target, int score, String comment){
-        try{
-            var st = conn.prepareStatement("INSERT INTO userreviews VALUES (?,?,?,?)");
-            st.setInt(1, reviewer);
-            st.setInt(2, target);
-            st.setInt(3, score);
-            st.setString(4, comment);
-            var rst = st.executeUpdate();
-            return rst == 1;
-        } catch (SQLException ex){
-            ex.printStackTrace();
-            return false;
-        }
-    } */
+    }*/
 
 }

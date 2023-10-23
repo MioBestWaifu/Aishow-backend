@@ -16,6 +16,7 @@ import com.aishow.backend.utils.Utils;
 
 public class StatementPreparer {
 
+    //USERS
     public static PreparedStatement matchUserCredentials(Connection conn, UserInformation info) throws SQLException{
         var st = conn.prepareStatement("SELECT * FROM user WHERE user.email = ? AND user.password = ?");
         st.setString(1, info.getEmail());
@@ -48,6 +49,47 @@ public class StatementPreparer {
         return st;
     }
 
+    public static PreparedStatement updateUserName(Connection conn, int id, String newVarchar) throws SQLException{
+        var st = conn.prepareStatement("UPDATE user SET name = ? WHERE idUser = ?");
+        st.setString(1, newVarchar);
+        st.setInt(2, id);
+        return st;
+    }
+
+    public static PreparedStatement updateUserImageUrl(Connection conn, int id, String newVarchar) throws SQLException{
+        var st = conn.prepareStatement("UPDATE user SET profileImageUrl = ? WHERE idUser = ?");
+        st.setString(1, newVarchar);
+        st.setInt(2, id);
+        return st;
+    }
+
+    public static PreparedStatement updateUserArea(Connection conn, int idUser, int idArea) throws SQLException{
+        var st = conn.prepareStatement("UPDATE user SET area = ? WHERE idUser = ?");
+        st.setInt(1, idArea);
+        st.setInt(2, idUser);
+        return st;
+    }
+
+    public static PreparedStatement getUserProfileImageUrlById(Connection conn, int id) throws SQLException {
+        var st = conn.prepareStatement("SELECT profileUrl FROM user WHERE idUser = ?");
+        st.setInt(1, id);
+        return st;
+    }
+
+    //SERVICES/TEMPLATES
+
+    public static PreparedStatement getServicesByProviderId(Connection conn, int id) throws SQLException{
+        var st = conn.prepareStatement("SELECT idServiceTemplates, costPerHour, description, serviceName, templateImageUrl, serviceModality, serviceCategory FROM servicetemplates WHERE idProvider = ?");
+        st.setInt(1, id);
+        return st;
+    }
+
+    public static PreparedStatement getServiceById (Connection conn, int id) throws SQLException {
+        var st = conn.prepareStatement("SELECT idProvider, idServiceTemplates, costPerHour, description, serviceName, templateImageUrl,serviceModality,serviceCategory FROM servicetemplates WHERE idServiceTemplates = ?");
+        st.setInt(1, id);
+        return st;
+    }
+
     public static PreparedStatement createService(Connection conn, ServiceInformation info) throws SQLException{
         var st = conn.prepareStatement("INSERT INTO serviceTemplates (idProvider,serviceName,description,costPerHour,serviceModality,serviceCategory,templateImageUrl)"+
         "VALUES (?,?,?,?,?,?,?)");
@@ -73,6 +115,27 @@ public class StatementPreparer {
         st.setInt(6, info.getTemplateId());
         return st;
     }
+
+    public static PreparedStatement updateTemplateImageUrl(Connection conn, int id, String newVarchar) throws SQLException{
+        var st = conn.prepareStatement("UPDATE servicetemplates SET templateImageUrl = ? WHERE idServiceTemplates = ?");
+        st.setString(1, newVarchar);
+        st.setInt(2, id);
+        return st;
+    }
+
+    public static PreparedStatement getLastCreatedServiceByProviderId(Connection conn, int creator) throws SQLException {
+        var st = conn.prepareStatement("SELECT idServiceTemplates FROM serviceTemplates WHERE idProvider = ? ORDER BY idServiceTemplates DESC LIMIT 1");
+        st.setInt(1, creator);
+        return st;
+    }
+
+    public static PreparedStatement getServiceImageUrlById(Connection conn, int id) throws SQLException {
+        var st = conn.prepareStatement("SELECT templateImageUrl FROM serviceTemplates WHERE idServiceTemplates = ?");
+        st.setInt(1, id);
+        return st;
+    }
+
+    //AVAILABILITY
 
     public static PreparedStatement getAvailabilityByTemplateId(Connection conn, int templateId) throws SQLException{
         var st = conn.prepareStatement("SELECT serviceAvailabilityID FROM serviceavailability WHERE templateID = ?");
@@ -101,33 +164,19 @@ public class StatementPreparer {
         return st;
     }
 
-    public static PreparedStatement updateUserName(Connection conn, int id, String newVarchar) throws SQLException{
-        var st = conn.prepareStatement("UPDATE user SET name = ? WHERE idUser = ?");
-        st.setString(1, newVarchar);
-        st.setInt(2, id);
+    public static PreparedStatement getAvailabilityAtFrame(Connection conn, ClientServiceInteraction info) throws SQLException {
+         var st = conn.prepareStatement("SELECT startTime, endTime FROM serviceinstances WHERE (templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ?) AND" + //
+                "((DATE(?) BETWEEN startDate AND endDate) AND ((TIME(?) BETWEEN startTime AND endTime) OR (TIME(?) BETWEEN startTime AND endTime))) ORDER BY startDate, startTime");
+         st.setInt(1, info.getService().getProviderId());
+        st.setInt(2, info.getService().getProviderId());
+        //ISSO NAO ACOMODA PRA MULTIPLOS DIAS
+        st.setString(3, info.getStartDate());
+        st.setTime(4, info.getStartTime());
+        st.setTime(5, info.getEndTime());
         return st;
     }
 
-    public static PreparedStatement updateUserImageUrl(Connection conn, int id, String newVarchar) throws SQLException{
-        var st = conn.prepareStatement("UPDATE user SET profileImageUrl = ? WHERE idUser = ?");
-        st.setString(1, newVarchar);
-        st.setInt(2, id);
-        return st;
-    }
-
-    public static PreparedStatement updateTemplateImageUrl(Connection conn, int id, String newVarchar) throws SQLException{
-        var st = conn.prepareStatement("UPDATE servicetemplates SET templateImageUrl = ? WHERE idServiceTemplates = ?");
-        st.setString(1, newVarchar);
-        st.setInt(2, id);
-        return st;
-    }
-
-    public static PreparedStatement updateUserArea(Connection conn, int idUser, int idArea) throws SQLException{
-        var st = conn.prepareStatement("UPDATE user SET area = ? WHERE idUser = ?");
-        st.setInt(1, idArea);
-        st.setInt(2, idUser);
-        return st;
-    }
+    //REVIEW
 
     public static PreparedStatement createServiceReview(Connection conn,int reviewer, int target, int score, String comment) throws SQLException {
         var st = conn.prepareStatement("INSERT INTO servicereviews VALUES (?,?,?,?)");
@@ -147,23 +196,6 @@ public class StatementPreparer {
         return st;
     }
 
-    public static PreparedStatement getAllGenericInformation(Connection conn,String table) throws SQLException{
-        var st = conn.prepareStatement("SELECT * FROM "+table);
-        return st;
-    }
-
-    public static PreparedStatement getGenericInformationById(Connection conn, String table,String idCol, int id) throws SQLException{
-        var st = conn.prepareStatement("SELECT * FROM "+table+" WHERE "+idCol+" = ?");
-        st.setInt(1, id);
-        return st;
-    }
-
-    public static PreparedStatement getServicesByProviderId(Connection conn, int id) throws SQLException{
-        var st = conn.prepareStatement("SELECT idServiceTemplates, costPerHour, description, serviceName, templateImageUrl, serviceModality, serviceCategory FROM servicetemplates WHERE idProvider = ?");
-        st.setInt(1, id);
-        return st;
-    }
-
     public static PreparedStatement getAllReviewsToUser(Connection conn, int id) throws SQLException {
         var st = conn.prepareStatement("SELECT idreviewer, score, comment FROM userreviews WHERE idtarget = ?");
         st.setInt(1, id);
@@ -176,29 +208,20 @@ public class StatementPreparer {
         return st;
     }
 
-    public static PreparedStatement getServiceById (Connection conn, int id) throws SQLException {
-        var st = conn.prepareStatement("SELECT idProvider, idServiceTemplates, costPerHour, description, serviceName, templateImageUrl,serviceModality,serviceCategory FROM servicetemplates WHERE idServiceTemplates = ?");
+    //Generic Info
+
+    public static PreparedStatement getAllGenericInformation(Connection conn,String table) throws SQLException{
+        var st = conn.prepareStatement("SELECT * FROM "+table);
+        return st;
+    }
+
+    public static PreparedStatement getGenericInformationById(Connection conn, String table,String idCol, int id) throws SQLException{
+        var st = conn.prepareStatement("SELECT * FROM "+table+" WHERE "+idCol+" = ?");
         st.setInt(1, id);
         return st;
     }
 
-    public static PreparedStatement getLastCreatedServiceByProviderId(Connection conn, int creator) throws SQLException {
-        var st = conn.prepareStatement("SELECT idServiceTemplates FROM serviceTemplates WHERE idProvider = ? ORDER BY idServiceTemplates DESC LIMIT 1");
-        st.setInt(1, creator);
-        return st;
-    }
-
-    public static PreparedStatement getServiceImageUrlById(Connection conn, int id) throws SQLException {
-        var st = conn.prepareStatement("SELECT templateImageUrl FROM serviceTemplates WHERE idServiceTemplates = ?");
-        st.setInt(1, id);
-        return st;
-    }
-
-    public static PreparedStatement getUserProfileImageUrlById(Connection conn, int id) throws SQLException {
-        var st = conn.prepareStatement("SELECT profileUrl FROM user WHERE idUser = ?");
-        st.setInt(1, id);
-        return st;
-    }
+    //REQUESTS AND INSTANCES
 
     public static PreparedStatement createServiceRequest (Connection conn, ClientServiceInteraction info) throws SQLException {
         var st = conn.prepareStatement("INSERT INTO servicerequests (templateID, clientID, startDate, endDate, startTime, endTime,cost)"+
@@ -268,17 +291,7 @@ public class StatementPreparer {
         return st;
     }
 
-    public static PreparedStatement getAvailabilityAtFrame(Connection conn, ClientServiceInteraction info) throws SQLException {
-         var st = conn.prepareStatement("SELECT startTime, endTime FROM serviceinstances WHERE (templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ?) AND" + //
-                "((DATE(?) BETWEEN startDate AND endDate) AND ((TIME(?) BETWEEN startTime AND endTime) OR (TIME(?) BETWEEN startTime AND endTime))) ORDER BY startDate, startTime");
-         st.setInt(1, info.getService().getProviderId());
-        st.setInt(2, info.getService().getProviderId());
-        //ISSO NAO ACOMODA PRA MULTIPLOS DIAS
-        st.setString(3, info.getStartDate());
-        st.setTime(4, info.getStartTime());
-        st.setTime(5, info.getEndTime());
-        return st;
-    }
+    //SEARCH
 
     public static PreparedStatement searchTemplates(Connection conn,String toSearch, int offset) throws SQLException {
         toSearch = '%' + toSearch + '%';
