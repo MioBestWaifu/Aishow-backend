@@ -63,7 +63,7 @@ public class SearchHandler extends BaseHandler{
             while (rs.next()){
                 ServiceInformation buffer = ServiceInformation.fromResultSet(rs);
                 providerRs = DatabaseConnection.runQuery(StatementPreparer.getUserById(
-                    DatabaseConnection.getConnection(),buffer.getProviderId()));
+                    DatabaseConnection.getConnection(),buffer.getProvider().getUserId()));
                 providerRs.next();
                 buffer.setProvider(UserInformation.fromResultSet(providerRs));
                 toReturn.add(buffer);

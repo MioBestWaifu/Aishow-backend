@@ -6,18 +6,15 @@ import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.aishow.backend.modular.ImageHandler;
 import com.aishow.backend.modular.ModularInfo;
 import com.aishow.backend.utils.Utils;
 
 public class ServiceInformation {
     //TODO #25 dar cabo dessas informações do user e criar um objeto UserInformation no lugar
-    String serviceName,shortServiceName,description, providerName, providerUrl, providerImageUrl, providerArea, templateImageUrl, modText, catText;
+    String serviceName,shortServiceName,description, templateImageUrl, modText, catText;
     float costPerHour;
     float averageScore;
-    int providerId, templateId, modality, category;
+    int templateId, modality, category;
     boolean[] availableDays;
     String[] availableFroms, availableTos;
     ArrayList<ReviewInfomation> reviews;
@@ -30,7 +27,8 @@ public class ServiceInformation {
         toReturn.description =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"desciption"});
         toReturn.templateImageUrl =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"templateImageUrl"});
         toReturn.costPerHour =(float) Utils.runMethodReflection(rs, "getFlaot", paramTypes, new Object[]{"costPerHour"});
-        toReturn.providerId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idProvider"});
+        toReturn.provider = new UserInformation();
+        toReturn.provider.userId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idProvider"});
         toReturn.templateId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idServiceTemplates"});
         toReturn.modality =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"serviceModality"});
         toReturn.category =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"serviceCategory"});
@@ -63,24 +61,6 @@ public class ServiceInformation {
     public void setDescription(String description) {
         this.description = description;
     }
-    public String getProviderName() {
-        return providerName;
-    }
-    public void setProviderName(String providerName) {
-        this.providerName = providerName;
-    }
-    public String getProviderUrl() {
-        return providerUrl;
-    }
-    public void setProviderUrl(String providerCode) {
-        // this.providerUrl = "http://"+Utils.ipAddress+"/users/"+providerCode;
-    }
-    public String getProviderImageUrl() {
-        return providerImageUrl;
-    }
-    public void setProviderImageUrl(String providerCode) {
-        this.providerImageUrl = ModularInfo.BASE_IMAGE_URL+providerCode;
-    }
     public float getCostPerHour() {
         return costPerHour;
     }
@@ -92,18 +72,6 @@ public class ServiceInformation {
     }
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
-    }
-    public int getProviderId() {
-        return providerId;
-    }
-    public void setProviderId(int providerId) {
-        this.providerId = providerId;
-    }
-    public String getProviderArea() {
-        return providerArea;
-    }
-    public void setProviderArea(String providerArea) {
-        this.providerArea = providerArea;
     }
     public float getAverageScore() {
         return averageScore;

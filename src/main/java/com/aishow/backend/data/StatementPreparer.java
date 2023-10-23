@@ -92,7 +92,7 @@ public class StatementPreparer {
     public static PreparedStatement createService(Connection conn, ServiceInformation info) throws SQLException{
         PreparedStatement st = conn.prepareStatement("INSERT INTO serviceTemplates (idProvider,serviceName,description,costPerHour,serviceModality,serviceCategory,templateImageUrl)"+
         "VALUES (?,?,?,?,?,?,?)");
-        st.setInt(1, info.getProviderId());
+        st.setInt(1, info.getProvider().getUserId());
         st.setString(2, info.getServiceName());
         st.setString(3, info.getDescription());
         st.setFloat(4, info.getCostPerHour());
@@ -166,8 +166,8 @@ public class StatementPreparer {
     public static PreparedStatement getAvailabilityAtFrame(Connection conn, ClientServiceInteraction info) throws SQLException {
          PreparedStatement st = conn.prepareStatement("SELECT startTime, endTime FROM serviceinstances WHERE (templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) OR clientID = ?) AND" + //
                 "((DATE(?) BETWEEN startDate AND endDate) AND ((TIME(?) BETWEEN startTime AND endTime) OR (TIME(?) BETWEEN startTime AND endTime))) ORDER BY startDate, startTime");
-         st.setInt(1, info.getService().getProviderId());
-        st.setInt(2, info.getService().getProviderId());
+         st.setInt(1, info.getService().getProvider().getUserId());
+        st.setInt(2, info.getService().getProvider().getUserId());
         //ISSO NAO ACOMODA PRA MULTIPLOS DIAS
         st.setString(3, info.getStartDate());
         st.setTime(4, info.getStartTime());

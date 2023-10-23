@@ -7,6 +7,7 @@ import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
 import com.aishow.backend.models.ServiceInformation;
+import com.aishow.backend.models.UserInformation;
 
 public class CreateServiceHandler extends BaseHandler{
 
@@ -23,7 +24,8 @@ public class CreateServiceHandler extends BaseHandler{
     public <T, G> G handle(T reqBody, String[] params) {
         try {
             ServiceInformation x = (ServiceInformation) reqBody;
-            x.setProviderId(Integer.parseInt(params[0]));
+            x.setProvider(new UserInformation());
+            x.getProvider().setUserId(Integer.parseInt(params[0]));
             PreparedStatement st = StatementPreparer.createService(DatabaseConnection.getConnection(), x);
             int y = DatabaseConnection.runUpdate(st);
 
