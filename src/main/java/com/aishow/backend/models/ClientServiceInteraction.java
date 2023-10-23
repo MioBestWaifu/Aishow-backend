@@ -20,7 +20,7 @@ public class ClientServiceInteraction {
 
     public static ClientServiceInteraction fromResultSet(ResultSet rs, boolean isInstance){
         ClientServiceInteraction toReturn = new ClientServiceInteraction();
-        var paramTypes = new Class[]{String.class};
+        Class[] paramTypes = new Class[]{String.class};
         toReturn.hasFinished = (boolean) Utils.runMethodReflection(rs, "getBoolean", paramTypes, new Object[]{"finished"});
         if (isInstance)
             toReturn.id = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idServiceInstances"});

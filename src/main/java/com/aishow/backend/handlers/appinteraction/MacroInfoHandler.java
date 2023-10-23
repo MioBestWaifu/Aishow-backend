@@ -2,6 +2,8 @@ package com.aishow.backend.handlers.appinteraction;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -42,8 +44,8 @@ public class MacroInfoHandler extends BaseHandler{
 
     private ArrayList<GenericInformation> sendInfos(String type) throws IOException{
         try {
-            var st = StatementPreparer.getAllGenericInformation(DatabaseConnection.getConnection(), type);
-            var rs = DatabaseConnection.runQuery(st);
+            PreparedStatement st = StatementPreparer.getAllGenericInformation(DatabaseConnection.getConnection(), type);
+            ResultSet rs = DatabaseConnection.runQuery(st);
             ArrayList<GenericInformation> toReturn = new ArrayList<>();
 
             while (rs.next()){

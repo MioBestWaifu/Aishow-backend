@@ -25,7 +25,7 @@ public class ServiceInformation {
 
     public static ServiceInformation fromResultSet(ResultSet rs){
         ServiceInformation toReturn = new ServiceInformation();
-        var paramTypes = new Class[]{String.class};
+        Class[] paramTypes = new Class[]{String.class};
         toReturn.serviceName =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"serviceName"});
         toReturn.description =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"desciption"});
         toReturn.templateImageUrl =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"templateImageUrl"});

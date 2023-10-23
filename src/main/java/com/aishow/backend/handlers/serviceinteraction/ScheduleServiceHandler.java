@@ -17,8 +17,8 @@ public class ScheduleServiceHandler extends BaseHandler{
         //Isso precisa de validação
         //Diferencia os erros
         try{
-            var y = (ClientServiceInteraction) reqBody;
-            var x = checkAvailability(y);
+            ClientServiceInteraction y = (ClientServiceInteraction) reqBody;
+            String x = checkAvailability(y);
             if (!x.equals("AVA"))
                 return (G)x;
             if(addNewRequest(y))

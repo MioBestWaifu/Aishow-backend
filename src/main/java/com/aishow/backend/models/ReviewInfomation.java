@@ -13,7 +13,7 @@ public class ReviewInfomation {
 
     public static ReviewInfomation fromResultSet(ResultSet rs, int type){
         ReviewInfomation toReturn = new ReviewInfomation();
-        var paramTypes = new Class[]{String.class};
+        Class[] paramTypes = new Class[]{String.class};
         toReturn.clientID =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idclient"});
         toReturn.score =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"score"});
         toReturn.comment =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"comment"});

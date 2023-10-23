@@ -10,7 +10,7 @@ public class GenericInformation{
 
     public static GenericInformation fromResultSet(ResultSet rs, String type){
         GenericInformation toReturn = new GenericInformation();
-        var paramTypes = new Class[]{String.class};
+        Class[] paramTypes = new Class[]{String.class};
         toReturn.Id =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"id"+type});
         toReturn.Name = (String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"name"});
         return toReturn;

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aishow.backend.managers.DatabaseManager;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class BackendApplication {
   //TODO #5 COMPATIBILIZAR COMPLETAMENTE OS TIPOS COM O JSON DO SPRING
   //TODO #6 botar try-catch em todo mundo aq e criar um log de algum tipo
 	public static void main(String[] args) throws IOException {
-		var stream = new ClassPathResource("dist/hayasaka/index.html").getInputStream();
+		InputStream stream = new ClassPathResource("dist/hayasaka/index.html").getInputStream();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		index = reader.lines().collect(Collectors.joining("\n"));
 		stream.close();

@@ -2,6 +2,8 @@ package com.aishow.backend.handlers.personalinteraction;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -19,8 +21,8 @@ public class LoginHandler extends BaseHandler{
     public <T, G> G handle(T reqBody){
         UserInformation info = (UserInformation) reqBody;
         try {
-            var st = StatementPreparer.matchUserCredentials(DatabaseConnection.getConnection(), info);
-            var rs = DatabaseConnection.runQuery(st);
+            PreparedStatement st = StatementPreparer.matchUserCredentials(DatabaseConnection.getConnection(), info);
+            ResultSet rs = DatabaseConnection.runQuery(st);
             if (rs.next()){
                 return (G) UserInformation.fromResultSet(rs);
             } else {

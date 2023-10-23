@@ -39,7 +39,7 @@ public class SearchHandler extends BaseHandler{
             ResultSet areaRs;
 
             while (rs.next()){
-                var buffer = UserInformation.fromResultSet(rs);
+                UserInformation buffer = UserInformation.fromResultSet(rs);
                 areaRs = DatabaseConnection.runQuery(StatementPreparer.getGenericInformationById(
                     DatabaseConnection.getConnection(), "area", "idarea", buffer.getAreaCode()));
                 areaRs.next();
@@ -61,7 +61,7 @@ public class SearchHandler extends BaseHandler{
             ResultSet providerRs;
 
             while (rs.next()){
-                var buffer = ServiceInformation.fromResultSet(rs);
+                ServiceInformation buffer = ServiceInformation.fromResultSet(rs);
                 providerRs = DatabaseConnection.runQuery(StatementPreparer.getUserById(
                     DatabaseConnection.getConnection(),buffer.getProviderId()));
                 providerRs.next();

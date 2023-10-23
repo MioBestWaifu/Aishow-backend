@@ -34,7 +34,7 @@ public class UserInformation {
 
     public static UserInformation fromResultSet(ResultSet rs){
         UserInformation toReturn = new UserInformation();
-        var paramTypes = new Class[]{String.class};
+        Class[] paramTypes = new Class[]{String.class};
 
         toReturn.email =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"email"});
         toReturn.password =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"password"});

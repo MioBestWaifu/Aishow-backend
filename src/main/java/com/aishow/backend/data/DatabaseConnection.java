@@ -45,8 +45,8 @@ public abstract class DatabaseConnection {
         }
         serviceIds = new ArrayList<>();
         try{
-        var st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates");
-        var res = st.executeQuery();
+        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates");
+        ResultSet res = st.executeQuery();
         while(res.next()){
             serviceIds.add(res.getInt(1));
         }
@@ -80,7 +80,7 @@ public abstract class DatabaseConnection {
 
     /* public static boolean IsOwner(int provider, int template){
         try{
-            var st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ? AND idServiceTemplates = ?");
+            PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ? AND idServiceTemplates = ?");
             st.setInt(1, provider);
             st.setInt(2, template);
             return st.executeQuery().next();
