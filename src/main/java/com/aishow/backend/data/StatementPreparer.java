@@ -225,8 +225,8 @@ public class StatementPreparer {
     public static PreparedStatement createServiceRequest (Connection conn, ClientServiceInteraction info) throws SQLException {
         PreparedStatement st = conn.prepareStatement("INSERT INTO servicerequests (templateID, clientID, startDate, endDate, startTime, endTime,cost)"+
         "VALUES (?,?,?,?,?,?,?)");
-        st.setInt(1, info.getTemplateId());
-        st.setInt(2, info.getClientId());
+        st.setInt(1, info.getService().getTemplateId());
+        st.setInt(2, info.getClient().getUserId());
         st.setString(3, info.getStartDate());
         st.setString(4, info.getEndDate());
         st.setTime(5, info.getStartTime());
@@ -274,8 +274,8 @@ public class StatementPreparer {
     public static PreparedStatement createServiceInstance(Connection conn, ClientServiceInteraction info) throws SQLException {
         PreparedStatement st = conn.prepareStatement("INSERT INTO serviceinstances (clientID,templateID,startDate,endDate,startTime,endTime,cost)"+
         "VALUES (?,?,?,?,?,?,?)");
-        st.setInt(1, info.getClientId());
-        st.setInt(2, info.getTemplateId());
+        st.setInt(1, info.getClient().getUserId());
+        st.setInt(2, info.getService().getTemplateId());
         st.setDate(3, Date.valueOf(info.getStartDate()));
         st.setDate(4, Date.valueOf(info.getEndDate()));
         st.setTime(5, info.getStartTime());

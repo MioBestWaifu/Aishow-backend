@@ -34,8 +34,8 @@ public class ServiceAgendaRequestHandler extends BaseHandler{
             ArrayList<ClientServiceInteraction> instances = new ArrayList<>();
             while (rs.next()){
                 ClientServiceInteraction buffer = ClientServiceInteraction.fromResultSet(rs, true);
-                buffer.setService(new ServiceRequestHandler().handle(null, new String[]{Integer.toString(buffer.getTemplateId())}));
-                buffer.setClient(new UserRequestHandler().handle(null, new String[]{Integer.toString(buffer.getClientId())}));;
+                buffer.setService(new ServiceRequestHandler().handle(null, new String[]{Integer.toString(buffer.getService().getTemplateId())}));
+                buffer.setClient(new UserRequestHandler().handle(null, new String[]{Integer.toString(buffer.getClient().getUserId())}));;
                 buffer.setProvider(true);
                 instances.add(buffer);
             }
@@ -45,7 +45,7 @@ public class ServiceAgendaRequestHandler extends BaseHandler{
 
             while (rs.next()){
                 ClientServiceInteraction buffer = ClientServiceInteraction.fromResultSet(rs, true);
-                buffer.setService(new ServiceRequestHandler().handle(null, new String[]{Integer.toString(buffer.getTemplateId())}));
+                buffer.setService(new ServiceRequestHandler().handle(null, new String[]{Integer.toString(buffer.getService().getTemplateId())}));
                 buffer.setProvider(false);
                 instances.add(buffer);
             }
@@ -57,7 +57,7 @@ public class ServiceAgendaRequestHandler extends BaseHandler{
             ArrayList<ClientServiceInteraction> requests = new ArrayList<>();
             while (rs.next()){
                 ClientServiceInteraction buffer = ClientServiceInteraction.fromResultSet(rs, false);
-                buffer.setService(new ServiceRequestHandler().handle(null, new String[]{Integer.toString(buffer.getTemplateId())}));
+                buffer.setService(new ServiceRequestHandler().handle(null, new String[]{Integer.toString(buffer.getService().getTemplateId())}));
                 buffer.setProvider(true);
                 requests.add(buffer);
             }

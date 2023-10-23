@@ -11,7 +11,7 @@ import com.aishow.backend.utils.Utils;
 
 public class ClientServiceInteraction {
     boolean isAccepted, hasFinished, isProvider;
-    int id, clientId, templateId;
+    int id;
     String startDate, endDate;
     Time startTime, endTime;
     float cost;
@@ -31,8 +31,10 @@ public class ClientServiceInteraction {
         toReturn.startTime = (Time) Utils.runMethodReflection(rs, "getBoolean", paramTypes, new Object[]{"startTime"});
         toReturn.endTime = (Time) Utils.runMethodReflection(rs, "getTime", paramTypes, new Object[]{"endTime"});
         toReturn.cost = (float) Utils.runMethodReflection(rs, "getTime", paramTypes, new Object[]{"startTime"});
-        toReturn.templateId = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"templateID"});
-        toReturn.clientId = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"clientID"});
+        toReturn.service = new ServiceInformation();
+        toReturn.client = new UserInformation();
+        toReturn.service.templateId = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"templateID"});
+        toReturn.client.userId = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"clientID"});
         toReturn.isAccepted = isInstance;
         return toReturn;
     }
@@ -54,18 +56,6 @@ public class ClientServiceInteraction {
     }
     public void setId(int id) {
         this.id = id;
-    }
-    public int getClientId() {
-        return clientId;
-    }
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
-    }
-    public int getTemplateId() {
-        return templateId;
-    }
-    public void setTemplateId(int templateId) {
-        this.templateId = templateId;
     }
     public String getStartDate() {
         return startDate;

@@ -27,7 +27,7 @@ public class UserMadeServiceRequestsHandler extends BaseHandler{
             ResultSet rs = DatabaseConnection.runQuery(st);
             while (rs.next()){
                 ClientServiceInteraction buffer = ClientServiceInteraction.fromResultSet(rs, false);
-                st = StatementPreparer.getServiceById(DatabaseConnection.getConnection(), buffer.getTemplateId());
+                st = StatementPreparer.getServiceById(DatabaseConnection.getConnection(), buffer.getService().getTemplateId());
                 ResultSet servRs = DatabaseConnection.runQuery(st);
                 buffer.setService(ServiceInformation.fromResultSet(servRs));
                 toReturn.add(buffer);
