@@ -7,14 +7,15 @@ import com.aishow.backend.utils.Utils;
 
 public class ReviewInfomation {
     UserInformation reviewer;
-    int score,type, clientID;
+    int score,type;
     //0 = User, 1 = Service
     String comment;
 
     public static ReviewInfomation fromResultSet(ResultSet rs, int type){
         ReviewInfomation toReturn = new ReviewInfomation();
         Class[] paramTypes = new Class[]{String.class};
-        toReturn.clientID =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idclient"});
+        toReturn.reviewer = new UserInformation();
+        toReturn.reviewer.userId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idclient"});
         toReturn.score =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"score"});
         toReturn.comment =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"comment"});
         toReturn.type = type;
