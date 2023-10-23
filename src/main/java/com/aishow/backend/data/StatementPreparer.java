@@ -44,7 +44,7 @@ public class StatementPreparer {
         st.setDate(4, info.getBirthday());
         st.setString(5, "0.png");
         st.setString(6, info.getGender());
-        st.setInt(7, info.getAreaCode());
+        st.setInt(7, info.getArea().Id);
         return st;
     }
 

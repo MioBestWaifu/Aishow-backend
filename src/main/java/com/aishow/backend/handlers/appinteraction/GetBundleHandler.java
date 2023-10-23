@@ -47,7 +47,7 @@ public class GetBundleHandler extends BaseHandler{
                 rs.next();
                 bundleServInfos.get(i).setProvider(UserInformation.fromResultSet(rs));
 
-                rs = DatabaseConnection.runQuery(StatementPreparer.getGenericInformationById(DatabaseConnection.getConnection(), "area", "idArea", bundleServInfos.get(i).getProvider().getAreaCode()));
+                rs = DatabaseConnection.runQuery(StatementPreparer.getGenericInformationById(DatabaseConnection.getConnection(), "area", "idArea", bundleServInfos.get(i).getProvider().getArea().Id));
                 rs.next();
                 
                 bundleServInfos.get(i).getProvider().setArea(GenericInformation.fromResultSet(rs, "area"));

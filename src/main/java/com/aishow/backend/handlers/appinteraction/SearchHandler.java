@@ -41,7 +41,7 @@ public class SearchHandler extends BaseHandler{
             while (rs.next()){
                 UserInformation buffer = UserInformation.fromResultSet(rs);
                 areaRs = DatabaseConnection.runQuery(StatementPreparer.getGenericInformationById(
-                    DatabaseConnection.getConnection(), "area", "idarea", buffer.getAreaCode()));
+                    DatabaseConnection.getConnection(), "area", "idarea", buffer.getArea().Id));
                 areaRs.next();
                 buffer.setArea(GenericInformation.fromResultSet(areaRs, "area"));
                 toReturn.add(buffer);

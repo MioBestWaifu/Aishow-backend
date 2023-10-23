@@ -15,9 +15,8 @@ import com.aishow.backend.utils.Utils;
 public class UserInformation {
     //Vai enviar senha no json tbm
     String email, password, gender,name,imageUrl;
-    int userId, areaCode;
+    int userId;
     float averageScore;
-    String areaName;
     boolean providingService;
     Date birthday;
     GenericInformation area;
@@ -43,7 +42,8 @@ public class UserInformation {
         toReturn.imageUrl =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"profileUrl"});
 
         toReturn.userId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idUser"});
-        toReturn.areaCode =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"area"});
+        toReturn.area = new GenericInformation();
+        toReturn.area.Id =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"area"});
 
         toReturn.birthday =(Date) Utils.runMethodReflection(rs, "getDate", paramTypes, new Object[]{"birthday"});
 
@@ -121,12 +121,6 @@ public class UserInformation {
     public void setImageUrl(String userCode) {
         this.imageUrl = ModularInfo.BASE_IMAGE_URL+userCode;
     }
-    public int getAreaCode() {
-        return areaCode;
-    }
-    public void setAreaCode(int area) {
-        this.areaCode = area;
-    }
     public ArrayList<ServiceInformation> getServices() {
         return services;
     }
@@ -138,12 +132,6 @@ public class UserInformation {
     }
     public void setReviews(ArrayList<ReviewInfomation> reviews) {
         this.reviews = reviews;
-    }
-    public String getAreaName() {
-        return areaName;
-    }
-    public void setAreaName(String areaName) {
-        this.areaName = areaName;
     }
     
     public float getAverageScore() {
