@@ -27,6 +27,7 @@ public class ServiceRequestHandler extends BaseHandler{
         try{
         PreparedStatement st = StatementPreparer.getServiceById(DatabaseConnection.getConnection(), Integer.parseInt(params[0]));
         ResultSet rs = DatabaseConnection.runQuery(st);
+        rs.next();
         ServiceInformation toReturn = ServiceInformation.fromResultSet(rs);
         completeServiceInformaiton(toReturn);
         return (G) toReturn;
@@ -49,7 +50,18 @@ public class ServiceRequestHandler extends BaseHandler{
         info.setReviews(reviews);
         st = StatementPreparer.getAvailabilityByTemplateId(DatabaseConnection.getConnection(), info.getTemplateId());
         rs = DatabaseConnection.runQuery(st);
+        //Não precisa de next aq
         info.setAvailablity(rs);
+        st = StatementPreparer.getGenericInformationById(DatabaseConnection.getConnection(), "servicemodality",
+        "idservicemodality", info.getModality());
+        rs = DatabaseConnection.runQuery(st);
+        rs.next();
+        info.setModText(rs.getString("name"));
+        st = StatementPreparer.getGenericInformationById(DatabaseConnection.getConnection(), "servicecategory",
+        "idservicecategory", info.getCategory());
+        rs = DatabaseConnection.runQuery(st);
+        rs.next();
+        info.setCatText(rs.getString("name"));
     }
 
     public static int findLastCreatedService(int creator){

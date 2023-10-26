@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers.userinteraction;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.aishow.backend.data.DatabaseConnection;
@@ -33,6 +34,8 @@ public class UserRequestHandler extends BaseHandler{
     
     public UserInformation getUserById(int id) throws SQLException{
         PreparedStatement st = StatementPreparer.getUserById(DatabaseConnection.getConnection(), id);
-        return UserInformation.fromResultSet(DatabaseConnection.runQuery(st));
+        ResultSet rs = DatabaseConnection.runQuery(st);
+        rs.next();
+        return UserInformation.fromResultSet(rs);
     }
 }

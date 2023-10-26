@@ -15,10 +15,11 @@ import com.aishow.backend.handlers.appinteraction.MacroInfoHandler;
 import com.aishow.backend.handlers.appinteraction.PathfindHandler;
 import com.aishow.backend.models.GenericInformation;
 
-@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online"})
+@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online","http://localhost:4200","168.232.228.88"})
 @RestController
 @RequestMapping("/api/images")
 public class ImageController {
+	//OK
     @PostMapping(value="update",consumes = "image/*", produces = "text/plain")
 	public String tryToUpdateImage(@RequestBody byte[] image, @RequestParam("type") String type, @RequestParam("id") String id, @RequestParam(name = "idProvider",required = false) String idProvider){
 		return new ImageUpdateHandler().handle(image, new String[]{type,id,idProvider});

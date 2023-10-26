@@ -24,19 +24,15 @@ public class ServiceInformation {
         ServiceInformation toReturn = new ServiceInformation();
         Class[] paramTypes = new Class[]{String.class};
         toReturn.serviceName =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"serviceName"});
-        toReturn.description =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"desciption"});
-        toReturn.templateImageUrl =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"templateImageUrl"});
-        toReturn.costPerHour =(float) Utils.runMethodReflection(rs, "getFlaot", paramTypes, new Object[]{"costPerHour"});
+        toReturn.description =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"description"});
+        toReturn.templateImageUrl =ModularInfo.BASE_IMAGE_URL + "services/"+ (String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"templateImageUrl"});
+        toReturn.costPerHour =(float) Utils.runMethodReflection(rs, "getFloat", paramTypes, new Object[]{"costPerHour"});
         toReturn.provider = new UserInformation();
         toReturn.provider.userId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idProvider"});
         toReturn.templateId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idServiceTemplates"});
         toReturn.modality =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"serviceModality"});
         toReturn.category =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"serviceCategory"});
         return toReturn;
-    }
-    
-    public void setReviews(ResultSet rs){
-
     }
 
     public void setAvailablity(ResultSet rs) throws SQLException{
@@ -105,11 +101,13 @@ public class ServiceInformation {
         if (reviews == null)
             return;
         if (reviews.size()>0){
-            int tot = 0;
+            float tot = 0;
             for (ReviewInfomation reviewInfomation : reviews) {
                 tot += reviewInfomation.getScore();
             }
-            var x = ((float)tot) / reviews.size();
+            System.out.println("SET SCORE");
+            System.out.println(tot);
+            float x = tot / reviews.size();
             setAverageScore(x);
         }
     }

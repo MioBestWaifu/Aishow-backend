@@ -13,7 +13,7 @@ import com.aishow.backend.handlers.appinteraction.MacroInfoHandler;
 import com.aishow.backend.handlers.appinteraction.SearchHandler;
 import com.aishow.backend.models.GenericInformation;
 
-@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online"})
+@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online","http://localhost:4200","168.232.228.88"})
 @RestController()
 @RequestMapping("/api/app")
 public class AppController {
@@ -26,6 +26,7 @@ public class AppController {
 
     @GetMapping(value = "search",produces = "application/json")
 	public<T> ArrayList<T> search(@RequestParam("type") String type,@RequestParam("q") String q,@RequestParam("offset") String offset){
+		System.out.println(q);
 		return new SearchHandler().handle(null, new String[]{type,q,offset});
 	} 
 }

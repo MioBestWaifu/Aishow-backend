@@ -21,16 +21,18 @@ public class ClientServiceInteraction {
     public static ClientServiceInteraction fromResultSet(ResultSet rs, boolean isInstance){
         ClientServiceInteraction toReturn = new ClientServiceInteraction();
         Class[] paramTypes = new Class[]{String.class};
-        toReturn.hasFinished = (boolean) Utils.runMethodReflection(rs, "getBoolean", paramTypes, new Object[]{"finished"});
-        if (isInstance)
+        if (isInstance){
             toReturn.id = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idServiceInstances"});
-        else 
-            toReturn.id = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idServiceRequests"});
+            toReturn.hasFinished = (boolean) Utils.runMethodReflection(rs, "getBoolean", paramTypes, new Object[]{"finished"});
+        }
+        else{
+            toReturn.id = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"serviceRequestID"});
+        }
         toReturn.startDate = (String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"startDate"});
         toReturn.endDate = (String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"endDate"});
-        toReturn.startTime = (Time) Utils.runMethodReflection(rs, "getBoolean", paramTypes, new Object[]{"startTime"});
+        toReturn.startTime = (Time) Utils.runMethodReflection(rs, "getTime", paramTypes, new Object[]{"startTime"});
         toReturn.endTime = (Time) Utils.runMethodReflection(rs, "getTime", paramTypes, new Object[]{"endTime"});
-        toReturn.cost = (float) Utils.runMethodReflection(rs, "getTime", paramTypes, new Object[]{"startTime"});
+        toReturn.cost = (float) Utils.runMethodReflection(rs, "getFloat", paramTypes, new Object[]{"cost"});
         toReturn.service = new ServiceInformation();
         toReturn.client = new UserInformation();
         toReturn.service.templateId = (int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"templateID"});

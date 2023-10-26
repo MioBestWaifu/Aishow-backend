@@ -1,6 +1,7 @@
 package com.aishow.backend.handlers.serviceinteraction;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.aishow.backend.data.DatabaseConnection;
@@ -29,6 +30,10 @@ public class CreateServiceHandler extends BaseHandler{
             PreparedStatement st = StatementPreparer.createService(DatabaseConnection.getConnection(), x);
             int y = DatabaseConnection.runUpdate(st);
 
+            st = StatementPreparer.getLastCreatedServiceByProviderId(DatabaseConnection.getConnection(), x.getProvider().getUserId());
+            ResultSet rs = DatabaseConnection.runQuery(st);
+            rs.next();
+            x.setTemplateId(rs.getInt(1));
             if(y != 1)
                 return (G) "FAIL BASIC";
             

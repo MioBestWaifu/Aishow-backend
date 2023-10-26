@@ -10,7 +10,9 @@ import java.util.Random;
 import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.handlers.serviceinteraction.ServiceRequestHandler;
 import com.aishow.backend.models.GenericInformation;
+import com.aishow.backend.models.ServiceBundle;
 import com.aishow.backend.models.ServiceInformation;
 import com.aishow.backend.models.UserInformation;
 
@@ -51,9 +53,13 @@ public class GetBundleHandler extends BaseHandler{
                 rs.next();
                 
                 bundleServInfos.get(i).getProvider().setArea(GenericInformation.fromResultSet(rs, "area"));
-            }
 
-            return (G) bundleServInfos;
+                ServiceRequestHandler.completeServiceInformaiton(bundleServInfos.get(i));
+            }
+            ServiceBundle toReturn = new ServiceBundle();
+            toReturn.setServiceInfos(bundleServInfos);
+
+            return (G) toReturn;
 
         } catch (SQLException ex){
             ex.printStackTrace();

@@ -24,7 +24,7 @@ public class SearchHandler extends BaseHandler{
     public <T, G> G handle(T reqBody, String[] params) {
         if (params[0].equals("service")){
             return(G) searchServices(params[1], Integer.parseInt(params[2]));
-        } else if (params[0].equals("users")){
+        } else if (params[0].equals("user")){
             return(G) searchUsers(params[1], Integer.parseInt(params[2]));
         } else {
             return null;
@@ -39,12 +39,16 @@ public class SearchHandler extends BaseHandler{
             ResultSet areaRs;
 
             while (rs.next()){
+                try{
                 UserInformation buffer = UserInformation.fromResultSet(rs);
                 areaRs = DatabaseConnection.runQuery(StatementPreparer.getGenericInformationById(
-                    DatabaseConnection.getConnection(), "area", "idarea", buffer.getArea().Id));
+                    DatabaseConnection.getConnection(), "area", "idArea", buffer.getArea().Id));
                 areaRs.next();
                 buffer.setArea(GenericInformation.fromResultSet(areaRs, "area"));
                 toReturn.add(buffer);
+                } catch (Exception ex){
+                    System.out.println("teve exeção em pesquisa");
+                }
             }
             return toReturn;
         } catch (SQLException ex){
@@ -57,16 +61,23 @@ public class SearchHandler extends BaseHandler{
         try{
             ArrayList<ServiceInformation> toReturn = new ArrayList<>();
             PreparedStatement st = StatementPreparer.searchTemplates(DatabaseConnection.getConnection(), query, offset);
+            System.out.println(st);
             ResultSet rs = DatabaseConnection.runQuery(st);
             ResultSet providerRs;
 
+            System.out.println("VO AVERIGUAR");
             while (rs.next()){
+                System.out.println("ACHEI UM");
+                try{
                 ServiceInformation buffer = ServiceInformation.fromResultSet(rs);
                 providerRs = DatabaseConnection.runQuery(StatementPreparer.getUserById(
                     DatabaseConnection.getConnection(),buffer.getProvider().getUserId()));
                 providerRs.next();
                 buffer.setProvider(UserInformation.fromResultSet(providerRs));
                 toReturn.add(buffer);
+                } catch (Exception ex){
+                    System.out.println("teve exeção em pesquisa");
+                }
             }
             return toReturn;
         } catch (SQLException ex){

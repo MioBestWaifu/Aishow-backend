@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aishow.backend.handlers.personalinteraction.LoginHandler;
+import com.aishow.backend.handlers.personalinteraction.NameUpdateHandler;
 import com.aishow.backend.handlers.personalinteraction.RegisterHandler;
 import com.aishow.backend.handlers.personalinteraction.ReloadUserHandler;
 import com.aishow.backend.handlers.userinteraction.UserRequestHandler;
 import com.aishow.backend.models.UserInformation;
 
-@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online"})
+@CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online","http://localhost:4200","168.232.228.88"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -25,21 +26,30 @@ public class UserController {
 	}
 
     //tirar esse id
+	//OK
     @GetMapping(value="reload",produces = "application/json")
 	public UserInformation reload(@RequestParam("id") String id){
 		return new ReloadUserHandler().handle(null, new String[]{id});
 	}
 
+	//OK
     @PostMapping(value ="login", consumes = "application/json", produces = "application/json")
 	public UserInformation tryToLogin(@RequestBody UserInformation loginInfo) {
 		UserInformation x = new LoginHandler().handle(loginInfo);
 		return x;
 	}
 
-	//PASSED
+	//OK
 	@PostMapping(value="register",produces ="text/plain")
 	public String tryToRegister(@RequestBody UserInformation loginInfo) {
 		String x = new RegisterHandler().handle(loginInfo);
+		return x;
+	}
+
+	//OK
+	@PostMapping(value="updateName",consumes = "text/plain", produces = "text/plain")
+	public String updateName(@RequestBody String newName,@RequestParam("id") String id) {
+		String x = new NameUpdateHandler().handle(newName,new String[]{id});
 		return x;
 	}
 }

@@ -39,7 +39,7 @@ public class UserInformation {
         toReturn.password =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"password"});
         toReturn.gender =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"gender"});
         toReturn.name =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"name"});
-        toReturn.imageUrl =(String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"profileUrl"});
+        toReturn.imageUrl =ModularInfo.BASE_IMAGE_URL + (String) Utils.runMethodReflection(rs, "getString", paramTypes, new Object[]{"profileUrl"});
 
         toReturn.userId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idUser"});
         toReturn.area = new GenericInformation();
@@ -48,14 +48,6 @@ public class UserInformation {
         toReturn.birthday =(Date) Utils.runMethodReflection(rs, "getDate", paramTypes, new Object[]{"birthday"});
 
         return toReturn;
-    }
-
-    public void setReviews(ResultSet rs){
-
-    }
-
-    public void setServices(ResultSet rs){
-
     }
     
     public String getEmail() {

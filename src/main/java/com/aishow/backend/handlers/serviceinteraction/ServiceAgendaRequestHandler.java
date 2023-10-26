@@ -58,6 +58,7 @@ public class ServiceAgendaRequestHandler extends BaseHandler{
             while (rs.next()){
                 ClientServiceInteraction buffer = ClientServiceInteraction.fromResultSet(rs, false);
                 buffer.setService(new ServiceRequestHandler().handle(null, new String[]{Integer.toString(buffer.getService().getTemplateId())}));
+                buffer.setClient(new UserRequestHandler().getUserById(buffer.getClient().getUserId()));
                 buffer.setProvider(true);
                 requests.add(buffer);
             }

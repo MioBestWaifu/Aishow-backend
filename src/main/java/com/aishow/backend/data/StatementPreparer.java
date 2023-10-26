@@ -56,7 +56,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement updateUserImageUrl(Connection conn, int id, String newVarchar) throws SQLException{
-        PreparedStatement st = conn.prepareStatement("UPDATE user SET profileImageUrl = ? WHERE idUser = ?");
+        PreparedStatement st = conn.prepareStatement("UPDATE user SET profileUrl = ? WHERE idUser = ?");
         st.setString(1, newVarchar);
         st.setInt(2, id);
         return st;
@@ -78,7 +78,7 @@ public class StatementPreparer {
     //SERVICES/TEMPLATES
 
     public static PreparedStatement getServicesByProviderId(Connection conn, int id) throws SQLException{
-        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates, costPerHour, description, serviceName, templateImageUrl, serviceModality, serviceCategory FROM servicetemplates WHERE idProvider = ?");
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM servicetemplates WHERE idProvider = ?");
         st.setInt(1, id);
         return st;
     }
@@ -90,7 +90,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement createService(Connection conn, ServiceInformation info) throws SQLException{
-        PreparedStatement st = conn.prepareStatement("INSERT INTO serviceTemplates (idProvider,serviceName,description,costPerHour,serviceModality,serviceCategory,templateImageUrl)"+
+        PreparedStatement st = conn.prepareStatement("INSERT INTO servicetemplates (idProvider,serviceName,description,costPerHour,serviceModality,serviceCategory,templateImageUrl)"+
         "VALUES (?,?,?,?,?,?,?)");
         st.setInt(1, info.getProvider().getUserId());
         st.setString(2, info.getServiceName());
@@ -123,13 +123,13 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement getLastCreatedServiceByProviderId(Connection conn, int creator) throws SQLException {
-        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM serviceTemplates WHERE idProvider = ? ORDER BY idServiceTemplates DESC LIMIT 1");
+        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ? ORDER BY idServiceTemplates DESC LIMIT 1");
         st.setInt(1, creator);
         return st;
     }
 
     public static PreparedStatement getServiceImageUrlById(Connection conn, int id) throws SQLException {
-        PreparedStatement st = conn.prepareStatement("SELECT templateImageUrl FROM serviceTemplates WHERE idServiceTemplates = ?");
+        PreparedStatement st = conn.prepareStatement("SELECT templateImageUrl FROM servicetemplates WHERE idServiceTemplates = ?");
         st.setInt(1, id);
         return st;
     }
@@ -137,7 +137,7 @@ public class StatementPreparer {
     //AVAILABILITY
 
     public static PreparedStatement getAvailabilityByTemplateId(Connection conn, int templateId) throws SQLException{
-        PreparedStatement st = conn.prepareStatement("SELECT serviceAvailabilityID FROM serviceavailability WHERE templateID = ?");
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM serviceavailability WHERE templateID = ?");
         st.setInt(1, templateId);
         return st;
     }
@@ -254,7 +254,8 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement getRequestsByProviderId(Connection conn, int id) throws SQLException {
-        PreparedStatement st = conn.prepareStatement("SELECT * FROM servicerequests WHERE clientID = ? ORDER BY startDate, startTime");
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM servicerequests WHERE templateID IN"+ 
+        "(SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) ORDER BY startDate, startTime");
         st.setInt(1, id);
         return st;
     }
@@ -266,7 +267,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement getRequestById(Connection conn, int id) throws SQLException {
-        PreparedStatement st = conn.prepareStatement("SELECT templateID FROM servicerequests WHERE serviceRequestID = ?");
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM servicerequests WHERE serviceRequestID = ?");
         st.setInt(1, id);
         return st;
     }
@@ -293,18 +294,20 @@ public class StatementPreparer {
     //SEARCH
 
     public static PreparedStatement searchTemplates(Connection conn,String toSearch, int offset) throws SQLException {
-        toSearch = '%' + toSearch + '%';
-        PreparedStatement st = conn.prepareStatement("SELECT * FROM servicetemplates WHERE serviceName LIKE ? LIMIT 20 OFFSET ?");
-        st.setString(1, toSearch);
-        st.setInt(2, offset);
+        //toSearch = "'%" + toSearch + "%'";
+        String query = "SELECT * FROM servicetemplates WHERE serviceName LIKE '%"+toSearch+"%' LIMIT 20 OFFSET "+offset;
+        PreparedStatement st = conn.prepareStatement(query);
+        //st.setString(1, toSearch);
+        //st.setInt(1, offset);
         return st;
     }
 
     public static PreparedStatement searchUsers(Connection conn,String toSearch, int offset) throws SQLException {
-        toSearch = '%' + toSearch + '%';
-        PreparedStatement st = conn.prepareStatement("SELECT * FROM user WHERE name LIKE ? LIMIT 20 OFFSET ?");
-        st.setString(1, toSearch);
-        st.setInt(2, offset);
+        //toSearch = "'%" + toSearch + "%'";
+        String query = "SELECT * FROM user WHERE name LIKE '%"+toSearch+"%' LIMIT 20 OFFSET "+offset;
+        PreparedStatement st = conn.prepareStatement(query);
+        //st.setString(1, toSearch);
+        //st.setInt(1, offset);
         return st;
     }
 
