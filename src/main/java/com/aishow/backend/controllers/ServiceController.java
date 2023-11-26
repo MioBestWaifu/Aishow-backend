@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aishow.backend.handlers.appinteraction.GetBundleHandler;
+import com.aishow.backend.handlers.appinteraction.ReviewRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.AnswerRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.NameUpdateHandler;
 import com.aishow.backend.handlers.serviceinteraction.CancelRequestHandler;
@@ -23,6 +24,7 @@ import com.aishow.backend.handlers.serviceinteraction.UpdateServiceHandler;
 import com.aishow.backend.handlers.serviceinteraction.UserMadeServiceRequestsHandler;
 import com.aishow.backend.handlers.serviceinteraction.UserServicesRequestHandler;
 import com.aishow.backend.models.ClientServiceInteraction;
+import com.aishow.backend.models.ReviewInfomation;
 import com.aishow.backend.models.ServiceBundle;
 import com.aishow.backend.models.ServiceInformation;
 import com.aishow.backend.models.ServiceSchedule;
@@ -35,6 +37,11 @@ public class ServiceController {
 	public ServiceInformation getService(@RequestParam("id") String id){
 		return new ServiceRequestHandler().handle(null, new String[]{id});
 	} 
+
+	@GetMapping(value="reviews",produces = "application/json")
+	public ArrayList<ReviewInfomation> getReviews(@RequestParam("id") String id){
+		return new ReviewRequestHandler().handle(null, new String[]{"services",id});
+	}
 
 	//OK
     @GetMapping(value="answerRequest",produces = "text/plain")

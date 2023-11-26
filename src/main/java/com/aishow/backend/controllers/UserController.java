@@ -1,5 +1,7 @@
 package com.aishow.backend.controllers;
 
+import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aishow.backend.handlers.appinteraction.ReviewRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.LoginHandler;
 import com.aishow.backend.handlers.personalinteraction.NameUpdateHandler;
 import com.aishow.backend.handlers.personalinteraction.RegisterHandler;
 import com.aishow.backend.handlers.personalinteraction.ReloadUserHandler;
 import com.aishow.backend.handlers.userinteraction.UserRequestHandler;
+import com.aishow.backend.models.ReviewInfomation;
 import com.aishow.backend.models.UserInformation;
 
 @CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online","http://localhost:4200","168.232.228.88"})
@@ -30,6 +34,11 @@ public class UserController {
     @GetMapping(value="reload",produces = "application/json")
 	public UserInformation reload(@RequestParam("id") String id){
 		return new ReloadUserHandler().handle(null, new String[]{id});
+	}
+
+	@GetMapping(value="reviews",produces = "application/json")
+	public ArrayList<ReviewInfomation> getReviews(@RequestParam("id") String id){
+		return new ReviewRequestHandler().handle(null, new String[]{"users",id});
 	}
 
 	//OK

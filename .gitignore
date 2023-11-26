@@ -3,7 +3,7 @@
 src/main/java/com/aishow/backend/modular
 
 # Compiled output
-/dist
+**/dist
 /src/raw
 /tmp
 /out-tsc

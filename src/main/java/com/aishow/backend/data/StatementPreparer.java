@@ -196,7 +196,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement getAllReviewsToUser(Connection conn, int id) throws SQLException {
-        PreparedStatement st = conn.prepareStatement("SELECT idreviewer, score, comment FROM userreviews WHERE idtarget = ?");
+        PreparedStatement st = conn.prepareStatement("SELECT idclient, score, comment FROM userreviews WHERE idtarget = ?");
         st.setInt(1, id);
         return st;
     }
