@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
+import com.aishow.backend.models.GenericInformation;
 import com.aishow.backend.models.UserInformation;
 import com.mysql.cj.xdevapi.PreparableStatement;
 
@@ -36,6 +37,11 @@ public class UserRequestHandler extends BaseHandler{
         PreparedStatement st = StatementPreparer.getUserById(DatabaseConnection.getConnection(), id);
         ResultSet rs = DatabaseConnection.runQuery(st);
         rs.next();
-        return UserInformation.fromResultSet(rs);
+        UserInformation toReturn = UserInformation.fromResultSet(rs);
+        st = StatementPreparer.getGenericInformationById(DatabaseConnection.getConnection(),"area","idArea", toReturn.getArea().Id);
+        rs = DatabaseConnection.runQuery(st);
+        rs.next();
+        toReturn.setArea(GenericInformation.fromResultSet(rs, "Area"));
+        return toReturn;
     }
 }
