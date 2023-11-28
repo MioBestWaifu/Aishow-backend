@@ -3,7 +3,12 @@
 src/main/java/com/aishow/backend/modular
 
 # Compiled output
-**/dist
+**/dist/
+.js
+.css
+.scss
+.ico
+.html
 /src/raw
 /tmp
 /out-tsc
@@ -66,3 +71,6 @@ testem.log
 Thumbs.db
 aishow.jar
 src/main/resources/KBarbie.png
+src/main/resources/dist/hayasaka/main.js
+src/main/resources/dist/hayasaka/main.js
+*.js
