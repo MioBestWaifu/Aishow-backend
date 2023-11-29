@@ -20,10 +20,11 @@ public class SearchHandler extends BaseHandler{
         throw new UnsupportedOperationException("Unimplemented method 'handle'");
     }
 
+    //TODO #38 FAZER SEPAR COM OU SEM GEOLIMITAÇÃO
     @Override
     public <T, G> G handle(T reqBody, String[] params) {
         if (params[0].equals("service")){
-            return(G) searchServices(params[1], Integer.parseInt(params[2]));
+            return(G) searchServices(params[1], Integer.parseInt(params[2]),true, Integer.parseInt(params[3]));
         } else if (params[0].equals("user")){
             return(G) searchUsers(params[1], Integer.parseInt(params[2]));
         } else {
@@ -57,10 +58,15 @@ public class SearchHandler extends BaseHandler{
         }
     }
 
-    private ArrayList<ServiceInformation> searchServices(String query, int offset){
+    private ArrayList<ServiceInformation> searchServices(String query, int offset, boolean geoLimit, int userIdArea){
         try{
             ArrayList<ServiceInformation> toReturn = new ArrayList<>();
-            PreparedStatement st = StatementPreparer.searchTemplates(DatabaseConnection.getConnection(), query, offset);
+            PreparedStatement st;
+            if (geoLimit){
+                st = StatementPreparer.searchTemplatesWithGeoLimitations(DatabaseConnection.getConnection(), query, offset,userIdArea);
+            } else {
+                st = StatementPreparer.searchTemplates(DatabaseConnection.getConnection(), query, offset);
+            }
             System.out.println(st);
             ResultSet rs = DatabaseConnection.runQuery(st);
             ResultSet providerRs;

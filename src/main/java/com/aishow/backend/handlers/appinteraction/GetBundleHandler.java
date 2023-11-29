@@ -15,16 +15,28 @@ import com.aishow.backend.models.GenericInformation;
 import com.aishow.backend.models.ServiceBundle;
 import com.aishow.backend.models.ServiceInformation;
 import com.aishow.backend.models.UserInformation;
+import com.ctc.wstx.shaded.msv_core.reader.State;
 
 public class GetBundleHandler extends BaseHandler{
 
     // TODO #27 Pegar available de algum outro lugar, nao deixar na dbconection
     @Override
     public <T, G> G handle(T reqBody) {
+        return null;
+    }
+
+    @Override
+    public <T, G> G handle(T reqBody, String[] params) {
         try{
             Integer[] alreadyHas = (Integer[]) reqBody;
             int[] toGet = new int[4];
-            ArrayList<Integer> available = DatabaseConnection.getAvailableServiceIds();
+            PreparedStatement availableSt = StatementPreparer.getServiceIdsWithGeoLimitation(DatabaseConnection.getConnection(),Integer.parseInt(params[0]));
+            ResultSet availableRes = DatabaseConnection.runQuery(availableSt);
+            ArrayList<Integer> available = new ArrayList<>();
+            //populate available with availableRes, usind column 1
+            while(availableRes.next()){
+                available.add(availableRes.getInt(1));
+            }
             available.removeAll(Arrays.asList(alreadyHas));
             Random random = new Random();
             ArrayList<ServiceInformation> bundleServInfos = new ArrayList<>();
@@ -65,12 +77,6 @@ public class GetBundleHandler extends BaseHandler{
             ex.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public <T, G> G handle(T reqBody, String[] params) {
-        // TODO Auto-generated method stub
-        return null;
     }
     
 }

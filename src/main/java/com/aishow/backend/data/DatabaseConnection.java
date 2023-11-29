@@ -79,14 +79,14 @@ public abstract class DatabaseConnection {
         return conn;
     }
 
-    public static ArrayList<Integer> getAvailableServiceIds(){
+    /* public static ArrayList<Integer> getAvailableServiceIds(){
         ArrayList<Integer> available = new ArrayList<>(serviceIds.size());
         for(int i=0;i<serviceIds.size();i++){
             available.add(i);
         }
         Collections.copy(available, serviceIds);
         return available;
-    }
+    } */
 
     /* public static boolean IsOwner(int provider, int template){
         try{

@@ -24,9 +24,10 @@ public class AppController {
 		return x;
 	}
 
+	//TODO #39 completar os parametros de pesquisa
     @GetMapping(value = "search",produces = "application/json")
-	public<T> ArrayList<T> search(@RequestParam("type") String type,@RequestParam("q") String q,@RequestParam("offset") String offset){
+	public<T> ArrayList<T> search(@RequestParam("type") String type,@RequestParam("q") String q,@RequestParam("offset") String offset,@RequestParam(required = false) String userIdArea){
 		System.out.println(q);
-		return new SearchHandler().handle(null, new String[]{type,q,offset});
+		return new SearchHandler().handle(null, new String[]{type,q,offset,userIdArea});
 	} 
 }

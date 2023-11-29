@@ -77,8 +77,8 @@ public class ServiceController {
 
 	//OK
 	@PostMapping(value = "anotherBundle", consumes = "application/json", produces = "application/json")
-	public ServiceBundle getAnotherBundle (@RequestBody Integer[] has) throws Exception{
-		ServiceBundle toReturn = new GetBundleHandler().handle(has);
+	public ServiceBundle getAnotherBundle (@RequestBody Integer[] has,@RequestParam("userIdArea") String userIdArea) throws Exception{
+		ServiceBundle toReturn = new GetBundleHandler().handle(has, new String[]{userIdArea});
 		if (toReturn == null)
 			throw new Exception();
 		return toReturn; 
