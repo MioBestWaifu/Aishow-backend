@@ -86,7 +86,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement getServiceIdsWithGeoLimitation(Connection conn, int idArea) throws SQLException{
-        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates WHERE ? IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR ((SELECT idArea FROM geolimitations WHERE idUser = idProvider) = 99)");
+        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates WHERE serviceModality = 2 OR ? IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR ((SELECT idArea FROM geolimitations WHERE idUser = idProvider) = 99)");
         st.setInt(1, idArea);
         return st;
     }
@@ -316,7 +316,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement searchTemplatesWithGeoLimitations(Connection conn,String toSearch, int offset, int userIdArea) throws SQLException{
-        String query = "SELECT * FROM servicetemplates WHERE serviceName LIKE '%"+toSearch+"%' AND ("+userIdArea+" IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR ((SELECT idArea FROM geolimitations WHERE idUser = idProvider) = 99)) LIMIT 20 OFFSET "+offset;
+        String query = "SELECT * FROM servicetemplates WHERE serviceName LIKE '%"+toSearch+"%' AND (serviceModality = 2 OR "+userIdArea+" IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR ((SELECT idArea FROM geolimitations WHERE idUser = idProvider) = 99)) LIMIT 20 OFFSET "+offset;
         PreparedStatement st = conn.prepareStatement(query);
         //st.setString(1, toSearch);
         //st.setInt(1, offset);
