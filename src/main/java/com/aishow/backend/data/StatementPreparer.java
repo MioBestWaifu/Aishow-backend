@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 
 import com.aishow.backend.models.ClientServiceInteraction;
+import com.aishow.backend.models.GeoLimitation;
 import com.aishow.backend.models.ServiceInformation;
 import com.aishow.backend.models.UserInformation;
 
@@ -313,6 +315,21 @@ public class StatementPreparer {
         PreparedStatement st = conn.prepareStatement(query);
         //st.setString(1, toSearch);
         //st.setInt(1, offset);
+        return st;
+    }
+
+    //GEOGRAPHIC LIMITATIONS
+    //create a prepared statement that deles from geolimitations where idUser = Geolimitation.idUser, then inserts the limitations
+    public static PreparedStatement updateGeoLimitations(Connection conn,ArrayList<GeoLimitation> limitations) throws SQLException{
+        PreparedStatement st = conn.prepareStatement("DELETE FROM geolimitations WHERE idUser = 9999999999");
+        st.addBatch("DELETE FROM geolimitations WHERE idUser = "+limitations.get(0).getIdUser());
+        for(GeoLimitation limit : limitations){
+            try {
+                st.addBatch("INSERT INTO geolimitations (idUser,idArea) VALUES ("+limit.getIdUser()+","+limit.getIdArea()+")");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return st;
     }
 

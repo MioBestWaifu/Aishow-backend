@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aishow.backend.handlers.appinteraction.ReviewRequestHandler;
+import com.aishow.backend.handlers.personalinteraction.GeoLimitationUpdateHandler;
 import com.aishow.backend.handlers.personalinteraction.LoginHandler;
 import com.aishow.backend.handlers.personalinteraction.NameUpdateHandler;
 import com.aishow.backend.handlers.personalinteraction.RegisterHandler;
 import com.aishow.backend.handlers.personalinteraction.ReloadUserHandler;
 import com.aishow.backend.handlers.userinteraction.UserRequestHandler;
+import com.aishow.backend.models.GeoLimitation;
 import com.aishow.backend.models.ReviewInfomation;
 import com.aishow.backend.models.UserInformation;
 
@@ -60,5 +62,10 @@ public class UserController {
 	public String updateName(@RequestBody String newName,@RequestParam("id") String id) {
 		String x = new NameUpdateHandler().handle(newName,new String[]{id});
 		return x;
+	}
+
+	@PostMapping(value = "updateGeoLimitations", consumes = "application/json", produces = "text/plain")
+	public String updateGeoLitimitaions(@RequestBody GeoLimitation[] geoLimitations) {
+		return new GeoLimitationUpdateHandler().handle(geoLimitations);
 	}
 }

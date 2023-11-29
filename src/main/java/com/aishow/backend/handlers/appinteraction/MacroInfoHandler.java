@@ -49,6 +49,8 @@ public class MacroInfoHandler extends BaseHandler{
             ArrayList<GenericInformation> toReturn = new ArrayList<>();
 
             while (rs.next()){
+                if (rs.getInt(1) == 99)
+                    continue;
                 toReturn.add(GenericInformation.fromResultSet(rs,type));
             }
 

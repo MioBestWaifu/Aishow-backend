@@ -65,6 +65,16 @@ public abstract class DatabaseConnection {
         return st.executeUpdate();
     }
 
+    public static int runBatchUpdate(PreparedStatement st) throws SQLException{
+        int[] toReturn = st.executeBatch();
+        //sum of all elements in toReturn
+        int sum = 0;
+        for(int i=0;i<toReturn.length;i++){
+            sum += toReturn[i];
+        }
+        return sum;
+    }
+
     public static Connection getConnection(){
         return conn;
     }
