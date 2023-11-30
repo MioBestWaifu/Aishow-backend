@@ -17,6 +17,7 @@ import com.aishow.backend.handlers.personalinteraction.AnswerRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.NameUpdateHandler;
 import com.aishow.backend.handlers.serviceinteraction.CancelRequestHandler;
 import com.aishow.backend.handlers.serviceinteraction.CreateServiceHandler;
+import com.aishow.backend.handlers.serviceinteraction.HistoryRequestHandler;
 import com.aishow.backend.handlers.serviceinteraction.ScheduleServiceHandler;
 import com.aishow.backend.handlers.serviceinteraction.ServiceAgendaRequestHandler;
 import com.aishow.backend.handlers.serviceinteraction.ServiceRequestHandler;
@@ -28,6 +29,7 @@ import com.aishow.backend.models.ReviewInfomation;
 import com.aishow.backend.models.ServiceBundle;
 import com.aishow.backend.models.ServiceInformation;
 import com.aishow.backend.models.ServiceSchedule;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 @CrossOrigin(origins = {"http://yancosta.online","http://www.yancosta.online","http://localhost:4200","168.232.228.88"})
 @RestController ()
@@ -73,6 +75,10 @@ public class ServiceController {
 	@GetMapping(value = "cancelRequest",produces = "text/plain")
 	public String cancelRequest(@RequestParam("id") String id){
 		return new CancelRequestHandler().handle(null, new String[]{id});
+	}
+	@GetMapping(value="history",produces = "application/json")
+	public ArrayList<ClientServiceInteraction> getHistory(@RequestParam("id") String id){
+		return new HistoryRequestHandler().handle(null, new String[]{id});
 	}
 
 	//OK

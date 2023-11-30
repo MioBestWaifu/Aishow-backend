@@ -261,6 +261,18 @@ public class StatementPreparer {
         return st;
     }
 
+    public static PreparedStatement getCompletedInstancesByProviderId(Connection conn, int id) throws SQLException {
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?) AND finished = true ORDER BY startDate, startTime");
+        st.setInt(1, id);
+        return st;
+    }
+
+    public static PreparedStatement getCompletedInstancesByClientId(Connection conn, int id) throws SQLException {
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE clientID = ? AND finished = true ORDER BY startDate, startTime");
+        st.setInt(1, id);
+        return st;
+    }
+
     public static PreparedStatement setDueInstancesAsCompleted(Connection conn) throws SQLException {
         PreparedStatement st = conn.prepareStatement("UPDATE serviceinstances SET finished = true WHERE endDate <= CURDATE() AND TIMEDIFF(CURTIME(),\"08:00:00\")>=\"00:30:00\" AND finished = false");
         return st;
