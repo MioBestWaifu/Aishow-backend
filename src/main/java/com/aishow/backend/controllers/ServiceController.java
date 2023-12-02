@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aishow.backend.handlers.appinteraction.GetBundleHandler;
+import com.aishow.backend.handlers.appinteraction.ReviewAdditionHandler;
 import com.aishow.backend.handlers.appinteraction.ReviewPossilibilityHandler;
 import com.aishow.backend.handlers.appinteraction.ReviewRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.AnswerRequestHandler;
@@ -26,7 +27,7 @@ import com.aishow.backend.handlers.serviceinteraction.UpdateServiceHandler;
 import com.aishow.backend.handlers.serviceinteraction.UserMadeServiceRequestsHandler;
 import com.aishow.backend.handlers.serviceinteraction.UserServicesRequestHandler;
 import com.aishow.backend.models.ClientServiceInteraction;
-import com.aishow.backend.models.ReviewInfomation;
+import com.aishow.backend.models.ReviewInformation;
 import com.aishow.backend.models.ServiceBundle;
 import com.aishow.backend.models.ServiceInformation;
 import com.aishow.backend.models.ServiceSchedule;
@@ -42,7 +43,7 @@ public class ServiceController {
 	} 
 
 	@GetMapping(value="reviews",produces = "application/json")
-	public ArrayList<ReviewInfomation> getReviews(@RequestParam("id") String id){
+	public ArrayList<ReviewInformation> getReviews(@RequestParam("id") String id){
 		return new ReviewRequestHandler().handle(null, new String[]{"services",id});
 	}
 
@@ -86,6 +87,12 @@ public class ServiceController {
 	public String checkReview(@RequestParam("idUser") String idUser,@RequestParam("idService") String idService){
 		return new ReviewPossilibilityHandler().handle(null, new String[]{"services",idUser,idService});
 	}
+
+	@PostMapping(value="review",consumes = "application/json", produces = "text/plain")
+	public String review(@RequestBody ReviewInformation review,@RequestParam("id") String id){
+		return new ReviewAdditionHandler().handle(review, new String[]{id});
+	}
+	
 	//OK
 	@PostMapping(value = "anotherBundle", consumes = "application/json", produces = "application/json")
 	public ServiceBundle getAnotherBundle (@RequestBody Integer[] has,@RequestParam("userIdArea") String userIdArea) throws Exception{
@@ -102,6 +109,7 @@ public class ServiceController {
 		String x = new CreateServiceHandler().handle(info,new String[]{id});
 		return x;
 	}
+
 
 	//OK
 	@PostMapping(value="schedule",consumes = "application/json", produces = "text/plain")

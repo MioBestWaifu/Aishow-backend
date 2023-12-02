@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aishow.backend.handlers.appinteraction.ReviewAdditionHandler;
 import com.aishow.backend.handlers.appinteraction.ReviewPossilibilityHandler;
 import com.aishow.backend.handlers.appinteraction.ReviewRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.GeoLimitationUpdateHandler;
@@ -20,7 +21,7 @@ import com.aishow.backend.handlers.personalinteraction.RegisterHandler;
 import com.aishow.backend.handlers.personalinteraction.ReloadUserHandler;
 import com.aishow.backend.handlers.userinteraction.UserRequestHandler;
 import com.aishow.backend.models.GeoLimitation;
-import com.aishow.backend.models.ReviewInfomation;
+import com.aishow.backend.models.ReviewInformation;
 import com.aishow.backend.models.UserInformation;
 import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
@@ -42,7 +43,7 @@ public class UserController {
 	}
 
 	@GetMapping(value="reviews",produces = "application/json")
-	public ArrayList<ReviewInfomation> getReviews(@RequestParam("id") String id){
+	public ArrayList<ReviewInformation> getReviews(@RequestParam("id") String id){
 		return new ReviewRequestHandler().handle(null, new String[]{"users",id});
 	}
 
@@ -54,6 +55,11 @@ public class UserController {
 	@GetMapping(value="geoLimitations",produces = "application/json")
 	public ArrayList<GeoLimitation> getGeoLimitations(@RequestParam("id") String id){
 		return new GeoLimitationsRequestHandler().handle(null, new String[]{id});
+	}
+
+	@PostMapping(value="review",consumes = "application/json", produces = "text/plain")
+	public String review(@RequestBody ReviewInformation review,@RequestParam("id") String id){
+		return new ReviewAdditionHandler().handle(review, new String[]{id});
 	}
 
 	//OK

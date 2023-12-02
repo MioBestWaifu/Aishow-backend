@@ -29,7 +29,7 @@ public class UserInformation {
     }
     ArrayList<ServiceBundle> serviceRecs;
     ArrayList<ServiceInformation> services;
-    ArrayList<ReviewInfomation> reviews;
+    ArrayList<ReviewInformation> reviews;
 
     public static UserInformation fromResultSet(ResultSet rs){
         UserInformation toReturn = new UserInformation();
@@ -119,10 +119,10 @@ public class UserInformation {
     public void setServices(ArrayList<ServiceInformation> services) {
         this.services = services;
     }
-    public ArrayList<ReviewInfomation> getReviews() {
+    public ArrayList<ReviewInformation> getReviews() {
         return reviews;
     }
-    public void setReviews(ArrayList<ReviewInfomation> reviews) {
+    public void setReviews(ArrayList<ReviewInformation> reviews) {
         this.reviews = reviews;
     }
     

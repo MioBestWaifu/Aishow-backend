@@ -17,7 +17,7 @@ public class ServiceInformation {
     int templateId, modality, category;
     boolean[] availableDays;
     String[] availableFroms, availableTos;
-    ArrayList<ReviewInfomation> reviews;
+    ArrayList<ReviewInformation> reviews;
     UserInformation provider;
 
     public static ServiceInformation fromResultSet(ResultSet rs){
@@ -93,16 +93,16 @@ public class ServiceInformation {
     public void setTemplateImageUrl(String templateImageUrl) {
         this.templateImageUrl = ModularInfo.BASE_IMAGE_URL+"services/"+templateImageUrl;
     }
-    public ArrayList<ReviewInfomation> getReviews() {
+    public ArrayList<ReviewInformation> getReviews() {
         return reviews;
     }
-    public void setReviews(ArrayList<ReviewInfomation> reviews) {
+    public void setReviews(ArrayList<ReviewInformation> reviews) {
         this.reviews = reviews;
         if (reviews == null)
             return;
         if (reviews.size()>0){
             float tot = 0;
-            for (ReviewInfomation reviewInfomation : reviews) {
+            for (ReviewInformation reviewInfomation : reviews) {
                 tot += reviewInfomation.getScore();
             }
             System.out.println("SET SCORE");

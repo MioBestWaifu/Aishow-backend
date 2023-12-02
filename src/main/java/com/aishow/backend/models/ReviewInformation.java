@@ -5,14 +5,14 @@ import java.util.HashMap;
 
 import com.aishow.backend.utils.Utils;
 
-public class ReviewInfomation {
+public class ReviewInformation {
     UserInformation reviewer;
     int score,type;
     //0 = User, 1 = Service
     String comment;
 
-    public static ReviewInfomation fromResultSet(ResultSet rs, int type){
-        ReviewInfomation toReturn = new ReviewInfomation();
+    public static ReviewInformation fromResultSet(ResultSet rs, int type){
+        ReviewInformation toReturn = new ReviewInformation();
         Class[] paramTypes = new Class[]{String.class};
         toReturn.reviewer = new UserInformation();
         toReturn.reviewer.userId =(int) Utils.runMethodReflection(rs, "getInt", paramTypes, new Object[]{"idclient"});
@@ -41,6 +41,18 @@ public class ReviewInfomation {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+
+    public int getType() {
+        return type;
+    }
+
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    
 
     
     

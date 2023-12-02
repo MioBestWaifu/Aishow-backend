@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
-import com.aishow.backend.models.ReviewInfomation;
+import com.aishow.backend.models.ReviewInformation;
 import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
 public class ReviewRequestHandler extends BaseHandler{
@@ -27,13 +27,13 @@ public class ReviewRequestHandler extends BaseHandler{
         }
     }
 
-    private ArrayList<ReviewInfomation> getServiceReviews(int parseInt) {
+    private ArrayList<ReviewInformation> getServiceReviews(int parseInt) {
         try{
             PreparedStatement st = StatementPreparer.getAllReviewsToService(DatabaseConnection.getConnection(), parseInt);
             ResultSet rs = DatabaseConnection.runQuery(st);
-            ArrayList<ReviewInfomation> reviews = new ArrayList<>();
+            ArrayList<ReviewInformation> reviews = new ArrayList<>();
             while (rs.next()){
-                reviews.add(ReviewInfomation.fromResultSet(rs,1));
+                reviews.add(ReviewInformation.fromResultSet(rs,1));
             }
             return reviews;
         } catch (Exception ex){
@@ -42,13 +42,13 @@ public class ReviewRequestHandler extends BaseHandler{
         }
     }
 
-    private ArrayList<ReviewInfomation> getUserReviews(int parseInt) {
+    private ArrayList<ReviewInformation> getUserReviews(int parseInt) {
         try{
             PreparedStatement st = StatementPreparer.getAllReviewsToUser(DatabaseConnection.getConnection(), parseInt);
             ResultSet rs = DatabaseConnection.runQuery(st);
-            ArrayList<ReviewInfomation> reviews = new ArrayList<>();
+            ArrayList<ReviewInformation> reviews = new ArrayList<>();
             while (rs.next()){
-                reviews.add(ReviewInfomation.fromResultSet(rs,0));
+                reviews.add(ReviewInformation.fromResultSet(rs,0));
             }
             return reviews;
         } catch (Exception ex){

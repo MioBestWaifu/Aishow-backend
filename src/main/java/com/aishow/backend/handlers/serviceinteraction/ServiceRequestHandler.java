@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.data.StatementPreparer;
 import com.aishow.backend.handlers.BaseHandler;
-import com.aishow.backend.models.ReviewInfomation;
+import com.aishow.backend.models.ReviewInformation;
 import com.aishow.backend.models.ServiceInformation;
 
 public class ServiceRequestHandler extends BaseHandler{
@@ -40,11 +40,11 @@ public class ServiceRequestHandler extends BaseHandler{
     //Adiciona reviews, availability e qqr outra coisa q possa vir a ser util no ServiceInformaion q ja tenho o basico
     public static void completeServiceInformaiton (ServiceInformation info) throws SQLException{
         PreparedStatement st = StatementPreparer.getAllReviewsToService(DatabaseConnection.getConnection(), info.getTemplateId());
-        ArrayList<ReviewInfomation> reviews = new ArrayList<>();
+        ArrayList<ReviewInformation> reviews = new ArrayList<>();
         ResultSet rs = DatabaseConnection.runQuery(st);
 
         while (rs.next()){
-            reviews.add(ReviewInfomation.fromResultSet(rs, 1));
+            reviews.add(ReviewInformation.fromResultSet(rs, 1));
         }
 
         info.setReviews(reviews);
