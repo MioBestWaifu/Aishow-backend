@@ -86,7 +86,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement getServiceIdsWithGeoLimitation(Connection conn, int idArea) throws SQLException{
-        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates WHERE serviceModality = 2 OR ? IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR ((SELECT idArea FROM geolimitations WHERE idUser = idProvider) = 99)");
+        PreparedStatement st = conn.prepareStatement("SELECT idServiceTemplates FROM servicetemplates WHERE serviceModality = 2 OR ? IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR (99 IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider))");
         st.setInt(1, idArea);
         return st;
     }
@@ -365,7 +365,7 @@ public class StatementPreparer {
         st.addBatch("DELETE FROM geolimitations WHERE idUser = "+limitations.get(0).getIdUser());
         for(GeoLimitation limit : limitations){
             try {
-                st.addBatch("INSERT INTO geolimitations (idUser,idArea) VALUES ("+limit.getIdUser()+","+limit.getIdArea()+")");
+                st.addBatch("INSERT IGNORE INTO geolimitations (idUser,idArea) VALUES ("+limit.getIdUser()+","+limit.getIdArea()+")");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
