@@ -20,7 +20,13 @@ public class AppController {
 
     @GetMapping("info")
 	public ArrayList<GenericInformation> getGenericInfo(@RequestParam("category") String cat) throws IOException{
-	    ArrayList<GenericInformation> x = new MacroInfoHandler().handle(null, new String[]{cat});
+	    ArrayList<GenericInformation> x = new MacroInfoHandler().handle(null, new String[]{cat,"all"});
+		return x;
+	}
+
+	@GetMapping("singleInfo")
+	public GenericInformation getSingGenericInfo(@RequestParam("category") String cat,@RequestParam("id") String id) throws IOException{
+	    GenericInformation x = new MacroInfoHandler().handle(null, new String[]{cat,"single",id});
 		return x;
 	}
 
@@ -29,5 +35,5 @@ public class AppController {
 	public<T> ArrayList<T> search(@RequestParam("type") String type,@RequestParam("q") String q,@RequestParam("offset") String offset,@RequestParam(required = false) String userIdArea){
 		System.out.println(q);
 		return new SearchHandler().handle(null, new String[]{type,q,offset,userIdArea});
-	} 
+	}
 }

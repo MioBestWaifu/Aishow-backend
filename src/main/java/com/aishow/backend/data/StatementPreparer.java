@@ -215,6 +215,20 @@ public class StatementPreparer {
         return st;
     }
 
+    public static PreparedStatement checkIfUserHasUsedService(Connection conn, int idUser, int idService) throws SQLException {
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE clientID = ? AND templateID = ?");
+        st.setInt(1, idUser);
+        st.setInt(2, idService);
+        return st;
+    }
+    //same as above, but check if the user has used the service with the provider
+    public static PreparedStatement checkIfUserHasUsedServiceWithProvider(Connection conn, int idUser, int idProvider) throws SQLException {
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM serviceinstances WHERE clientID = ? AND templateID IN (SELECT idServiceTemplates FROM servicetemplates WHERE idProvider = ?)");
+        st.setInt(1, idUser);
+        st.setInt(2, idProvider);
+        return st;
+    }
+
     //Generic Info
 
     public static PreparedStatement getAllGenericInformation(Connection conn,String table) throws SQLException{
@@ -356,6 +370,12 @@ public class StatementPreparer {
                 e.printStackTrace();
             }
         }
+        return st;
+    }
+
+    public static PreparedStatement getGeoLimitationsByUserId(Connection conn, int id) throws SQLException {
+        PreparedStatement st = conn.prepareStatement("SELECT * FROM geolimitations WHERE idUser = ?");
+        st.setInt(1, id);
         return st;
     }
 

@@ -26,19 +26,36 @@ public class MacroInfoHandler extends BaseHandler{
     
     @Override
     public <T, G> G handle(T reqBody, String[] params){
-        try{
-            switch(params[0]){
-                case "areas":
-                    return (G) sendInfos("area");
-                case "mod":
-                    return (G) sendInfos("servicemodality");
-                case "cat":
-                    return (G) sendInfos("servicecategory");
-                default:
-                    return (G) "ERROR";
-            } 
-        } catch (IOException ex){
-            return null;
+        if (params[1].equals("all")){
+            try{
+                switch(params[0]){
+                    case "areas":
+                        return (G) sendInfos("area");
+                    case "mod":
+                        return (G) sendInfos("servicemodality");
+                    case "cat":
+                        return (G) sendInfos("servicecategory");
+                    default:
+                        return (G) "ERROR";
+                } 
+            } catch (IOException ex){
+                return null;
+            }
+        } else {
+            try{
+                switch(params[0]){
+                    case "areas":
+                        return (G) sendSingleInfo("area",Integer.parseInt(params[2]));
+                    case "mod":
+                        return (G) sendSingleInfo("servicemodality",Integer.parseInt(params[2]));
+                    case "cat":
+                        return (G) sendSingleInfo("servicecategory",Integer.parseInt(params[2]));
+                    default:
+                        return (G) "ERROR";
+                } 
+            } catch (IOException ex){
+                return null;
+            }
         }
     }
 
@@ -55,6 +72,19 @@ public class MacroInfoHandler extends BaseHandler{
             }
 
             return toReturn;
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    private GenericInformation sendSingleInfo(String type, int id) throws IOException{
+        try {
+            PreparedStatement st = StatementPreparer.getGenericInformationById(DatabaseConnection.getConnection(), type,"id"+type ,id);
+            ResultSet rs = DatabaseConnection.runQuery(st);
+            if (rs.next())
+                return GenericInformation.fromResultSet(rs,type);
+            return null;
         } catch (SQLException ex){
             ex.printStackTrace();
             return null;

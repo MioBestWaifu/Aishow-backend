@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aishow.backend.handlers.appinteraction.GetBundleHandler;
+import com.aishow.backend.handlers.appinteraction.ReviewPossilibilityHandler;
 import com.aishow.backend.handlers.appinteraction.ReviewRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.AnswerRequestHandler;
 import com.aishow.backend.handlers.personalinteraction.NameUpdateHandler;
@@ -81,6 +82,10 @@ public class ServiceController {
 		return new HistoryRequestHandler().handle(null, new String[]{id});
 	}
 
+	@GetMapping(value="checkReview",produces = "text/plain")
+	public String checkReview(@RequestParam("idUser") String idUser,@RequestParam("idService") String idService){
+		return new ReviewPossilibilityHandler().handle(null, new String[]{"services",idUser,idService});
+	}
 	//OK
 	@PostMapping(value = "anotherBundle", consumes = "application/json", produces = "application/json")
 	public ServiceBundle getAnotherBundle (@RequestBody Integer[] has,@RequestParam("userIdArea") String userIdArea) throws Exception{
