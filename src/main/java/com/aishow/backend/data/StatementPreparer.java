@@ -342,7 +342,7 @@ public class StatementPreparer {
     }
 
     public static PreparedStatement searchTemplatesWithGeoLimitations(Connection conn,String toSearch, int offset, int userIdArea) throws SQLException{
-        String query = "SELECT * FROM servicetemplates WHERE serviceName LIKE '%"+toSearch+"%' AND (serviceModality = 2 OR "+userIdArea+" IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR ((SELECT idArea FROM geolimitations WHERE idUser = idProvider) = 99)) LIMIT 20 OFFSET "+offset;
+        String query = "SELECT * FROM servicetemplates WHERE serviceName LIKE '%"+toSearch+"%' AND (serviceModality = 2 OR "+userIdArea+" IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider) OR (99 IN (SELECT idArea FROM geolimitations WHERE idUser = idProvider))) LIMIT 20 OFFSET "+offset;
         PreparedStatement st = conn.prepareStatement(query);
         //st.setString(1, toSearch);
         //st.setInt(1, offset);
