@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import com.aishow.backend.data.DatabaseConnection;
 import com.aishow.backend.data.StatementPreparer;
@@ -49,8 +52,9 @@ public class ServiceAgendaRequestHandler extends BaseHandler{
                 buffer.setProvider(false);
                 instances.add(buffer);
             }
-
             toReturn.setPendingInstances(instances);
+
+
             st = (StatementPreparer.getRequestsByProviderId(DatabaseConnection.getConnection(), Integer.parseInt(params[0])));
             rs = DatabaseConnection.runQuery(st);
 
